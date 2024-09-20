@@ -95,7 +95,7 @@
 					return
 				}
 				let params = {
-					cashbook_id: this.$store.getters.cur_cashbook.id,
+					//cashbook_id: this.$store.getters.cur_cashbook.id,
 					type: this.formData.type === 0 ? 20 : 10,
 					query_type: this.formData.queryType === 0 ? 'month' : 'year',
 					year: Number(this.datePicker.year),

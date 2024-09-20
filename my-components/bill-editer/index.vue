@@ -9,7 +9,7 @@
 			<view class="in-list" v-show="formData.type == 0">
 				<swiper class="swiper" :indicator-dots="true">
 					<swiper-item class="swiper-item" v-for="(list,index) in out_list" :key="index">
-						<CategoryList @openSet="openSet" @change="categoryChnage" :value="formData.category_id"
+						<CategoryList @openSet="openSet" @change="categoryChange" :value="formData.category_id"
 							:list="list">
 						</CategoryList>
 					</swiper-item>
@@ -18,7 +18,7 @@
 			<view class="out-list" v-show="formData.type == 1">
 				<swiper class="swiper" :indicator-dots="true">
 					<swiper-item class="swiper-item" v-for="(list,index) in in_list" :key="index">
-						<CategoryList @openSet="openSet" @change="categoryChnage" :value="formData.category_id"
+						<CategoryList @openSet="openSet" @change="categoryChange" :value="formData.category_id"
 							:list="list">
 						</CategoryList>
 					</swiper-item>
@@ -74,18 +74,18 @@
 		},
 		props: {
 			value: {
-				type: Number,
-				default: null
+				type: [String, Number],
+				default: 0
 			}
 		},
 		data() {
 			return {
 				list: ['支出', '收入'],
 				formData: {
-					id: null,
+					id: 0,
 					type: 0,
-					amount: null,
-					category_id: null,
+					amount: '0.00',
+					category_id: 0,
 					date: '',
 					remark: '',
 					image: null
@@ -147,7 +147,7 @@
 			},
 			listSet(list = []) {
 				list.push({
-					icon: "red-packet",
+					icon: "setting",
 					name: "设置",
 					is_set: true,
 					id: 0
@@ -166,15 +166,17 @@
 				tmp = []
 				return arr
 			},
-			categoryChnage(id) {
+			categoryChange(id) {
+        console.log(id,'categoryChange')
 				this.formData.category_id = id
 			},
 			pickerConfirm(e) {
 				this.formData.date = e.year + '-' + e.month + "-" + e.day;
 			},
 			onInput(e) {
+        console.log(e)
 				let v = e.detail.value;
-				v = v.replace(/^\D*([1-9]\d{0,6}\.?\d{0,2})?.*$/, '$1');
+				v = v.replace(/^\D*([1-9]\d{0,6}\.?\d{0,2})?.*$/, '$1');//输入数字
 				this.formData.amount = v;
 				return v;
 			},
@@ -182,6 +184,20 @@
 				this.formData.remark = e.detail.value;
 			},
 			submit() {
+        console.log(this.$store.getters,'getters')
+        if (!this.formData.category_id){
+          this.$u.toast('请选择分类')
+          return
+        }
+        if (this.formData.amount <= 0){
+          this.$u.toast('请输入金额')
+          return
+        }
+        if (!this.formData.date){
+          this.$u.toast('请选择日期')
+          return
+        }
+
 				let data = {
 					id: this.formData.id,
 					type: this.formData.type == 0 ? 20 : 10, // 20支持 10 收入
@@ -190,7 +206,7 @@
 					date: this.formData.date,
 					image: null,
 					remark: this.formData.remark,
-					cashbook_id: this.$store.getters.cur_cashbook.id
+					//cashbook_id: this.$store.getters.cur_cashbook.id ||0
 				}
 				this.$emit('submit', data)
 			},

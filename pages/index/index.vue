@@ -161,7 +161,8 @@
 				if (!this.hasLogin) {
 					return
 				}
-				let cashbook_id = this.$store.getters.cur_cashbook.id
+				//let cashbook_id = this.$store.getters.cur_cashbook.id
+				let cashbook_id = 1
 				let year = Number(this.year)
 				let month = Number(this.month)
 				this.$u.api.getCashflowList(cashbook_id, year, month).then(res => {
@@ -290,6 +291,7 @@
 				line-clamp: 1;
 				-webkit-line-clamp: 1;
 				-webkit-box-orient: vertical;
+        color: #c8c4c4;
 			}
 		}
 	}

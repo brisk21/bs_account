@@ -26,7 +26,10 @@
 		},
 		onLoad(options) {
 			if (options.id) {
-				this.id = options.id
+        this.$nextTick(() => {
+          this.id = options.id
+        })
+
 			}
 		},
 	}

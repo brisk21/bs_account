@@ -23,7 +23,7 @@
 <style lang="scss" scoped>
 	.write_btn {
 		position: fixed;
-		bottom: 50rpx;
+		bottom: 120rpx;
 		right: 50rpx;
 		width: 100rpx;
 		height: 100rpx;

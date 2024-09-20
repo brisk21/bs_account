@@ -29,8 +29,11 @@
 		},
 		watch: {
 			value(val) {
-				this.curId = val
-				console.log('改变了')
+        if (val){
+          this.curId = val
+        }
+
+				console.log('改变了',val)
 			}
 		},
 		methods: {

@@ -8,19 +8,19 @@
 		<u-cell-group v-show="type == 0">
 			<u-cell-item v-for="(item,index) in out_list" :title="item.name" :arrow="false">
 				<u-icon slot="icon" size="40" :name="item.icon"></u-icon>
-				<u-icon slot="right-icon" @click="delCategory(item.id,index,0)" size="32" name="close"></u-icon>
+<!--				<u-icon slot="right-icon" @click="delCategory(item.id,index,0)" size="32" name="close"></u-icon>-->
 			</u-cell-item>
 		</u-cell-group>
 
 		<u-cell-group v-show="type == 1">
 			<u-cell-item v-for="(item,index) in in_list" :title="item.name" :arrow="false">
 				<u-icon slot="icon" size="40" :name="item.icon"></u-icon>
-				<u-icon slot="right-icon" @click="delCategory(item.id,index,1)" size="32" name="close"></u-icon>
+<!--				<u-icon slot="right-icon" @click="delCategory(item.id,index,1)" size="32" name="close"></u-icon>-->
 			</u-cell-item>
 		</u-cell-group>
 
 		<view class="bottom_btn">
-			<button class="add_btn" type="default">新增</button>
+			<button class="add_btn" @click="show = true" type="default">新增</button>
 		</view>
 	</view>
 </template>
@@ -29,6 +29,7 @@
 	export default {
 		data() {
 			return {
+        show: true,
 				list: ['支出', '收入'],
 				type: 0,
 				in_list: [],
@@ -36,6 +37,13 @@
 			}
 		},
 		methods: {
+       open() {
+            console.log('open');
+        },
+        close() {
+          this.show = false
+          // console.log('close');
+        },
 			typeChange(index) {
 				this.type = index;
 			},
