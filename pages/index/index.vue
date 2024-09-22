@@ -38,7 +38,7 @@
 			</u-empty>
 		</view>
 		<template v-else>
-			<view v-if="cashflow.list.length > 0" class="scroll">
+			<view v-if="cashflow.list.length > 0" class="scroll data-list">
 				<scroll-view scroll-y="true" class="scroll-view" refresher-enabled="true"
 					:refresher-triggered="refresherTriggered" @refresherrefresh="refresher()"
 					@refresherrestore="refresherrestore()" @refresherabort="refresherabort()">
@@ -296,6 +296,19 @@
         color: #c8c4c4;
 			}
 		}
+    .top{
+      /*绝对定位在最上边*/
+      position: fixed;
+      top: 88rpx;
+      width: 100%;
+      z-index: 999;
+    }
+    .data-list{
+      padding-top: 166rpx;
+    }
+    .empty{
+
+    }
 	}
 
 	.go-to-login {
