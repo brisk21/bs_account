@@ -572,7 +572,7 @@ export default {
 							}
 						})
 						.catch(res => {
-							fileItem.errMsg = res.errMsg || res.message
+							fileItem.errMsg = res.errMsg || res.msg
 							fileItem.index = index
 							if (cur < len) {
 								next()

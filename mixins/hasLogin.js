@@ -5,7 +5,7 @@ module.exports = {
 			if (this.$store.getters.user === undefined) {
 				return false
 			}
-			return !!this.$store.getters.user.id
+			return !!this.$store.getters.user.user_code
 		}
 	},
 	methods: {

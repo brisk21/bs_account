@@ -1,4 +1,4 @@
 export default {
-	baseUrl: 'http://testjz.test.top/api',
+	baseUrl: 'http://jz.test.top/api',
 	uploadUrl: '/api/files/upload',
 }

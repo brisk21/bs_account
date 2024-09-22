@@ -3,10 +3,10 @@
 		<view class="info_box">
 			<view class="line">
 				<view style="font-size: 50rpx;
-				min-height: 100rpx; 
+				min-height: 100rpx;
 				height: 100rpx;
 				width: 50%;">
-					{{info.amount}}
+				￥{{info.amount}}
 				</view>
 				<image @click="previewImg()" class="photo_icon" :src="info.image" </image>
 

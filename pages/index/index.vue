@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<fab></fab>
+
 		<view class="top">
 			<view class="line">
 				<view class="item">
@@ -25,10 +25,10 @@
 					</view>
 				</view>
 				<view class="item">
-					<view class="font-2x"> {{cashflow.in}} </view>
+					<view class="font-2x">￥{{cashflow.in}} </view>
 				</view>
 				<view class="item">
-					<view class="font-2x">{{ cashflow.out }} </view>
+					<view class="font-2x">￥{{ cashflow.out }} </view>
 				</view>
 			</view>
 		</view>
@@ -49,10 +49,10 @@
 									<view class="header-text"> {{item.time}} {{item.week}}</view>
 								</view>
 								<view class="u-m-r-10 u-flex-1">
-									<view class="header-text">收入 {{item.in}}</view>
+									<view class="header-text">收入 ￥{{item.in}}</view>
 								</view>
 								<view class="u-m-r-10 u-flex-1">
-									<view class="header-text">支出 {{item.out}}</view>
+									<view class="header-text">支出 ￥{{item.out}}</view>
 								</view>
 							</view>
 
@@ -68,7 +68,7 @@
 									{{item1.remark || ''}}
 								</view>
 								<view class="u-flex-1 box-right">
-									{{item1.amount}}
+									￥{{item1.amount}}
 								</view>
 							</view>
 						</view>
@@ -79,10 +79,12 @@
 				<u-empty text="暂无明细" mode="list"></u-empty>
 			</view>
 		</template>
-
+    <fab></fab>
 		<u-picker mode="time" v-model="picker_show" :params="picker_params" :default-time="picker_time"
 			@confirm="pickerConfirm"></u-picker>
+
 	</view>
+
 </template>
 
 <script>
@@ -303,6 +305,7 @@
 	}
 
 	.top {
+
 		.line {
 			display: flex;
 			color: #fff;
@@ -310,6 +313,7 @@
 			padding-left: 30rpx;
 			padding-right: 30rpx;
 			padding-bottom: 30rpx;
+
 
 			&.data {
 				padding-right: 20rpx;
@@ -329,7 +333,7 @@
 			}
 
 			.header-text {
-				font-size: 25rpx;
+				font-size: 36rpx;
 			}
 
 			.bar {

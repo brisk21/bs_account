@@ -19,7 +19,7 @@
 					if (res.code == 0) {
 						uni.navigateBack()
 					} else {
-						this.$u.toast(res.message);
+						this.$u.toast(res.msg);
 					}
 				})
 			}

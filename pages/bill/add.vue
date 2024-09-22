@@ -22,7 +22,7 @@
 							url: '/pages/index/index'
 						})
 					} else {
-						this.$u.toast(res.message);
+						this.$u.toast(res.msg);
 					}
 				})
 			}

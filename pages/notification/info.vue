@@ -25,7 +25,7 @@
 			getData() {
 				this.$u.api.getNotificationInfo(this.id).then(res => {
 					if (res.code == 1) {
-						this.$u.toast(res.message);
+						this.$u.toast(res.msg);
 						return
 					}
 					this.info = res.data.info

@@ -60,7 +60,7 @@
 			delCategory(id, index, type) {
 				this.$u.api.delCategory(id).then(res => {
 					if (res.code == 1) {
-						this.$u.toast(res.message);
+						this.$u.toast(res.msg);
 						return
 					}
 					if (type == 0) {

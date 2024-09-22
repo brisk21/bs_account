@@ -142,8 +142,8 @@ function uploadCloudFiles(res, max = 5, onUploadProgress) {
                 }
             })
                 .catch((res) => {
-                // fileItem.errMsg = res.message;
-								fileItem.errMsg =  res.errMsg || res.message;
+                // fileItem.errMsg = res.msg;
+								fileItem.errMsg =  res.errMsg || res.msg;
                 if (cur < len) {
                     next();
                 }

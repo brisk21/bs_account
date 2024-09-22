@@ -64,7 +64,7 @@
 				data.captcha_key = this.captcha.key
 				this.$u.api.register(data).then(res => {
 					if (res.code == 1) {
-						this.$u.toast(res.message);
+						this.$u.toast(res.msg);
 						this.getCaptcha()
 					} else {
 						this.$u.toast('注册成功');

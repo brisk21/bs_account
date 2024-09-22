@@ -867,7 +867,7 @@ function pattern$2(rule, value, callback, source, options) {
 
 function date(rule, value, callback, source, options) {
 	var errors = [];
-	var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field); 
+	var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 
 	if (validate) {
 		if (isEmptyValue(value) && !rule.required) {
@@ -1295,7 +1295,7 @@ Schema.prototype = {
 				} else if (res instanceof Array) {
 					cb(res);
 				} else if (res instanceof Error) {
-					cb(res.message);
+					cb(res.msg);
 				}
 			}
 
