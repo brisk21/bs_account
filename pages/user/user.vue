@@ -43,15 +43,15 @@
 		</view>
 		<view class="tj-sction">
 			<view class="tj-item">
-				<text class="num">{{userData.sign_in_day || 0}}</text>
+				<text class="num">{{userInfo.sign_in_day || 0}}</text>
 				<text>使用天数</text>
 			</view>
 			<view class="tj-item">
-				<text class="num">{{userData.all_bill_day || 0}}</text>
+				<text class="num">{{userInfo.all_bill_day || 0}}</text>
 				<text>总记账天数</text>
 			</view>
 			<view class="tj-item">
-				<text class="num">{{userData.all_bill_count || 0}}</text>
+				<text class="num">{{userInfo.all_bill_count || 0}}</text>
 				<text>总记账笔数</text>
 			</view>
 		</view>
@@ -104,11 +104,8 @@
 		},
 		data() {
 			return {
-				userData: {},
 				phone_height: "0",
 				scroll_view_height: "100",
-
-				border_bottom: false,
 				bill_title: "默认账单",
 
 				select_bill_show: false,
@@ -130,6 +127,7 @@
 			unreadCount() {
 				return this.$store.getters.unread_count || 0
 			}
+
 		},
 		methods: {
 			// #ifdef MP
@@ -138,6 +136,7 @@
 			share() {
 				console.log('非小程序分享')
 			},
+
 			// 点击选择账单
 			selectBill() {
 				this.select_bill_show = !this.select_bill_show;

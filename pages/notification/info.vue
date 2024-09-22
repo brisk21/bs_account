@@ -18,7 +18,7 @@
 		},
 		computed: {
 			html() {
-				return this.info.data ? this.info.data.content : ''
+				return this.info.msg_id ? this.info.content : ''
 			}
 		},
 		methods: {
@@ -28,7 +28,8 @@
 						this.$u.toast(res.msg);
 						return
 					}
-					this.info = res.data.info
+          console.log(res.data)
+					this.info = res.data
 				})
 			}
 		},

@@ -15,13 +15,23 @@
 		},
 		methods: {
 			submit(data) {
-				this.$u.api.updateCashflow(data).then(res => {
-					if (res.code == 0) {
-						uni.navigateBack()
-					} else {
-						this.$u.toast(res.msg);
-					}
-				})
+        uni.showModal({
+          title: '提示',
+          content: '确定修改吗？',
+          success: (res) => {
+            if (res.confirm) {
+              this.$u.api.updateCashflow(data).then(res => {
+                if (res.code == 0) {
+                  uni.navigateBack()
+                } else {
+                  this.$u.toast(res.msg);
+                }
+              })
+            } else if (res.cancel) {
+              //this.$u.toast('已取消');
+            }
+          }
+        })
 			}
 		},
 		onLoad(options) {
