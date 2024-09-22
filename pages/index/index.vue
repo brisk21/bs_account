@@ -39,7 +39,7 @@
 		</view>
 		<template v-else>
 			<view v-if="cashflow.list.length > 0" class="scroll data-list">
-				<scroll-view scroll-y="true" class="scroll-view" refresher-enabled="true"
+				<scroll-view :scroll-y="true" class="scroll-view" :refresher-enabled="true"
 					:refresher-triggered="refresherTriggered" @refresherrefresh="refresher()"
 					@refresherrestore="refresherrestore()" @refresherabort="refresherabort()">
 					<view>
@@ -65,10 +65,13 @@
 									{{item1.category.name}}
 								</view>
 								<view class="box-remark">
-									{{item1.remark || ''}}
+									{{item1.remark || '无'}}
 								</view>
-								<view class="u-flex-1 box-right">
-									￥{{item1.amount}}
+								<view class="u-flex-1 box-right amount-green" v-if="item1.type==20">
+									-￥{{item1.amount}}
+								</view>
+                <view class="u-flex-1 box-right amount-red" v-else>
+									+￥{{item1.amount}}
 								</view>
 							</view>
 						</view>
@@ -119,6 +122,13 @@
 				month: ""
 			}
 		},
+
+    //下拉
+    onPullDownRefresh() {
+     // this.refresher()
+    },
+
+
 		methods: {
 			clickDate() {
 				this.picker_show = true;
@@ -280,7 +290,14 @@
 				vertical-align: middle;
 				color: #909399;
 				font-size: 26rpx;
+
 			}
+        .amount-green{
+          color: #42b479;
+        }
+        .amount-red{
+          color: #ff0000;
+        }
 
 			.box-remark {
 				font-weight: 500;
@@ -298,17 +315,18 @@
 		}
     .top{
       /*绝对定位在最上边*/
-      position: fixed;
+      /*position: fixed;
       top: 88rpx;
       width: 100%;
-      z-index: 999;
+      z-index: 999;*/
     }
     .data-list{
-      padding-top: 166rpx;
+     /* padding-top: 166rpx;*/
     }
     .empty{
 
     }
+
 	}
 
 	.go-to-login {
