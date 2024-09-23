@@ -1,9 +1,16 @@
 <template>
   <u-cell-group>
-    <u-cell-item :icon="icons[item.type]" v-for="(item,index) in tableData" :key="index" :title="item.title"
+    <view v-if="tableData.length <= 0" class="empty">
+        <u-empty text="暂无消息" mode="message"></u-empty>
+      </view>
+    <view>
+      <u-cell-item :icon="icons[item.type]" v-for="(item,index) in tableData" :key="index" :title="item.title"
                  :label="item.content" :arrow="false" @click="viewInfo(item)">
       <u-badge v-show="item.read_time <= 0" :is-dot="true" :absolute="false" slot="right-icon"></u-badge>
     </u-cell-item>
+    </view>
+
+
   </u-cell-group>
 </template>
 

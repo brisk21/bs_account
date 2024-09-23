@@ -26,9 +26,12 @@ const install = (Vue, vm) => {
     }
 
     const getCategory = (type) => {
-        return vm.$u.get('category', {
+        return vm.$u.get('category/list', {
             type
         });
+    }
+    const getCategoryInfo = (type) => {
+        return vm.$u.get('category/info/' + type);
     }
 
     const createCashFlow = (data) => {
@@ -120,7 +123,8 @@ const install = (Vue, vm) => {
         createCategory,
         delCategory,
         updateCategory,
-        getStatisticData
+        getStatisticData,
+        getCategoryInfo
     };
 }
 

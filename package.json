@@ -1,10 +1,10 @@
 {
     "id": "iamxcd-yqapp",
-    "name": "有钱记账APP",
+    "name": "记账",
     "version": "1.0.0",
-    "description": "基于laravel+uniapp 开发的记账APP",
+    "description": "thinkphp6+uniapp 开发的记账APP",
     "keywords": [
-        "laravel",
+        "thinkphp",
         "记账"
     ],
     "dcloudext": {

@@ -77,7 +77,7 @@
 						</u-cell-item>
 					</button>
 					<!-- #endif -->
-					<button type="default" open-type="share" class="list-item">
+					<button  @click="wkf()" type="default" open-type="share" class="list-item">
 						<u-cell-item title="推荐好友">
 						</u-cell-item>
 					</button>
@@ -151,7 +151,14 @@
 
 			},
 			logout() {
-				this.$store.dispatch('logout')
+        uni.showModal({
+          title: '确定退出登录？',
+          success: (res) => {
+            if (res.confirm) {
+              this.$store.dispatch('logout')
+            }
+          }
+        })
 			},
 			wkf() {
 				this.$u.toast('该功能暂未开放');
@@ -240,7 +247,7 @@
 <style lang="scss">
 	.container {
 		background-color: #f5f5f5;
-		height: 100vh;
+		height: 100%;
 	}
 
 	%flex-center {
