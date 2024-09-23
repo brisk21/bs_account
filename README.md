@@ -1,4 +1,4 @@
-## 有钱记账API
+## BS记账API
 
 ### 简介
 记账APP后台，uniapp（vue2）+ thinkphp6开发,管理后台用element ui
