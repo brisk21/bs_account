@@ -28,8 +28,8 @@
 
 		<view class="input_box">
 			<view class="line">
-				<input type="digit" :value="formData.amount" class="amount_input" placeholder="0.00" :focus="true"
-					@input="onInput" @confirm="submit()" />
+				<input type="digit" v-model="formData.amount"  class="amount_input" placeholder="0.00"
+				 @confirm="submit()" />
 				<!-- <image slot="icon" @click="clickImg()" class="photo_icon" :src="img" mode=""></image> -->
 
 				<!-- 			<view v-show="img != empty_img">
@@ -84,7 +84,7 @@
 				formData: {
 					id: 0,
 					type: 0,
-					amount: '0.00',
+					amount: '',
 					category_id: 0,
 					date: '',
 					remark: '',
@@ -175,10 +175,10 @@
 			},
 			onInput(e) {
         console.log(e)
-				let v = e.detail.value;
+				/*let v = e.detail.value;
 				v = v.replace(/^\D*([1-9]\d{0,6}\.?\d{0,2})?.*$/, '$1');//输入数字
-				this.formData.amount = v;
-				return v;
+				this.formData.amount = v;*/
+				return e.detail.value;
 			},
 			onRemarkInput(e) {
 				this.formData.remark = e.detail.value;
@@ -189,10 +189,10 @@
           this.$u.toast('请选择分类')
           return
         }
-        if (this.formData.amount <= 0){
+        /*if (this.formData.amount <= 0){
           this.$u.toast('请输入金额')
           return
-        }
+        }*/
         if (!this.formData.date){
           this.$u.toast('请选择日期')
           return
