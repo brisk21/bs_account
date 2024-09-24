@@ -7,24 +7,43 @@
       </u-subsection>
 
     </view>
-    <u-cell-group v-show="type == 0">
+    <u-cell-group>
+       <u-cell-item :arrow="false" title="管理分类" :title-style="{color: '#1953c3',fontWeight:'bold'}">
+          <u-switch slot="right-icon" v-model="action" ></u-switch>
+       </u-cell-item>
+    </u-cell-group>
+
+    <u-cell-group v-show="type === 0">
       <u-cell-item v-for="(item,index) in out_list" :title="item.name" :arrow="false">
         <u-icon slot="icon" size="40" :name="item.icon"></u-icon>
 
-        <u-icon slot="right-icon" @click="toEdit(item)" size="32" margin-right="20" 	class="edit-btn" 	  name="edit-pen"></u-icon>
-        <u-icon slot="right-icon" @click="delCategory(item.id,index,0)" color="gray" margin-left="10" size="32" name="close"></u-icon>
+        <view slot="right-icon" v-if="action">
+          <u-button plain   type="primary" size="mini" @click="toEdit(item)">
+            <u-icon size="32" margin-right="20" class="edit-btn" name="edit-pen"></u-icon>
+          </u-button>
+          <u-button style="margin-left: 10px"  size="mini" @click="delCategory(item.id,index,1)">
+            <u-icon size="32" name="close"></u-icon>
+          </u-button>
+        </view>
       </u-cell-item>
     </u-cell-group>
 
-    <u-cell-group v-show="type == 1">
+    <u-cell-group v-show="type === 1">
       <u-cell-item v-for="(item,index) in in_list" :title="item.name" :arrow="false">
         <u-icon slot="icon" size="40" :name="item.icon"></u-icon>
-        <u-icon slot="right-icon" @click="toEdit(item)" size="32" margin-right="20"	class="edit-btn"  name="edit-pen"></u-icon>
-        <u-icon slot="right-icon" @click="delCategory(item.id,index,1)" size="32" name="close"></u-icon>
+
+        <view slot="right-icon" v-if="action">
+          <u-button plain   type="primary" size="mini" @click="toEdit(item)">
+            <u-icon size="32" margin-right="20" class="edit-btn" name="edit-pen"></u-icon>
+          </u-button>
+          <u-button style="margin-left: 10px"  size="mini" @click="delCategory(item.id,index,1)">
+            <u-icon size="32" name="close"></u-icon>
+          </u-button>
+        </view>
       </u-cell-item>
     </u-cell-group>
     <view class="bottom_btn">
-      <button class="add_btn" @click.prevent="open" type="default">新增</button>
+      <u-button type="primary" plain @click="open">新增</u-button>
     </view>
 
 
@@ -37,7 +56,7 @@ export default {
   components: {},
   data() {
     return {
-      showPopup: true,
+      action: false,
       categoryName: '',
       show: false,
       list: ['支出', '收入'],
@@ -46,19 +65,14 @@ export default {
       out_list: []
     }
   },
+  created() {
+    //this.getCategory()
+  },
+  onShow() {
+    console.log('show')
+    this.getCategory()
+  },
   methods: {
-    openx() {
-      console.log('11111')
-    },
-    async submitCategory() {
-      if (this.categoryName.trim()) {
-        let arg = {name: this.categoryName};
-        console.log(arg)
-      } else {
-        // 分类名称为空时的处理
-        this.$u.toast('请输入分类名称');
-      }
-    },
     open() {
       uni.navigateTo({
         url: '/pages/setting/form',
@@ -82,13 +96,13 @@ export default {
         this.out_list = res.data
       })
     },
-    toEdit(item){
+    toEdit(item) {
       uni.navigateTo({
-        url: '/pages/setting/form?id=' + item.id+ '&type=' + item.type + '&name=' + item.name,
+        url: '/pages/setting/form?id=' + item.id + '&type=' + item.type + '&name=' + item.name,
         success: (res) => {
         },
         fail: (res) => {
-          console.log('失败',res)
+          console.log('失败', res)
         }
       })
     },
@@ -103,11 +117,7 @@ export default {
                 this.$u.toast(res.msg);
                 return
               }
-              if (type == 0) {
-                this.out_list.splice(index, 1)
-              } else {
-                this.in_list.splice(index, 1)
-              }
+              this.getCategory()
               this.$u.toast('删除成功');
             })
 
@@ -120,9 +130,7 @@ export default {
 
     }
   },
-  created() {
-    this.getCategory()
-  }
+
 }
 </script>
 
@@ -142,14 +150,15 @@ export default {
 .category-list {
   .bottom_btn {
     width: 100%;
-    position: fixed;
-    bottom: 50rpx;
+    position: relative;
+    bottom: 0rpx;
 
     .add_btn {
       width: 80%;
       background-color: $uni-theme-color;
       color: $uni-text-color-inverse;
     }
+
     .edit-btn {
       margin-right: 30px !important;
     }
