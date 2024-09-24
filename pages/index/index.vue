@@ -39,9 +39,8 @@
     </view>
     <template v-else>
       <view v-if="cashflow.list.length > 0" class="scroll data-list">
-        <scroll-view :scroll-y="true" class="scroll-view" :refresher-enabled="true"
-                     :refresher-triggered="refresherTriggered" @refresherrefresh="refresher()"
-                     @refresherrestore="refresherrestore()" @refresherabort="refresherabort()">
+        <scroll-view :refresher-enabled="false"  :scroll-y="true" class="scroll-view"
+       scroll-into-view="top"  >
           <view>
             <view v-for="(item, index) in cashflow.list" :key="index">
               <view class="u-flex list-box">
@@ -100,6 +99,7 @@ export default {
   },
   data() {
     return {
+      is_fresh: false,
       picker_params: {
         year: true,
         month: true,
@@ -115,18 +115,44 @@ export default {
         list: [],
         out: "0.00"
       },
-      refresherTriggered: false,
-      _refresherTriggered: false,
       year: "",
       month: ""
     }
   },
-
+  onReady() {
+    uni.pageScrollTo({
+      scrollTop: 0, // 滚动到页面的目标位置（0表示顶部）
+      duration: 0 // 滚动动画时长，设置为0则无动画直接跳转
+    });
+  },
   //下拉
   onPullDownRefresh() {
-    // this.refresher()
-  },
+    console.log("下拉刷新")
+    if (this.hasLogin){
+       this.getList();
+    }else{
+      setTimeout(()=>{
+        uni.stopPullDownRefresh()
+      },500)
 
+    }
+
+  },
+  onShow() {
+    this.getList()
+  },
+  onLoad(options) {
+    let t = new Date().toISOString().slice(0, 10);
+    let t_a = t.split("-");
+    this.year = t_a[0] || "";
+    this.month = t_a[1] || "";
+    this.picker_time = this.year + "-" + this.month;
+
+  },
+  created() {
+
+
+  },
 
   methods: {
 
@@ -148,40 +174,26 @@ export default {
       this.picker_time = this.year + "-" + this.month;
       this.getList()
     },
-    refresher() {
-      // console.log('下拉刷新');
-      this.getList()
-      if (this._refresherTriggered) {
-        return;
-      }
-      this._refresherTriggered = true;
-      if (!this.refresherTriggered) {
-        this.refresherTriggered = true;
-      }
-    },
-    refresherrestore() {
-      // console.log("自定义下拉刷新被复位");
-      this.refresherTriggered = false;
-      this._refresherTriggered = false;
-    },
-    refresherabort() {
-      // console.log("自定义下拉刷新被中止");
-      this.refresherTriggered = false;
-      this._refresherTriggered = false;
-    },
+
+
     getList() {
-      if (!this.hasLogin) {
-       // return
+      this.cashflow = {
+        in: "0.00",
+        list: [],
+        out: "0.00"
       }
-      //let cashbook_id = this.$store.getters.cur_cashbook.id
+      if (!this.hasLogin) {
+        return
+      }
+      uni.startPullDownRefresh()
       let cashbook_id = 1
       let year = Number(this.year)
       let month = Number(this.month)
       this.$u.api.getCashflowList(cashbook_id, year, month).then(res => {
         this.cashflow = res.data
-        this.refresherrestore()
       }).catch(() => {
-        this.refresherabort()
+      }).finally(() => {
+        uni.stopPullDownRefresh()
       })
     },
     toDetail(id) {
@@ -199,19 +211,7 @@ export default {
       // #endif
     }
   },
-  onShow() {
-    this.getList()
-  },
-  onLoad(options) {
 
-    let t = new Date().toISOString().slice(0, 10);
-    let t_a = t.split("-");
-    this.year = t_a[0] || "";
-    this.month = t_a[1] || "";
-    this.picker_time = this.year + "-" + this.month;
-
-    this.getList()
-  }
 }
 </script>
 
@@ -315,7 +315,8 @@ export default {
       color: #c8c4c4;
     }
   }
-.data-list {
+
+  .data-list {
     position: absolute;
     top: 88px;
     width: 100%;
@@ -333,7 +334,7 @@ export default {
   position: fixed;
   top: var(NavigationBar, 44px); /* 使用计算属性，默认值为 44px */
   background: red;
-  z-index: 99999;
+  z-index: 99;
   text-align: center;
   margin: 0 auto;
   width: 100%;

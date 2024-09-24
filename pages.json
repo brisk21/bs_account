@@ -5,8 +5,10 @@
   "pages": [
     {
       "path": "pages/index/index",
+
       "style": {
         "navigationBarTitleText": "明细",
+        "enablePullDownRefresh" : true,
         "app-plus": {
           "bounce": "none"
         }
