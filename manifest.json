@@ -2,8 +2,8 @@
     "name" : "记账",
     "appid" : "__UNI__3CF9076",
     "description" : "记账，不只是记录",
-    "versionName" : "1.0.1",
-    "versionCode" : 101,
+    "versionName" : "1.0.2",
+    "versionCode" : 102,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
