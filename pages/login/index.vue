@@ -69,18 +69,13 @@
 						this.getCaptcha()
 					} else {
 						this.$u.toast('登录成功');
-						this.$store.dispatch('getUserInfo').then(res => {
 
-            })
-            //fixme 无效
-            this.$nextTick(() => {
-               uni.switchTab({
-                 url: '/'
-              })
+					 	this.$store.dispatch('getUserInfo').then(res => {
+              uni.switchTab({
+                url: '/pages/index/index'
+               })
             })
 
-
-						//uni.navigateBack()
 					}
 				})
 			},

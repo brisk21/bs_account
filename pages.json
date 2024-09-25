@@ -117,6 +117,15 @@
           "bounce": "none"
         }
       }
+    },
+    {
+      "path": "pages/setting/index",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
     }
   ],
   "globalStyle": {

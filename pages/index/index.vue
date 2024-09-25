@@ -100,6 +100,7 @@ export default {
   data() {
     return {
       is_fresh: false,
+      is_pulling: false,
       picker_params: {
         year: true,
         month: true,
@@ -128,8 +129,15 @@ export default {
   //下拉
   onPullDownRefresh() {
     console.log("下拉刷新")
-    if (this.hasLogin){
-       this.getList();
+    if (this.hasLogin && !this.is_fresh){
+      this.is_fresh = true;
+      let that = this;
+      that.getList();
+      setTimeout(function () {
+        that.is_fresh = false;
+        uni.stopPullDownRefresh()
+      },1000)
+
     }else{
       setTimeout(()=>{
         uni.stopPullDownRefresh()
@@ -139,22 +147,29 @@ export default {
 
   },
   onShow() {
-    this.getList()
+    console.log('onShow')
+   this.init_data()
   },
   onLoad(options) {
-    let t = new Date().toISOString().slice(0, 10);
-    let t_a = t.split("-");
-    this.year = t_a[0] || "";
-    this.month = t_a[1] || "";
-    this.picker_time = this.year + "-" + this.month;
-
+    console.log('onLoad')
+    this.init_data()
   },
   created() {
-
+    console.log('created')
+    this.init_data()
 
   },
 
   methods: {
+
+    init_data() {
+        let t = new Date().toISOString().slice(0, 10);
+        let t_a = t.split("-");
+        this.year = t_a[0] || "";
+        this.month = t_a[1] || "";
+        this.picker_time = this.year + "-" + this.month;
+        this.getList()
+    },
 
     clickDate() {
       this.picker_show = true;
@@ -185,15 +200,25 @@ export default {
       if (!this.hasLogin) {
         return
       }
-      uni.startPullDownRefresh()
+      if (this.is_pulling){
+        return;
+      }
+      let that = this;
+
       let cashbook_id = 1
       let year = Number(this.year)
       let month = Number(this.month)
+
+      this.is_pulling = true
       this.$u.api.getCashflowList(cashbook_id, year, month).then(res => {
         this.cashflow = res.data
       }).catch(() => {
       }).finally(() => {
         uni.stopPullDownRefresh()
+        setTimeout(function () {
+          that.is_fresh = false;
+          that.is_pulling = false
+        }, 1000)
       })
     },
     toDetail(id) {
@@ -220,7 +245,7 @@ export default {
   background-color: #f7f7f7;
 
   // scroll-view 通过flex 布局 自适应
-  height: 100vh;
+ /* height: 100vh;*/
   display: flex;
   flex-direction: column;
 

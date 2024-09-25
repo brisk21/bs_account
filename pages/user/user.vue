@@ -58,30 +58,14 @@
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
-					<!-- 					<u-cell-item title="账单设置">
-					</u-cell-item> -->
-					<!-- 					<u-cell-item title="类别设置">
-					</u-cell-item> -->
-					<u-cell-item @click="goto('xtxx')" title="系统消息">
+					<u-cell-item @click="goto('notice')" title="系统消息" icon="bell">
 						<u-badge v-show="hasLogin && unreadCount > 0" :count="unreadCount" :absolute="false"
 							slot="right-icon">
 						</u-badge>
 					</u-cell-item>
-					<u-cell-item @click="wkf()" title="数据导出">
-					</u-cell-item>
-					<u-cell-item @click="categorySet()" title="收支类型">
-					</u-cell-item>
-					<!-- #ifdef MP-WEIXIN -->
-					<button type="default" open-type="contact" class="list-item">
-						<u-cell-item title="联系客服">
-						</u-cell-item>
-					</button>
-					<!-- #endif -->
-					<button  @click="wkf()" type="default" open-type="share" class="list-item">
-						<u-cell-item title="推荐好友">
-						</u-cell-item>
-					</button>
-					<u-cell-item v-if="hasLogin" @click="logout()" title="注销登录">
+					<u-cell-item @click="categorySet()" title="收支类型" icon="grid"></u-cell-item>
+
+          <u-cell-item @click="goto('setting')" title="设置" icon="setting">
 					</u-cell-item>
 				</u-cell-group>
 			</view>
@@ -116,7 +100,8 @@
 					extra: '0'
 				}],
 				paths: {
-					xtxx: '/pages/notification/index'
+					notice: '/pages/notification/index',
+          setting: '/pages/setting/index'
 				}
 			}
 		},
@@ -150,16 +135,7 @@
 			pickerConfirm() {
 
 			},
-			logout() {
-        uni.showModal({
-          title: '确定退出登录？',
-          success: (res) => {
-            if (res.confirm) {
-              this.$store.dispatch('logout')
-            }
-          }
-        })
-			},
+
 			wkf() {
 				this.$u.toast('该功能暂未开放');
 			},
