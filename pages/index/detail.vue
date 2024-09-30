@@ -8,9 +8,6 @@
 				width: 50%;">
           ￥{{ info.amount }}
         </view>
-        <image @click="previewImg()" class="photo_icon" :src="info.image"
-        </image>
-
       </view>
 
       <u-line></u-line>
@@ -31,7 +28,13 @@
       <view class="line">
         <text class="type">备注</text>
         <view style="font-size: 28rpx;width: 70%;">
-          {{ info.remark || '' }}
+          {{ info.remark || '暂无备注' }}
+        </view>
+      </view>
+      <view class="line" v-if="info.image">
+        <text class="type">附件</text>
+        <view style="font-size: 28rpx;width: 70%;">
+         <u-image  @click="previewImg()"  height="150rpx" width="150rpx" :src="info.image"></u-image>
         </view>
       </view>
 

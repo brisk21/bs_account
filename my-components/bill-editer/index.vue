@@ -1,13 +1,13 @@
 <template>
 	<view class="container">
 		<view class="type_selector">
-			<u-subsection class="selector" :animation="false" :list="list" @change="typeChange" active-color="#fff"
-				:current="formData.type" mode="subsection">
+			<u-subsection class="selector" :animation="true" :list="list" @change="typeChange" active-color="#fff"
+				:current="type" mode="subsection">
 			</u-subsection>
 		</view>
 		<view class="category-list">
-			<view class="in-list" v-show="formData.type == 0">
-				<swiper class="swiper" :indicator-dots="true">
+			<view class="out-list" v-show="formData.type == 20">
+				<swiper class="swiper" :indicator-dots="true" indicator-active-color="red" >
 					<swiper-item class="swiper-item" v-for="(list,index) in out_list" :key="index">
 						<CategoryList @openSet="openSet" @change="categoryChange" :value="formData.category_id"
 							:list="list">
@@ -15,9 +15,9 @@
 					</swiper-item>
 				</swiper>
 			</view>
-			<view class="out-list" v-show="formData.type == 1">
-				<swiper class="swiper" :indicator-dots="true">
-					<swiper-item class="swiper-item" v-for="(list,index) in in_list" :key="index">
+			<view class=" in-list" v-show="formData.type == 10">
+				<swiper class="swiper" :indicator-dots="true" indicator-active-color="red" >
+					<swiper-item class="swiper-item" v-for="(list,index) in in_list" :key="index" >
 						<CategoryList @openSet="openSet" @change="categoryChange" :value="formData.category_id"
 							:list="list">
 						</CategoryList>
@@ -28,15 +28,8 @@
 
 		<view class="input_box">
 			<view class="line">
-				<input type="digit" v-model="formData.amount"  class="amount_input" placeholder="0.00"
-				 @confirm="submit()" />
-				<!-- <image slot="icon" @click="clickImg()" class="photo_icon" :src="img" mode=""></image> -->
-
-				<!-- 			<view v-show="img != empty_img">
-					<view class="del-btn" @click="delImg()">
-						<uni-icons :color="iconclear.color" :size="iconclear.size" :type="iconclear.type" />
-					</view>
-				</view> -->
+				<input type="digit" min="0" max="999999999" v-model="formData.amount"  class="amount_input" placeholder="0.00"
+				 @confirm="submit()"  />
 			</view>
 
 			<u-line></u-line>
@@ -54,9 +47,27 @@
 			</view>
 			<view class="line">
 				<text class="popup_type">备注</text>
-				<input type="text" :value="formData.remark" @input="onRemarkInput" placeholder="添加备注"
-					style="font-size: 28rpx;width: 70%;" />
+				<input type="textarea"  v-model="formData.remark" @input="onRemarkInput" placeholder="添加备注"
+					style="font-size: 28rpx;width: 70%;" clearable border border-color="gray"	:auto-height="true" />
 			</view>
+      <view class="line">
+				<text class="popup_type">附件图片</text>
+         <u-upload
+             ref="upload"
+             :action="action"
+             :auto-upload="true"
+             :file-list="fileList"
+             :max-size="2 * 1024 * 1024"
+             :max-count="1"
+             :before-upload="beforeUpload"
+             :header="header"
+             :limit-type="['png', 'jpg', 'jpeg']"
+             :preview-full-image="true"
+             @on-error="handleError"
+             @on-success="uploadSuccess"
+         ></u-upload>
+			</view>
+
 		</view>
 
 		<u-picker mode="time" v-model="picker_show" :params="pickerOption" :default-time="formData.date"
@@ -66,6 +77,7 @@
 
 <script>
 	import dayjs from '@/dayjs.min.js'
+  import constConfig from '@/const.js'
 	import CategoryList from '@/my-components/category-list/index.vue'
 	import _ from 'lodash'
 	export default {
@@ -80,10 +92,11 @@
 		},
 		data() {
 			return {
+        type: 0,
 				list: ['支出', '收入'],
 				formData: {
 					id: 0,
-					type: 0,
+					type: 20,
 					amount: '',
 					category_id: 0,
 					date: '',
@@ -106,7 +119,6 @@
 				out_list: [],
 				in_list: [],
 
-				empty_img: '../../static/empty-img.png',
 				img: '',
 
 				iconclear: {
@@ -114,6 +126,12 @@
 					size: '20',
 					type: 'clear'
 				},
+        action: constConfig.baseUrl + '/upload/image',
+        header: {
+          'Authorization': 'Bearer ' + this.$store.getters.user_token
+        },
+				fileList: [
+				]
 			}
 		},
 		watch: {
@@ -125,8 +143,27 @@
 			}
 		},
 		methods: {
+      uploadSuccess(res, index, lists, name){
+        //console.log('uploadSuccess', res);
+        if (res.code == 0){
+          this.formData.image = res.data.full_url
+        }else{
+          this.$u.toast(res.msg)
+          //移除文件
+          this.$refs.upload.remove(index)
+        }
+      },
+      handleError(data, index, lists, name){
+        console.log('handleError', data);
+
+      },
+      beforeUpload(index, list) {
+				return true;
+			},
+
 			typeChange(index) {
-				this.formData.type = index;
+        this.type = index
+				this.formData.type = index===0?20:10;
 				this.formData.category_id = null
 			},
       getCategory() {
@@ -143,6 +180,8 @@
              this.in_list = this.listSet(this.in_list)
              this.out_list = this.listSet(this.out_list)
           }
+        }).catch(err => {
+          console.log(err)
         })
 
       },
@@ -205,44 +244,10 @@
           return
         }
 
-				let data = {
-					id: this.formData.id,
-					type: this.formData.type == 0 ? 20 : 10, // 20支持 10 收入
-					category_id: this.formData.category_id,
-					amount: this.formData.amount,
-					date: this.formData.date,
-					image: null,
-					remark: this.formData.remark,
-					//cashbook_id: this.$store.getters.cur_cashbook.id ||0
-				}
-				this.$emit('submit', data)
+
+				this.$emit('submit', this.formData)
 			},
-			clickImg() {
-				if (this.img == this.empty_img) {
-					this.uploadImg();
-				} else {
-					this.previewImg();
-				}
-			},
-			delImg() {
-				this.img = this.empty_img;
-			},
-			previewImg() {
-				uni.previewImage({
-					type: 0,
-					urls: [this.formData.image]
-				});
-			},
-			uploadImg() {
-				let _this = this;
-				uni.chooseImage({
-					count: 1, //默认9
-					sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
-					success: function(res) {
-						console.log('选择相册后的文件列表：', JSON.stringify(res.tempFilePaths));
-					}
-				});
-			},
+
 			getCashflowInfo(id) {
 				this.$u.api.getCashflowInfo(id).then(res => {
 					let data = res.data
