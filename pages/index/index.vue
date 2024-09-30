@@ -163,11 +163,33 @@ export default {
   methods: {
 
     init_data() {
-        let t = new Date().toISOString().slice(0, 10);
-        let t_a = t.split("-");
-        this.year = t_a[0] || "";
-        this.month = t_a[1] || "";
-        this.picker_time = this.year + "-" + this.month;
+       // 获取当前日期
+      let currentDate = new Date();
+
+      // 手动设置时区为UTC+8（假设中国标准时间）
+      let chinaTimezoneOffset = 8 * 60; // 8 hours offset
+      let chinaCurrentDate = new Date(currentDate.getTime() + chinaTimezoneOffset * 60 * 1000);
+
+      // 格式化日期为 YYYY-MM-DD
+      let formattedDate = chinaCurrentDate.toISOString().substring(0, 10);
+
+      // 分割日期字符串
+      let dateParts = formattedDate.split("-");
+
+      // 确保日期字符串格式正确
+      if (dateParts.length === 3) {
+          // 提取年份和月份
+          this.year = dateParts[0];
+          this.month = dateParts[1];
+      } else {
+          console.error("日期格式错误");
+          this.year = "";
+          this.month = "";
+      }
+
+      // 构造 picker_time 字段
+       this.picker_time = `${this.year}-${this.month}`
+       console.log(this.picker_time)
         this.getList()
     },
 
