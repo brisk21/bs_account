@@ -65,6 +65,7 @@
              :preview-full-image="true"
              @on-error="handleError"
              @on-success="uploadSuccess"
+             @on-remove="handleRemove"
          ></u-upload>
 			</view>
 
@@ -143,6 +144,9 @@
 			}
 		},
 		methods: {
+      handleRemove(index, lists, name){
+        this.formData.image = null
+      },
       uploadSuccess(res, index, lists, name){
         //console.log('uploadSuccess', res);
         if (res.code == 0){
@@ -251,15 +255,10 @@
 			getCashflowInfo(id) {
 				this.$u.api.getCashflowInfo(id).then(res => {
 					let data = res.data
-					this.formData = {
-						id: data.id,
-						type: data.type == 20 ? 0 : 1,
-						amount: data.amount,
-						category_id: data.category_id,
-						date: data.date,
-						remark: data.remark,
-						image: data.image,
-					}
+					this.formData = data
+          if (data.image){
+            this.fileList.push({url: data.image})
+          }
 				})
 			},
 		},
