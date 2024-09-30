@@ -4,6 +4,10 @@
       <u-input placeholder="请输入分类名称" border :maxlength="10" type="text" clearable class="category_form_input"
                v-model="value"/>
     </u-form-item>
+    <u-form-item label="排序">
+      <u-input placeholder="越大越靠前" border :maxlength="10" type="number"  clearable class="category_form_input"
+               v-model="sort"/>
+    </u-form-item>
     <u-form-item label="类型">
       <u-radio-group v-model="type">
         <u-radio
@@ -34,6 +38,7 @@ export default {
     return {
       id: 0,
       value: '',
+      sort: 0,
       type: 20,
       bill_list: [
         {
@@ -54,14 +59,13 @@ export default {
       this.$u.api.getCategoryInfo(this.id).then(res => {
         if (res.code == 0) {
           this.value = res.data.name;
+          this.sort = res.data.sort;
           this.type = res.data.type;
         }
       })
     }
   },
   methods: {
-
-
     radioChange(e) {
       console.log(e);
     },
@@ -90,14 +94,14 @@ export default {
         success: (res) => {
           if (res.confirm) {
             if (this.id > 0) {
-              this.$u.api.updateCategory({id: this.id, name: name, type: type}).then(res => {
+              this.$u.api.updateCategory({id: this.id, name: name, type: type, sort: this.sort}).then(res => {
                 this.$u.toast(res.msg);
                 if (res.code == 0) {
                   uni.navigateBack()
                 }
               })
             } else {
-              this.$u.api.createCategory({name: name, type: type}).then(res => {
+              this.$u.api.createCategory({name: name, type: type, sort: this.sort}).then(res => {
                 this.$u.toast(res.msg);
                 if (res.code == 0) {
                   uni.navigateBack()
