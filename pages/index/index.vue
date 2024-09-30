@@ -32,7 +32,7 @@
         </view>
       </view>
     </view>
-    <view v-if="!hasLogin" class="empty">
+    <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
         <button size="mini" slot="bottom" class="go-to-login" @click="toLogin()">立即登录</button>
       </u-empty>
@@ -242,17 +242,20 @@ export default {
 
 <style lang="scss">
 .container {
-  background-color: #f7f7f7;
+  background-color: white;
 
   // scroll-view 通过flex 布局 自适应
  /* height: 100vh;*/
   display: flex;
   flex-direction: column;
 
-  .scroll,
-  .empty {
+  .scroll {
     flex: 1;
     overflow: scroll;
+  }
+  .need_login {
+    margin-top: 45%;
+    background: white;
   }
 
   .scroll-view {

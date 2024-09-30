@@ -87,13 +87,17 @@ export default {
       this.type = index;
     },
     getCategory() {
-      this.$u.api.getCategory(10).then(res => {
-        // console.log(res)
-        this.in_list = res.data
-      })
-      this.$u.api.getCategory(20).then(res => {
-        // console.log(res)
-        this.out_list = res.data
+      this.$u.api.getCategory(0).then(res => {
+        //type10=收入，type20=支出
+        if (res.code == 0 && res.data.length > 0) {
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].type === 10) {
+              this.in_list.push(res.data[i])
+            } else {
+              this.out_list.push(res.data[i])
+            }
+          }
+        }
       })
     },
     toEdit(item) {

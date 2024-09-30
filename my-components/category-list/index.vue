@@ -1,7 +1,7 @@
 <template>
 	<view class="category">
 		<view class="category-item" v-for="(item, index) in list" :key="index" @click="setCurCategory(item)">
-			<view class="list-box" :class="[curId == item.id ? 'select-item':'']">
+			<view class="list-box" :class="[curId === item.id ? 'select-item':'']">
 				<u-icon :name="item.icon" class="icon"></u-icon>
 			</view>
 			<view class="box-text">{{item.name}}</view>
@@ -13,7 +13,7 @@
 	export default {
 		props: {
 			list: {
-				type: Array
+				type: Array|Object
 			},
 			value: {
 				type: Number | null
@@ -38,7 +38,7 @@
 		},
 		methods: {
 			setCurCategory(item) {
-				// console.log('点击了', id)
+				 //console.log('点击了', item)
 				if (item.is_set) {
 					this.$emit('openSet')
 				} else {
