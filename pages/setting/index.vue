@@ -5,24 +5,31 @@
 				<u-cell-group>
 					<u-cell-item @click="wkf()" title="数据导出" icon="order">
 					</u-cell-item>
-          <u-cell-item  @click="wkf()" title="联系客服" icon="kefu-ermai"></u-cell-item>
-        <!--<button type="default" open-type="contact" class="list-item">
+					<u-cell-item @click="wkf()" title="联系客服" icon="kefu-ermai"></u-cell-item>
+					<!--<button type="default" open-type="contact" class="list-item">
 						<u-cell-item title="联系客服">
 						</u-cell-item>
 					</button>-->
 					<u-cell-item @click="wkf()" title="推荐好友" icon="share"></u-cell-item>
-					<u-cell-item   title="协议阅读" icon="order">
-            <u-link :href="'https://jz.api.alipay168.cn/api/agreement/register'" :under-line="false">注册协议</u-link>
-          </u-cell-item>
-					<u-cell-item   title="协议阅读" icon="order">
-            <u-link :href="'https://jz.api.alipay168.cn/api/agreement/privacy'" :under-line="false">隐私政策</u-link>
-          </u-cell-item>
+					<u-cell-item title="协议阅读" icon="order">
+						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/register'"
+							:under-line="false">注册协议</u-link>
+					</u-cell-item>
+					<u-cell-item title="协议阅读" icon="order">
+						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/privacy'"
+							:under-line="false">隐私政策</u-link>
+					</u-cell-item>
 
-          <u-cell-item  title="关于我们" icon="info-circle">
-            <u-link :href="'https://jz.api.alipay168.cn/api/agreement/about'" :under-line="false">关于我们</u-link>
-          </u-cell-item>
+					<u-cell-item title="关于我们" icon="info-circle">
+						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/about'"
+							:under-line="false">关于我们</u-link>
+					</u-cell-item>
 
-          <u-cell-item @click="wkf()" title="反馈&建议" icon="volume"></u-cell-item>
+					<u-cell-item @click="wkf()" title="反馈&建议" icon="volume"></u-cell-item>
+
+					<u-cell-item  @click="check_update()" title="版本号" icon="reload">
+						<u-badge count="有新版本" :absolute="false" slot="right-icon"></u-badge>
+					</u-cell-item>
 
 					<u-cell-item v-if="hasLogin" @click="logout()" title="退出登录" icon="close-circle">
 					</u-cell-item>
@@ -34,6 +41,10 @@
 </template>
 
 <script>
+	// #ifdef APP-PLUS
+	import checkappupdate from 'js_sdk/wonyes-checkappupdate/wonyes/checkappupdate.js'
+	// #endif
+	import constConfig from '@/const.js'
 	import {
 		getCode
 	} from '@/common/login.js'
@@ -43,6 +54,7 @@
 		},
 		data() {
 			return {
+				show_version: false,
 				phone_height: "0",
 				scroll_view_height: "100",
 				bill_title: "默认账单",
@@ -67,8 +79,24 @@
 				return this.$store.getters.unread_count || 0
 			}
 
+			
 		},
 		methods: {
+			// #ifdef APP-PLUS
+			check_update() {
+				checkappupdate.check({
+					title: "检测到有新版本！",
+					content: "请升级app到最新版本！",
+					canceltext: "暂不升级",
+					oktext: "立即升级",
+					api: constConfig.baseUrl + '/update',
+					barbackground: "rgba(50,50,50,0.8)", //进度条背景色，默认灰色，可自定义rgba形式色值
+					barbackgroundactive: "rgba(32,165,58,1)" //进度条前景色色，默认绿色，可自定义rgba形式色值
+				})
+			},
+
+			// #endif
+			
 			// #ifdef MP
 			getCode,
 			// #endif
@@ -90,17 +118,17 @@
 
 			},
 			logout() {
-        uni.showModal({
-          title: '确定退出登录？',
-          success: (res) => {
-            if (res.confirm) {
-              this.$store.dispatch('logout')
-              uni.reLaunch({
-                url: '/pages/login/index'
-              })
-            }
-          }
-        })
+				uni.showModal({
+					title: '确定退出登录？',
+					success: (res) => {
+						if (res.confirm) {
+							this.$store.dispatch('logout')
+							uni.reLaunch({
+								url: '/pages/login/index'
+							})
+						}
+					}
+				})
 			},
 			wkf() {
 				this.$u.toast('该功能暂未开放');
@@ -182,6 +210,9 @@
 			if (this.hasLogin) {
 				this.$store.dispatch('getUserInfo')
 			}
+			//  #ifdef APP-PLUS
+			this.show_version = true
+			// #endif
 		}
 	}
 </script>
@@ -190,8 +221,8 @@
 	.container {
 		background-color: #f5f5f5;
 		height: 100%;
-    max-height: 100%;
-    overflow: hidden;
+		max-height: 100%;
+		overflow: hidden;
 	}
 
 	%flex-center {
@@ -235,5 +266,4 @@
 	.list-item::after {
 		border: initial;
 	}
-
 </style>

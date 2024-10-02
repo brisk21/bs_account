@@ -3,12 +3,28 @@
 </style>
 
 <script>
+  // #ifdef APP-PLUS
+	import checkappupdate from 'js_sdk/wonyes-checkappupdate/wonyes/checkappupdate.js'
+	// #endif
+  import constConfig from '@/const.js'
+
 	import {
 		getCode
 	} from '@/common/login.js'
 	export default {
 		onLaunch: function() {
-
+		 // #ifdef APP-PLUS
+			console.log('update')
+			checkappupdate.check({
+				title:"检测到有新版本！",
+				content:"请升级app到最新版本！",
+				canceltext:"暂不升级",
+				oktext:"立即升级",
+				api: constConfig.baseUrl+'/update',
+				barbackground:"rgba(50,50,50,0.8)",//进度条背景色，默认灰色，可自定义rgba形式色值
+				barbackgroundactive:"rgba(32,165,58,1)"//进度条前景色色，默认绿色，可自定义rgba形式色值
+			})
+		// #endif
 		},
 		onShow: function() {
 			let token = uni.getStorageSync('UserToken')
