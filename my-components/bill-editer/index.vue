@@ -7,22 +7,35 @@
 		</view>
 		<view class="category-list">
 			<view class="out-list" v-show="formData.type == 20">
-				<swiper class="swiper" :indicator-dots="true" indicator-active-color="red" >
-					<swiper-item class="swiper-item" v-for="(list,index) in out_list" :key="index">
-						<CategoryList @openSet="openSet" @change="categoryChange" :value="formData.category_id"
-							:list="list">
-						</CategoryList>
-					</swiper-item>
-				</swiper>
+        <template v-if="out_list.length>0">
+          <u-grid :col="5" :border="true" >
+          <u-grid-item
+            v-for="(item,index) in out_list"
+            :key="item.id"
+            :bg-color="item.id && formData.category_id==item.id?'#71d5a1':''"
+            @click="setCurCategory(item)"
+          >
+            <u-icon :name="item.icon" :size="46"></u-icon>
+            <view class="grid-text">{{ item.name }}</view>
+          </u-grid-item>
+        </u-grid>
+        </template>
 			</view>
-			<view class=" in-list" v-show="formData.type == 10">
-				<swiper class="swiper" :indicator-dots="true" indicator-active-color="red" >
-					<swiper-item class="swiper-item" v-for="(list,index) in in_list" :key="index" >
-						<CategoryList @openSet="openSet" @change="categoryChange" :value="formData.category_id"
-							:list="list">
-						</CategoryList>
-					</swiper-item>
-				</swiper>
+			<view class="in-list" v-show="formData.type == 10">
+
+       <template v-if="in_list.length>0">
+            <u-grid :col="5" :border="true" >
+            <u-grid-item
+              v-for="(item,index) in in_list"
+              :key="item.id"
+              :bg-color="item.id && formData.category_id==item.id?'#71d5a1':''"
+              @click="setCurCategory(item)"
+            >
+              <u-icon :name="item.icon" :size="46"></u-icon>
+              <view class="grid-text">{{ item.name }}</view>
+            </u-grid-item>
+          </u-grid>
+        </template>
 			</view>
 		</view>
 
@@ -189,6 +202,13 @@
         })
 
       },
+      setCurCategory(item){
+        console.log(item,'click')
+        if (item.is_set){
+          return this.openSet()
+        }
+        this.formData.category_id = item.id
+      },
 			openSet() {
 				console.log('打开设置页面')
 				uni.navigateTo({
@@ -202,6 +222,7 @@
 					is_set: true,
 					id: null
 				})
+        return list
 				let arr = []
 				let tmp = []
 				for (let i = 0; i < list.length; i++) {
@@ -284,6 +305,11 @@
 				width: 80%;
 			}
 		}
+    .category-item{
+      margin-left: 8rpx;
+      margin-top: 8rpx;
+      font-size: 36rpx;
+    }
 	}
 
 	.input_box {
