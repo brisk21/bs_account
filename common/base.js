@@ -103,6 +103,11 @@ const install = (Vue, vm) => {
         return vm.$u.get('statistic/type', params);
     }
 
+    //检查更新
+    const checkAppVersion = (params) => {
+        return vm.$u.get('update', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -124,7 +129,8 @@ const install = (Vue, vm) => {
         delCategory,
         updateCategory,
         getStatisticData,
-        getCategoryInfo
+        getCategoryInfo,
+        checkAppVersion
     };
 }
 

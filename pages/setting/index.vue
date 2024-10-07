@@ -27,8 +27,10 @@
 
 					<u-cell-item @click="wkf()" title="反馈&建议" icon="volume"></u-cell-item>
 
-					<u-cell-item  @click="check_update()" title="版本号" icon="reload">
-						<u-badge count="有新版本" :absolute="false" slot="right-icon"></u-badge>
+					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
+              <text >{{app_version}}</text>
+						 <u-badge v-if="show_version" count="有新版本" :absolute="false" slot="right-icon"></u-badge>
+
 					</u-cell-item>
 
 					<u-cell-item v-if="hasLogin" @click="logout()" title="退出登录" icon="close-circle">
@@ -54,6 +56,7 @@
 		},
 		data() {
 			return {
+        app_version: null,
 				show_version: false,
 				phone_height: "0",
 				scroll_view_height: "100",
@@ -79,11 +82,34 @@
 				return this.$store.getters.unread_count || 0
 			}
 
-			
 		},
 		methods: {
-			// #ifdef APP-PLUS
+
+      //获取系统版本信息
+      getSystemInfo() {
+				let info = uni.getSystemInfoSync();
+
+        this.app_version = info.appVersion
+
+        this.check_app(info);
+			},
+
+      check_app(info) {
+        let that = this
+        this.$u.api.checkAppVersion({platform:info.platform,version:info.appVersion}).then(res => {
+					if (res.code == 0) {
+					    that.show_version = true;
+					}
+				})
+			},
+
+
 			check_update() {
+        if (uni.getSystemInfoSync().platform=='h5'){
+          this.$u.toast('请在APP端更新')
+          return
+        }
+        // #ifdef APP-PLUS
 				checkappupdate.check({
 					title: "检测到有新版本！",
 					content: "请升级app到最新版本！",
@@ -93,10 +119,13 @@
 					barbackground: "rgba(50,50,50,0.8)", //进度条背景色，默认灰色，可自定义rgba形式色值
 					barbackgroundactive: "rgba(32,165,58,1)" //进度条前景色色，默认绿色，可自定义rgba形式色值
 				})
+        // #endif
+
+
 			},
 
-			// #endif
-			
+
+
 			// #ifdef MP
 			getCode,
 			// #endif
@@ -205,14 +234,13 @@
 				})
 			}
 		},
-		onLoad(options) {},
+		onLoad(options) {
+      this.getSystemInfo()
+    },
 		onShow() {
 			if (this.hasLogin) {
 				this.$store.dispatch('getUserInfo')
 			}
-			//  #ifdef APP-PLUS
-			this.show_version = true
-			// #endif
 		}
 	}
 </script>
