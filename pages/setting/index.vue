@@ -25,7 +25,7 @@
 							:under-line="false">关于我们</u-link>
 					</u-cell-item>
 
-					<u-cell-item @click="wkf()" title="反馈&建议" icon="volume"></u-cell-item>
+					<u-cell-item @click="goto('feedback',true)" title="反馈&建议" icon="volume"></u-cell-item>
 
 					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
               <text >{{app_version}}</text>
@@ -70,7 +70,8 @@
 					extra: '0'
 				}],
 				paths: {
-					notice: '/pages/notification/index'
+					notice: '/pages/notification/index',
+          feedback: '/pages/setting/feedback'
 				}
 			}
 		},
@@ -226,7 +227,7 @@
 			},
 			goto(key, auth = true) {
 				if (auth && !this.hasLogin) {
-					this.$u.toast('请登录后查看');
+					this.$u.toast('请先登录');
 					return
 				}
 				uni.navigateTo({

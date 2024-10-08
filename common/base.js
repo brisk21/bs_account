@@ -108,6 +108,11 @@ const install = (Vue, vm) => {
         return vm.$u.get('update', params);
     }
 
+    //留言反馈
+    const feedback = (params) => {
+        return vm.$u.post('feedback', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -130,7 +135,8 @@ const install = (Vue, vm) => {
         updateCategory,
         getStatisticData,
         getCategoryInfo,
-        checkAppVersion
+        checkAppVersion,
+        feedback
     };
 }
 

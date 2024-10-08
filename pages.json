@@ -126,11 +126,20 @@
           "bounce": "none"
         }
       }
-    }
+    },
+	{
+	  "path": "pages/setting/feedback",
+	  "style": {
+	    "navigationBarTitleText": "留言反馈",
+	    "app-plus": {
+	      "bounce": "none"
+	    }
+	  }
+	}
   ],
   "globalStyle": {
     "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "有钱花记账",
+    "navigationBarTitleText": "随手记",
     "navigationBarBackgroundColor": "#42b479",
     "backgroundColor": "#FFFFFF"
   },

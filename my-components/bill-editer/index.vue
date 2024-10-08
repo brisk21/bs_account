@@ -171,8 +171,9 @@
         }
       },
       handleError(data, index, lists, name){
-        console.log('handleError', data);
-
+        console.log('handleError', index);
+        //移除文件
+          this.$refs.upload.remove(index)
       },
       beforeUpload(index, list) {
 				return true;
