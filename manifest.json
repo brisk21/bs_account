@@ -13,7 +13,9 @@
             "autoclose" : true,
             "delay" : 0
         },
-        "modules" : {},
+        "modules" : {
+            "Camera" : {}
+        },
         "distribute" : {
             "android" : {
                 "permissions" : [],
@@ -22,10 +24,16 @@
             },
             "ios" : {
                 "idfa" : false,
-                "dSYMs" : false
+                "dSYMs" : false,
+                "privacyDescription" : {
+                    "NSPhotoLibraryUsageDescription" : "上传账单记录",
+                    "NSPhotoLibraryAddUsageDescription" : "保存数据",
+                    "NSCameraUsageDescription" : "拍摄账单信息"
+                }
             },
             "sdkConfigs" : {
-                "ad" : {}
+                "ad" : {},
+                "push" : {}
             },
             "icons" : {
                 "android" : {
@@ -96,5 +104,6 @@
             "es6" : true
         }
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+    "locale" : "zh-Hans"
 }
