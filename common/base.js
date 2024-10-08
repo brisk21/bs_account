@@ -6,7 +6,7 @@ const indexUrl = 'mp/';
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
 const install = (Vue, vm) => {
     const code2token = (code) => {
-        return vm.$u.post('v2/code2token', {
+        return vm.$u.post('code_login', {
             code,
             // #ifdef MP-WEIXIN
             platform: 'wx',
