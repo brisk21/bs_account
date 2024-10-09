@@ -20,7 +20,7 @@
 			</view>
 			<button type="primary"  class="confirm-btn" @click="login()">账号登录</button>
 
-			<button v-if="is_wx" class="confirm-btn" @click="wxlogin()">微信登录</button>
+      <button v-if="is_wx" type="primary" size="default" class="confirm-btn-wx"   @click="wxlogin">微信一键登录</button>
 			<!-- 			<view class="forget-section">
 				忘记密码?
 			</view> -->
@@ -163,7 +163,7 @@
 		line-height: 76upx;
 		border-radius: 50px;
 		margin-top: 70upx;
-		background: $uni-theme-color;
+		background: #177ade;
 		color: #fff;
 		font-size: $font-lg;
 
@@ -171,6 +171,19 @@
 			border-radius: 100px;
 		}
 	}
+  .confirm-btn-wx{
+    width: 630upx;
+		height: 76upx;
+		line-height: 76upx;
+		border-radius: 50px;
+		margin-top: 70upx;
+		color: #fff;
+		font-size: $font-lg;
+    background: $uni-theme-color;
+		&:after {
+			border-radius: 100px;
+		}
+  }
 
 	.forget-section {
 		font-size: $font-sm+2upx;

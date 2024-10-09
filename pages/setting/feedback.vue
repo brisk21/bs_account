@@ -26,7 +26,7 @@
              @on-remove="handleRemove"
          ></u-upload>
 		</u-form-item>
-      <u-form-item label="">
+      <u-form-item label="操作">
         <u-button type="primary" @click="submit">提交</u-button>
       </u-form-item>
 
