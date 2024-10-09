@@ -233,7 +233,10 @@ export default {
 
       this.is_pulling = true
       this.$u.api.getCashflowList(cashbook_id, year, month).then(res => {
-        this.cashflow = res.data
+        if (res.code ==0){
+          this.cashflow = res.data
+        }
+
       }).catch(() => {
       }).finally(() => {
         uni.stopPullDownRefresh()
@@ -249,6 +252,9 @@ export default {
       });
     },
     toLogin() {
+      this.goToLoginPage()
+      return;
+
       // #ifndef MP
       this.goToLoginPage()
       // #endif

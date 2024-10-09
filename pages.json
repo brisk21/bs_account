@@ -23,7 +23,6 @@
         }
       }
     },
-    // #ifndef MP
     {
       "path": "pages/login/index",
       "style": {
@@ -42,7 +41,6 @@
         }
       }
     },
-    // #endif
 
     {
       "path": "pages/bill/add",

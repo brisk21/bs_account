@@ -18,8 +18,9 @@
 					</u-form-item>
 				</u-form>
 			</view>
-			<button class="confirm-btn" @click="login()">登录</button>
+			<button type="primary"  class="confirm-btn" @click="login()">账号登录</button>
 
+			<button v-if="is_wx" class="confirm-btn" @click="wxlogin()">微信登录</button>
 			<!-- 			<view class="forget-section">
 				忘记密码?
 			</view> -->
@@ -32,9 +33,12 @@
 </template>
 
 <script>
-	export default {
+	import {getCode} from "@/common/login";
+
+  export default {
 		data() {
 			return {
+        is_wx: false,
 				form: {
 					account: '',
 					password: '',
@@ -50,6 +54,9 @@
 		},
 		onLoad() {
 			this.getCaptcha()
+       // #ifdef MP
+      this.is_wx = true
+      // #endif
 		},
 		methods: {
 			toRegist() {
@@ -57,7 +64,13 @@
 					url: '/pages/login/register'
 				})
 			},
+      // #ifdef MP
+      wxlogin(){
+        getCode()
+      },
+      // #endif
 			login() {
+
 				let data = {
 					...this.form
 				}

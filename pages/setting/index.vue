@@ -3,14 +3,15 @@
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
-					<u-cell-item @click="wkf()" title="数据导出" icon="order">
+					<u-cell-item @click="goto('feedback',true)" title="反馈&建议" icon="volume"></u-cell-item>
+					<!--<u-cell-item @click="wkf()" title="数据导出" icon="order">
 					</u-cell-item>
-					<u-cell-item @click="wkf()" title="联系客服" icon="kefu-ermai"></u-cell-item>
+					<u-cell-item @click="wkf()" title="联系客服" icon="kefu-ermai"></u-cell-item>-->
 					<!--<button type="default" open-type="contact" class="list-item">
 						<u-cell-item title="联系客服">
 						</u-cell-item>
 					</button>-->
-					<u-cell-item @click="wkf()" title="推荐好友" icon="share"></u-cell-item>
+					<!--<u-cell-item @click="wkf()" title="推荐好友" icon="share"></u-cell-item>-->
 					<u-cell-item title="协议阅读" icon="order">
 						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/register'"
 							:under-line="false">注册协议</u-link>
@@ -25,7 +26,7 @@
 							:under-line="false">关于我们</u-link>
 					</u-cell-item>
 
-					<u-cell-item @click="goto('feedback',true)" title="反馈&建议" icon="volume"></u-cell-item>
+					
 
 					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
               <text >{{app_version}}</text>
@@ -166,63 +167,6 @@
 			categorySet() {
 				uni.navigateTo({
 					url: "/pages/setting/category"
-				})
-			},
-			// #ifdef MP-WEIXIN
-			getUserInfoWx() {
-				wx.getUserProfile({
-					desc: '获取头像信息，用于展示',
-					lang: 'zh_CN',
-					success: (res) => {
-						let info = res.userInfo
-						let data = {
-							avatar: info.avatarUrl,
-							city: info.city,
-							country: info.country,
-							gender: info.gender,
-							nick_name: info.nickName,
-							province: info.province,
-						}
-						this.updateProfile(data)
-					}
-				})
-			},
-			// #endif
-			// #ifdef MP-TOUTIAO
-			getUserInfoTt() {
-				tt.getUserInfo({
-					desc: '获取头像信息，用于展示',
-					lang: 'zh_CN',
-					success: (res) => {
-						let info = res.userInfo
-						let data = {
-							avatar: info.avatarUrl,
-							city: info.city,
-							country: info.country,
-							gender: info.gender,
-							nick_name: info.nickName,
-							province: info.province,
-						}
-						this.updateProfile(data)
-					}
-				})
-			},
-			// #endif
-			onGetUserInfo(e) {
-				let info = e.detail.userInfo
-				let data = {
-					avatar: info.avatarUrl,
-					city: info.city,
-					country: info.country,
-					gender: info.gender,
-					nick_name: info.nickName,
-					province: info.province,
-				}
-				this.updateProfile(data)
-			},
-			updateProfile(data) {
-				this.$u.api.updateProfile(data).then(res => {
-					this.$store.dispatch('getUserInfo')
 				})
 			},
 			goto(key, auth = true) {

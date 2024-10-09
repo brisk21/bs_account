@@ -10,28 +10,10 @@
 				</view>
 				<view class="info-box">
 					<view v-if="hasLogin">
-						<!-- #ifdef MP-WEIXIN -->
-						<text class="username" @click="getUserInfoWx()">{{userInfo.nick_name || '游客'}}</text>
-						<!-- #endif -->
-						<!-- #ifndef MP -->
-						<text class="username">{{userInfo.nick_name || '游客'}}</text>
-						<!-- #endif -->
-						<!-- #ifdef MP-QQ -->
-						<button type="default" class="username qq_login_btn" open-type="getUserInfo" lang="zh_CN"
-							@getuserinfo="onGetUserInfo">{{userInfo.nick_name || '游客'}}</button>
-						<!-- #endif -->
-						<!-- #ifdef MP-TOUTIAO -->
-						<text class="username" @click="getUserInfoTt()">{{userInfo.nick_name || '游客'}}</text>
-						<!-- #endif -->
-
+						<text class="username" >{{userInfo.nick_name || '游客'}}</text>
 					</view>
 					<view v-else>
-						<!-- #ifdef MP -->
-						<text class="username" @click="getCode()">点击登录</text>
-						<!-- #endif -->
-						<!-- #ifndef MP -->
 						<text class="username" @click="goToLoginPage()">点击登录</text>
-						<!-- #endif -->
 
 					</view>
 				</view>
@@ -115,9 +97,6 @@
 
 		},
 		methods: {
-			// #ifdef MP
-			getCode,
-			// #endif
 			share() {
 				console.log('非小程序分享')
 			},
@@ -142,63 +121,6 @@
 			categorySet() {
 				uni.navigateTo({
 					url: "/pages/setting/category"
-				})
-			},
-			// #ifdef MP-WEIXIN
-			getUserInfoWx() {
-				wx.getUserProfile({
-					desc: '获取头像信息，用于展示',
-					lang: 'zh_CN',
-					success: (res) => {
-						let info = res.userInfo
-						let data = {
-							avatar: info.avatarUrl,
-							city: info.city,
-							country: info.country,
-							gender: info.gender,
-							nick_name: info.nickName,
-							province: info.province,
-						}
-						this.updateProfile(data)
-					}
-				})
-			},
-			// #endif
-			// #ifdef MP-TOUTIAO
-			getUserInfoTt() {
-				tt.getUserInfo({
-					desc: '获取头像信息，用于展示',
-					lang: 'zh_CN',
-					success: (res) => {
-						let info = res.userInfo
-						let data = {
-							avatar: info.avatarUrl,
-							city: info.city,
-							country: info.country,
-							gender: info.gender,
-							nick_name: info.nickName,
-							province: info.province,
-						}
-						this.updateProfile(data)
-					}
-				})
-			},
-			// #endif
-			onGetUserInfo(e) {
-				let info = e.detail.userInfo
-				let data = {
-					avatar: info.avatarUrl,
-					city: info.city,
-					country: info.country,
-					gender: info.gender,
-					nick_name: info.nickName,
-					province: info.province,
-				}
-				this.updateProfile(data)
-			},
-			updateProfile(data) {
-				this.$u.api.updateProfile(data).then(res => {
-					this.$store.dispatch('getUserInfo')
 				})
 			},
 			goto(key, auth = true) {

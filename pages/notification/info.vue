@@ -44,6 +44,6 @@
 
 <style lang="scss">
 	.content {
-		padding: 5rpx;
+		padding: 30rpx;
 	}
 </style>

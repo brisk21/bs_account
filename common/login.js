@@ -10,6 +10,10 @@ export function getCode() {
 
 export function loginHandle(code) {
 	store.dispatch('code2token', code).then(response => {
-		store.dispatch('getUserInfo')
+		store.dispatch('getUserInfo').then(res => {
+		  uni.switchTab({
+			url: '/pages/index/index'
+		   })
+		})
 	})
 }
