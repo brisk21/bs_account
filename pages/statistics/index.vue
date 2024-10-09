@@ -38,6 +38,11 @@
     <u-picker mode="time" v-model="datePicker.picker_show" :default-time="datePicker.picker_time"
               :params="pickerParams" @confirm="pickerConfirm">
     </u-picker>
+    <view class="ad-container" v-if="userInfo && userInfo.position.statistics_page">
+       <ad-custom unit-id="adunit-8b8c1d986d8b9ff3" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
+    </view>
+
+
   </view>
 </template>
 
@@ -46,9 +51,6 @@ import scss from '@/uni.scss'
 import StatisticLeiXingBingTu from '@/my-components/charts/statistic-lei-xing-bing-tu.vue'
 // import StatisticShouZhiZhuZhuangTu from '@/my-components/charts/statistic-shou-zhi-zhu-zhuang-tu.vue'
 import dayjs from '@/dayjs.min.js'
-import {
-  getCode
-} from '@/common/login.js'
 
 export default {
   components: {
@@ -85,6 +87,9 @@ export default {
         second: false
       }
     },
+     userInfo() {
+				return this.$store.getters.user
+			},
   },
   methods: {
     typeChange(index) {
@@ -140,13 +145,8 @@ export default {
       }
     },
     toLogin() {
-      // #ifndef MP
-      this.goToLoginPage()
-      // #endif
+     this.goToLoginPage()
 
-      // #ifdef MP
-      getCode()
-      // #endif
     }
   },
   onShow() {
@@ -214,6 +214,9 @@ export default {
         width: 200rpx;
       }
     }
+  }
+  .ad-container{
+    margin-top: 60rpx;
   }
 }
 </style>

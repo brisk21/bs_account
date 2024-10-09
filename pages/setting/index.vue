@@ -26,7 +26,7 @@
 							:under-line="false">关于我们</u-link>
 					</u-cell-item>
 
-					
+
 
 					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
               <text >{{app_version}}</text>
@@ -39,6 +39,8 @@
 				</u-cell-group>
 			</view>
 		</view>
+    <ad-custom v-if="userInfo && userInfo.position.setting_page" unit-id="adunit-1709c673b8c4e1e0" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
+
 
 	</view>
 </template>
@@ -128,9 +130,6 @@
 
 
 
-			// #ifdef MP
-			getCode,
-			// #endif
 			share() {
 				console.log('非小程序分享')
 			},

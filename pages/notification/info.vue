@@ -1,6 +1,11 @@
 <template>
 	<view class="content">
 		<mp-html :content="html" />
+    <view class="ad-container" v-if="userInfo && userInfo.position.msg_info_page">
+      <ad-custom  unit-id="adunit-30666b45697904b1" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
+
+    </view>
+
 	</view>
 </template>
 
@@ -19,7 +24,10 @@
 		computed: {
 			html() {
 				return this.info.msg_id ? this.info.content : ''
-			}
+			},
+      userInfo() {
+				return this.$store.getters.user
+			},
 		},
 		methods: {
 			getData() {
@@ -46,4 +54,7 @@
 	.content {
 		padding: 30rpx;
 	}
+  .ad-container{
+    margin-top: 60rpx;
+  }
 </style>

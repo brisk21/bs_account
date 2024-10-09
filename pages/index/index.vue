@@ -378,6 +378,9 @@ export default {
     width: 100%;
     padding-bottom: 80px;
   }
+  .empty {
+    margin-top: 200px;
+  }
 }
 
 .go-to-login {

@@ -8,16 +8,16 @@
 
     </view>
     <u-cell-group>
-       <u-cell-item :arrow="false" title="管理分类" :title-style="{color: '#1953c3',fontWeight:'bold'}">
-          <u-switch slot="right-icon" v-model="action" ></u-switch>
+       <u-cell-item  :arrow="false" title="管理分类" :title-style="{color: '#1953c3',fontWeight:'bold'}">
+          <u-switch slot="right-icon" v-model="action"  ></u-switch>
        </u-cell-item>
     </u-cell-group>
 
     <u-cell-group v-show="type === 0">
-      <u-cell-item v-for="(item,index) in out_list" :title="item.name" :arrow="false">
+      <u-cell-item v-for="(item,index) in out_list" :key="index" :title="item.name" :arrow="false">
         <u-icon slot="icon" size="40" :name="item.icon"></u-icon>
 
-        <view slot="right-icon" v-if="action">
+        <view slot="right-icon" v-show="action">
           <u-button plain   type="primary" size="mini" @click="toEdit(item)">
             <u-icon size="32" margin-right="20" class="edit-btn" name="edit-pen"></u-icon>
           </u-button>
@@ -29,10 +29,10 @@
     </u-cell-group>
 
     <u-cell-group v-show="type === 1">
-      <u-cell-item v-for="(item,index) in in_list" :title="item.name" :arrow="false">
+      <u-cell-item v-for="(item,index) in in_list" :key="index" :title="item.name" :arrow="false">
         <u-icon slot="icon" size="40" :name="item.icon"></u-icon>
 
-        <view slot="right-icon" v-if="action">
+        <view slot="right-icon" v-show="action">
           <u-button plain   type="primary" size="mini" @click="toEdit(item)">
             <u-icon size="32" margin-right="20" class="edit-btn" name="edit-pen"></u-icon>
           </u-button>
@@ -87,6 +87,8 @@ export default {
       this.type = index;
     },
     getCategory() {
+      this.in_list = []
+      this.out_list = []
       this.$u.api.getCategory(0).then(res => {
         //type10=收入，type20=支出
         if (res.code == 0 && res.data.length > 0) {

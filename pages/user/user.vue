@@ -53,10 +53,14 @@
 			</view>
 		</view>
 
+    <ad-custom v-if="userInfo && userInfo.position.user_center" unit-id="adunit-2ce0331ff2925c38" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
+
 
 		<u-select @click="select_bill_show = true" :default-value="default_bill_index" mode="single-column"
 			v-model="select_bill_show" :list="bill_list" @confirm="billConfirm"></u-select>
 	</view>
+
+
 </template>
 
 <script>
@@ -70,6 +74,7 @@
 		},
 		data() {
 			return {
+        ad_show: false,
 				phone_height: "0",
 				scroll_view_height: "100",
 				bill_title: "默认账单",
