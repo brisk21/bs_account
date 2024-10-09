@@ -28,11 +28,7 @@
 		},
 		onShow: function() {
 			let token = uni.getStorageSync('UserToken')
-			if (!token) {
-				// #ifdef MP
-				// getCode()
-				// #endif
-			} else {
+			if (token) {
 				this.$store.dispatch('getUserInfo')
 			}
 		},
