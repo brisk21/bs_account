@@ -30,7 +30,7 @@ const install = (Vue, vm) => {
 		},
 		// 响应拦截，如配置，每次请求结束都会执行本方法
 		Vue.prototype.$u.http.interceptor.response = (res) => {
-			// console.log(res,'xx')
+			//console.log(res,'xx')
 			if (res.statusCode > 300 && res.statusCode != 401) {
 				// 如果返回false，则会调用Promise的reject回调，
 				// 并将进入this.$u.post(url).then().catch(res=>{})的catch回调中，res为服务端的返回值
@@ -44,6 +44,11 @@ const install = (Vue, vm) => {
 				vm.$store.dispatch('logout')
 				return false;
 			} else {
+				if (res.data.code == 401){
+					console.log('执行了 401')
+					vm.$store.dispatch('logout')
+					return false
+				}
 				return res.data
 			}
 		}
