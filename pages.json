@@ -136,35 +136,35 @@
       "path": "pages/setting/safe/index",
       "style": {
         "navigationBarTitleText": "安全中心",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/setting/safe/avatar",
       "style": {
         "navigationBarTitleText": "信息修改",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/setting/xieyi",
       "style": {
         "navigationBarTitleText": "协议相关",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/setting/safe/account",
       "style": {
         "navigationBarTitleText": "修改账号",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/setting/safe/edit_pwd",
       "style": {
         "navigationBarTitleText": "修改密码",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     }
   ],
