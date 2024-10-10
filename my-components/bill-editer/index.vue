@@ -87,11 +87,9 @@
 <script>
 import dayjs from '@/dayjs.min.js'
 import constConfig from '@/const.js'
-import CategoryList from '@/my-components/category-list/index.vue'
 import uploadFile from "@/components/UploadFile.vue";
 export default {
   components: {
-    CategoryList,
     uploadFile
   },
   props: {
@@ -220,19 +218,6 @@ export default {
         id: null
       })
       return list
-      let arr = []
-      let tmp = []
-      for (let i = 0; i < list.length; i++) {
-        if (i != 0 && (i % 10 == 0)) {
-          arr.push(tmp)
-          tmp = []
-        } else {
-          tmp.push(list[i])
-        }
-      }
-      arr.push(tmp)
-      tmp = []
-      return arr
     },
     categoryChange(id) {
       console.log(id, 'categoryChange')
