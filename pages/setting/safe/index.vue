@@ -12,10 +12,10 @@
 					<u-cell-item @click="goto('/pages/setting/safe/edit_pwd')" title="修改密码" icon="lock-open">
             建议定期修改，更安全
           </u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/email')" title="绑定邮箱" icon="email">
+          <u-cell-item @click="goto('')" title="绑定邮箱" icon="email">
             方便找回密码等
           </u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/bindwx')" title="绑定微信" icon="weixin-fill">
+          <u-cell-item @click="goto('')" title="绑定微信" icon="weixin-fill">
             小程序可快速登录
           </u-cell-item>
 
@@ -50,6 +50,10 @@
 					this.$u.toast('请登录后查看');
 					return
 				}
+        if (!path){
+          this.$u.toast('暂未开放')
+          return
+        }
 				uni.navigateTo({
 					url: path
 				})
