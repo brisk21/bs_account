@@ -3,7 +3,9 @@
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
-					<u-cell-item @click="goto('feedback',true)" title="反馈&建议" icon="volume"></u-cell-item>
+          <u-cell-item @click="goto('/pages/setting/safe/index',true)" title="安全中心" icon="lock"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/feedback',true)" title="反馈&建议" icon="volume"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/xieyi',true)" title="协议相关" icon="order"></u-cell-item>
 					<!--<u-cell-item @click="wkf()" title="数据导出" icon="order">
 					</u-cell-item>
 					<u-cell-item @click="wkf()" title="联系客服" icon="kefu-ermai"></u-cell-item>-->
@@ -12,20 +14,6 @@
 						</u-cell-item>
 					</button>-->
 					<!--<u-cell-item @click="wkf()" title="推荐好友" icon="share"></u-cell-item>-->
-					<u-cell-item title="协议阅读" icon="order">
-						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/register'"
-							:under-line="false">注册协议</u-link>
-					</u-cell-item>
-					<u-cell-item title="协议阅读" icon="order">
-						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/privacy'"
-							:under-line="false">隐私政策</u-link>
-					</u-cell-item>
-
-					<u-cell-item title="关于我们" icon="info-circle">
-						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/about'"
-							:under-line="false">关于我们</u-link>
-					</u-cell-item>
-
 
 
 					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
@@ -75,10 +63,6 @@
 					label: '默认账单',
 					extra: '0'
 				}],
-				paths: {
-					notice: '/pages/notification/index',
-          feedback: '/pages/setting/feedback'
-				}
 			}
 		},
 		computed: {
@@ -171,13 +155,13 @@
 					url: "/pages/setting/category"
 				})
 			},
-			goto(key, auth = true) {
+			goto(path, auth = true) {
 				if (auth && !this.hasLogin) {
 					this.$u.toast('请先登录');
 					return
 				}
 				uni.navigateTo({
-					url: this.paths[key]
+					url: path
 				})
 			}
 		},

@@ -5,10 +5,9 @@
   "pages": [
     {
       "path": "pages/index/index",
-
       "style": {
         "navigationBarTitleText": "明细",
-        "enablePullDownRefresh" : true,
+        "enablePullDownRefresh": true,
         "app-plus": {
           "bounce": "none"
         }
@@ -41,7 +40,6 @@
         }
       }
     },
-
     {
       "path": "pages/bill/add",
       "style": {
@@ -107,7 +105,7 @@
         }
       }
     },
-	  {
+    {
       "path": "pages/setting/form",
       "style": {
         "navigationBarTitleText": "分类操作",
@@ -125,15 +123,36 @@
         }
       }
     },
-	{
-	  "path": "pages/setting/feedback",
-	  "style": {
-	    "navigationBarTitleText": "留言反馈",
-	    "app-plus": {
-	      "bounce": "none"
-	    }
-	  }
-	}
+    {
+      "path": "pages/setting/feedback",
+      "style": {
+        "navigationBarTitleText": "留言反馈",
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "pages/setting/safe/index",
+      "style": {
+        "navigationBarTitleText": "安全中心",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/setting/safe/avatar",
+      "style": {
+        "navigationBarTitleText": "信息修改",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/setting/xieyi",
+      "style": {
+        "navigationBarTitleText": "协议相关",
+        "enablePullDownRefresh": true
+      }
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "white",

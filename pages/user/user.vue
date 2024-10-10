@@ -17,10 +17,6 @@
 
 					</view>
 				</view>
-				<!-- 				<view class="select_bill" @click="selectBill()">
-					{{bill_title}}
-					<u-icon name="arrow-right"></u-icon>
-				</view> -->
 			</view>
 		</view>
 		<view class="tj-sction">
@@ -40,14 +36,14 @@
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
-					<u-cell-item @click="goto('notice')" title="系统消息" icon="bell">
+					<u-cell-item @click="goto('/pages/notification/index')" title="系统消息" icon="bell">
 						<u-badge v-show="hasLogin && unreadCount > 0" :count="unreadCount" :absolute="false"
 							slot="right-icon">
 						</u-badge>
 					</u-cell-item>
-					<u-cell-item @click="categorySet()" title="收支类型" icon="grid"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/category')" title="收支类型" icon="grid"></u-cell-item>
 
-          <u-cell-item @click="goto('setting')" title="设置" icon="setting">
+          <u-cell-item @click="goto('/pages/setting/index',false)" title="设置" icon="setting">
 					</u-cell-item>
 				</u-cell-group>
 			</view>
@@ -56,8 +52,7 @@
     <ad-custom v-if="userInfo && userInfo.position.user_center" unit-id="adunit-2ce0331ff2925c38" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
     <!-- #endif -->
 
-		<u-select @click="select_bill_show = true" :default-value="default_bill_index" mode="single-column"
-			v-model="select_bill_show" :list="bill_list" @confirm="billConfirm"></u-select>
+
 	</view>
 
 
@@ -82,11 +77,8 @@
 					value: '0',
 					label: '默认账单',
 					extra: '0'
-				}],
-				paths: {
-					notice: '/pages/notification/index',
-          setting: '/pages/setting/index'
-				}
+				}]
+
 			}
 		},
 		computed: {
@@ -99,39 +91,13 @@
 
 		},
 		methods: {
-			share() {
-				console.log('非小程序分享')
-			},
-
-			// 点击选择账单
-			selectBill() {
-				this.select_bill_show = !this.select_bill_show;
-			},
-			// 选择账单回调
-			billConfirm(e) {
-				console.log(e);
-			},
-
-			message() {},
-			pickerConfirm() {
-
-			},
-
-			wkf() {
-				this.$u.toast('该功能暂未开放');
-			},
-			categorySet() {
-				uni.navigateTo({
-					url: "/pages/setting/category"
-				})
-			},
-			goto(key, auth = true) {
+			goto(path, auth = true) {
 				if (auth && !this.hasLogin) {
 					this.$u.toast('请登录后查看');
 					return
 				}
 				uni.navigateTo({
-					url: this.paths[key]
+					url: path
 				})
 			}
 		},
