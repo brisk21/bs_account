@@ -78,7 +78,7 @@ export default {
     },
     uploadSuccess(res, index, lists, name) {
       if (res.code === 0) {
-        this.$emit('success', { url: res.data.full_url, index, fileList: lists });
+        this.$emit('success', { url: res.data.full_url, index, fileList: lists ,res});
       } else {
         this.$u.toast(res.msg);
         this.handleRemove(index, lists, name);

@@ -5,16 +5,16 @@
                v-model="form.nick_name"/>
     </u-form-item>
     <u-form-item label="头像">
-     <upload-file
+      <upload-file
           :action="action"
           :header="header"
           :max-size="maxSize"
           :max-count="maxCount"
           :limit-type="limitType"
-           :default-files="initialFiles"
+          :default-files="initialFiles"
           @success="handleFileUploadSuccess"
           @remove="handleFileUploadRemove"
-        />
+      />
     </u-form-item>
 
 
@@ -30,6 +30,7 @@
 <script>
 import constConfig from '@/const.js'
 import uploadFile from "@/components/UploadFile.vue";
+
 export default {
   components: {
     uploadFile
@@ -44,13 +45,13 @@ export default {
       initialFiles: [
         /*{ url: 'http://example.com/image1.jpg' },*/
       ],
-        action: constConfig.baseUrl + '/upload/image',
-        header: {
-          'Authorization': 'Bearer ' + this.$store.getters.user_token,
-        },
-        maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
-        maxCount: 1, // 可以设置不同的数量限制
-        limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
+      action: constConfig.baseUrl + '/upload/image',
+      header: {
+        'Authorization': 'Bearer ' + this.$store.getters.user_token,
+      },
+      maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
+      maxCount: 1, // 可以设置不同的数量限制
+      limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
 
     };
   },
@@ -65,12 +66,12 @@ export default {
   methods: {
     getUserInfo() {
       let user = this.$store.getters.user
-      if (!user){
-         //跳到登录
+      if (!user) {
+        //跳到登录
         uni.navigateTo({
           url: '/pages/login/login'
         })
-        return ;
+        return;
       }
       this.$nextTick(() => {
         this.user = user
@@ -82,15 +83,15 @@ export default {
 
     },
 
-    handleFileUploadSuccess({ url, index, fileList }) {
+    handleFileUploadSuccess({url, index, fileList}) {
       // 更新 formData 或者做其他处理
       console.log('文件上传成功:', url);
       this.form.avatar = url
     },
-    handleFileUploadRemove({ index, fileList }) {
+    handleFileUploadRemove({index, fileList}) {
       // 更新状态或者做其他处理
       console.log('文件已被移除:', index);
-      this.form.avatar =  this.user.avatar || null
+      this.form.avatar = this.user.avatar || null
     },
     async submit() {
       let that = this
@@ -108,9 +109,9 @@ export default {
               nick_name: this.form.nick_name,
               avatar: this.form.avatar
             }).then(res => {
-                this.$u.toast(res.msg);
+              this.$u.toast(res.msg);
 
-              })
+            })
 
           } else if (res.cancel) {
             this.$u.toast('已取消');
