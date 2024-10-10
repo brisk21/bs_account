@@ -4,12 +4,12 @@
 		<view class="user-section">
 			<view class="bg"></view>
 			<view class="user-info-box">
-				<view class="portrait-box">
+				<view class="portrait-box" @click="goto('/pages/setting/safe/avatar',true)">
 					<image class="portrait" :src="userInfo.avatar || '/static/missing-face.png'">
 					</image>
 				</view>
 				<view class="info-box">
-					<view v-if="hasLogin">
+					<view v-if="hasLogin" @click="goto('/pages/setting/safe/avatar',true)">
 						<text class="username" >{{userInfo.nick_name || '游客'}}</text>
 					</view>
 					<view v-else>

@@ -11,6 +11,7 @@
       :header="header"
       :limit-type="limitType"
       :preview-full-image="previewFullImage"
+       :show-progress="false"
       @on-error="handleError"
       @on-success="uploadSuccess"
       @on-remove="handleRemove"

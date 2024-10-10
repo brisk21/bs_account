@@ -110,7 +110,11 @@ export default {
               avatar: this.form.avatar
             }).then(res => {
               this.$u.toast(res.msg);
-
+              setTimeout(function () {
+                uni.navigateBack({
+                  delta: 1
+                })
+              },500)
             })
 
           } else if (res.cancel) {
