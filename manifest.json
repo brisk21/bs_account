@@ -79,7 +79,7 @@
         "usingComponents" : true,
         "appid" : "wx7b32a9e7026048d0",
         "setting" : {
-            "urlCheck" : false,
+            "urlCheck" : true,
             "minified" : true,
             "es6" : true,
             "postcss" : true

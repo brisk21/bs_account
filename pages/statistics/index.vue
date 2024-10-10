@@ -38,9 +38,11 @@
     <u-picker mode="time" v-model="datePicker.picker_show" :default-time="datePicker.picker_time"
               :params="pickerParams" @confirm="pickerConfirm">
     </u-picker>
+    <!-- #ifdef MP-->
     <view class="ad-container" v-if="userInfo && userInfo.position.statistics_page">
        <ad-custom unit-id="adunit-8b8c1d986d8b9ff3" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
     </view>
+    <!-- #endif -->
 
 
   </view>
@@ -117,7 +119,9 @@ export default {
       this.$u.api.getStatisticData(params).then(res => {
         this.loadingType = 3;
         if (res.code == 0 && res.data.length) {
-          this.statisticTypeData = res.data
+          this.$nextTick(() => {
+            this.statisticTypeData = res.data
+          })
         } else {
           let that = this;
           setTimeout(function () {
@@ -125,8 +129,6 @@ export default {
           }, 1000)
           this.statisticTypeData = []
         }
-
-
       })
     },
     pickerConfirm(e) {

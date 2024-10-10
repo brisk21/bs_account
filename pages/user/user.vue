@@ -52,9 +52,9 @@
 				</u-cell-group>
 			</view>
 		</view>
-
+   <!-- #ifdef MP-->
     <ad-custom v-if="userInfo && userInfo.position.user_center" unit-id="adunit-2ce0331ff2925c38" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
-
+    <!-- #endif -->
 
 		<u-select @click="select_bill_show = true" :default-value="default_bill_index" mode="single-column"
 			v-model="select_bill_show" :list="bill_list" @confirm="billConfirm"></u-select>
@@ -65,9 +65,6 @@
 
 <script>
 	import fab from '@/my-components/fab/index.vue'
-	import {
-		getCode
-	} from '@/common/login.js'
 	export default {
 		components: {
 			fab

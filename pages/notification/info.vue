@@ -1,10 +1,12 @@
 <template>
 	<view class="content">
 		<mp-html :content="html" />
+    <!-- #ifdef MP-->
     <view class="ad-container" v-if="userInfo && userInfo.position.msg_info_page">
       <ad-custom  unit-id="adunit-30666b45697904b1" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
 
     </view>
+    <!-- #endif -->
 
 	</view>
 </template>
