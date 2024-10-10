@@ -159,6 +159,13 @@
         "navigationBarTitleText": "修改账号",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/setting/safe/edit_pwd",
+      "style": {
+        "navigationBarTitleText": "修改密码",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {

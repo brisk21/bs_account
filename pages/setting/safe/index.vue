@@ -9,7 +9,7 @@
           <u-cell-item @click="goto('/pages/setting/safe/account')" title="修改账号" icon="account" >
               登录账号每个月只能修改一次
             </u-cell-item>
-					<u-cell-item @click="goto('/pages/setting/safe/password')" title="修改密码" icon="lock-open">
+					<u-cell-item @click="goto('/pages/setting/safe/edit_pwd')" title="修改密码" icon="lock-open">
             建议定期修改，更安全
           </u-cell-item>
           <u-cell-item @click="goto('/pages/setting/safe/email')" title="绑定邮箱" icon="email">

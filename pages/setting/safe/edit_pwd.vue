@@ -1,12 +1,21 @@
 <template>
   <view class="container category_form">
-    <u-form-item label="账号">
-      <u-input placeholder="请输入登录账号" border :maxlength="50" type="text" clearable class="category_form_input"
+    <u-form-item label="账号：" label-position="top">
+      <u-input disabled border :maxlength="50" type="text" clearable class="category_form_input"
                v-model="form.account"/>
     </u-form-item>
-    <u-form-item label="密码">
+    <u-form-item label="原密码：" label-position="top">
       <u-input placeholder="请输入登录密码" border :maxlength="32" type="password" clearable class="category_form_input"
                v-model="form.password"/>
+    </u-form-item>
+    <u-form-item label="新密码：" label-position="top">
+      <u-input placeholder="请输入新密码" border :maxlength="32" type="password" clearable class="category_form_input"
+               v-model="form.new_password"/>
+    </u-form-item>
+    <u-form-item label="确认密码：" label-position="top">
+      <u-input placeholder="请再次输入新密码" border :maxlength="32" type="password" clearable
+               class="category_form_input"
+               v-model="form.new_password_confirm"/>
     </u-form-item>
 
     <view class="buttons">
@@ -23,7 +32,9 @@ export default {
     return {
       form: {
         account: '',
-        password: ''
+        password: '',
+        new_password: '',
+        new_password_confirm: ''
       }
     };
   },
@@ -49,18 +60,32 @@ export default {
     },
 
     submit() {
-      if (!this.form.account){
-        this.$u.toast('请输入账号');
+      if (!this.form.new_password) {
+        this.$u.toast('请输入登录密码');
+        return;
+      }
+      if (!this.form.new_password_confirm) {
+        this.$u.toast('请再次输入密码');
+        return;
+      }
+      if (this.form.new_password !== this.form.new_password_confirm) {
+        this.$u.toast('两次密码不一致');
+        return;
+      }
+      //密码至少6位数
+      if (this.form.new_password.length < 6) {
+        this.$u.toast('密码至少6位数');
         return;
       }
       uni.showModal({
         title: '提示',
-        content: '确定提交吗,每个月只能修改一次哦？',
+        content: '确定提交吗？',
         success: (res) => {
           if (res.confirm) {
-            this.$u.api.updateAccount({
-              account: this.form.account,
-              password: this.form.password
+            this.$u.api.updatePwd({
+              password: this.form.password,
+              new_password: this.form.new_password,
+              new_password_confirm: this.form.new_password_confirm
             }).then(res => {
               this.$u.toast(res.msg);
               if (res.code !== 0) {
@@ -70,8 +95,8 @@ export default {
                 uni.navigateBack({
                   delta: 1
                 })
-              },500)
-           })
+              }, 500)
+            })
           }
         }
       })

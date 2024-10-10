@@ -56,6 +56,9 @@ const install = (Vue, vm) => {
     const updateAccount = (data) => {
         return vm.$u.put('updateAccount', data);
     }
+    const updatePwd = (data) => {
+        return vm.$u.put('updatePwd ', data);
+    }
 
     const delCashflow = (id) => {
         return vm.$u.delete(`cashflow/${id}`);
@@ -121,6 +124,7 @@ const install = (Vue, vm) => {
         code2token,
         me,
         updateAccount,
+        updatePwd,
         getCategory,
         createCashFlow,
         getCashflowList,

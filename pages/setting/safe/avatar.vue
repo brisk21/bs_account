@@ -135,7 +135,7 @@ export default {
   .buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 20rpx;
+    margin-top: 160rpx;
 
     .action-btn {
       width: 100%;
