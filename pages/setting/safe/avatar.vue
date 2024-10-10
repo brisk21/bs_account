@@ -17,8 +17,6 @@
       />
     </u-form-item>
 
-
-    <!--    <u-select v-model="select_bill_show" :list="bill_list" @confirm="billConfirm"></u-select>-->
     <view class="buttons">
       <u-button class="action-btn" type="success" @click="submit">保存</u-button>
 

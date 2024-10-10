@@ -152,6 +152,13 @@
         "navigationBarTitleText": "协议相关",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/setting/safe/account",
+      "style": {
+        "navigationBarTitleText": "修改账号",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {

@@ -53,6 +53,10 @@ const install = (Vue, vm) => {
         return vm.$u.put('profile', data);
     }
 
+    const updateAccount = (data) => {
+        return vm.$u.put('updateAccount', data);
+    }
+
     const delCashflow = (id) => {
         return vm.$u.delete(`cashflow/${id}`);
     }
@@ -116,6 +120,7 @@ const install = (Vue, vm) => {
     vm.$u.api = {
         code2token,
         me,
+        updateAccount,
         getCategory,
         createCashFlow,
         getCashflowList,
