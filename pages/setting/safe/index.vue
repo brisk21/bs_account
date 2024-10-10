@@ -4,7 +4,7 @@
 			<view class="menu-list">
 				<u-cell-group>
             <u-cell-item @click="goto('/pages/setting/safe/avatar')" title="修改头像和昵称" :icon="userInfo.avatar || '/static/missing-face.png'" >
-
+              {{userInfo.nick_name}}
             </u-cell-item>
           <u-cell-item @click="goto('/pages/setting/safe/account')" title="修改账号" icon="account" >
               登录账号每个月只能修改一次
