@@ -120,6 +120,10 @@ const install = (Vue, vm) => {
         return vm.$u.post('feedback', params);
     }
 
+    const setDisplay = (params) => {
+        return vm.$u.post('cashflow-display', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -145,7 +149,8 @@ const install = (Vue, vm) => {
         getStatisticData,
         getCategoryInfo,
         checkAppVersion,
-        feedback
+        feedback,
+        setDisplay
     };
 }
 

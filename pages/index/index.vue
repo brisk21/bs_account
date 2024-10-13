@@ -7,10 +7,13 @@
           <view class="header-text"> {{ year }} 年</view>
         </view>
         <view class="item">
-          <view class="header-text">收入</view>
+          <view class="header-text">收入
+            <u-icon :name="eye.in ? 'eye' : 'eye-off'" class="setDisplay" @click="setDisplay('in')"></u-icon>
+
+          </view>
         </view>
         <view class="item">
-          <view class="header-text">支出</view>
+          <view class="header-text">支出<u-icon class="setDisplay" @click="setDisplay('out')" :name="eye.out ? 'eye' : 'eye-off'"> </u-icon></view>
         </view>
       </view>
       <view class="line data">
@@ -99,6 +102,10 @@ export default {
   },
   data() {
     return {
+      eye:{
+        in:true,
+        out:true
+      },
       is_fresh: false,
       is_pulling: false,
       picker_params: {
@@ -161,6 +168,16 @@ export default {
   },
 
   methods: {
+    setDisplay(type){
+      console.log(type)
+      this.eye[type] = !this.eye[type]
+      this.$u.api.setDisplay({type:type}).then((res)=>{
+         this.$u.toast(res.msg,500)
+        if (res.code === 0){
+          this.getList()
+        }
+      })
+    },
 
     init_data() {
        // 获取当前日期
@@ -235,6 +252,7 @@ export default {
       this.$u.api.getCashflowList(cashbook_id, year, month).then(res => {
         if (res.code ==0){
           this.cashflow = res.data
+          this.eye = res.data.show_set
         }
 
       }).catch(() => {
@@ -383,6 +401,9 @@ export default {
   }
 }
 
+.setDisplay{
+  margin-left: 10rpx;
+}
 .go-to-login {
   border-radius: 10rpx;
   background: $uni-theme-color;
