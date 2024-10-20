@@ -124,6 +124,14 @@ const install = (Vue, vm) => {
         return vm.$u.post('cashflow-display', params);
     }
 
+    //推送设置
+    const setPush = (params) => {
+        return vm.$u.put('push_setting', params);
+    }
+    const getPush = (params) => {
+        return vm.$u.get('push_setting', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -150,7 +158,9 @@ const install = (Vue, vm) => {
         getCategoryInfo,
         checkAppVersion,
         feedback,
-        setDisplay
+        setDisplay,
+        setPush,
+        getPush
     };
 }
 

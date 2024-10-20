@@ -6,15 +6,8 @@
           <u-cell-item @click="goto('/pages/setting/safe/index',true)" title="安全中心" icon="lock"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/feedback',true)" title="反馈&建议" icon="volume"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/xieyi',true)" title="协议相关" icon="order"></u-cell-item>
-					<!--<u-cell-item @click="wkf()" title="数据导出" icon="order">
-					</u-cell-item>
-					<u-cell-item @click="wkf()" title="联系客服" icon="kefu-ermai"></u-cell-item>-->
-					<!--<button type="default" open-type="contact" class="list-item">
-						<u-cell-item title="联系客服">
-						</u-cell-item>
-					</button>-->
-					<!--<u-cell-item @click="wkf()" title="推荐好友" icon="share"></u-cell-item>-->
-
+					<u-cell-item @click="wkf()" title="数据导出" icon="download"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
 
 					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
               <text >{{app_version}}</text>
@@ -116,24 +109,6 @@
 			},
 
 
-
-			share() {
-				console.log('非小程序分享')
-			},
-
-			// 点击选择账单
-			selectBill() {
-				this.select_bill_show = !this.select_bill_show;
-			},
-			// 选择账单回调
-			billConfirm(e) {
-				console.log(e);
-			},
-
-			message() {},
-			pickerConfirm() {
-
-			},
 			logout() {
 				uni.showModal({
 					title: '确定退出登录？',
