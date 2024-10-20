@@ -12,8 +12,9 @@
 					<u-cell-item @click="goto('/pages/setting/safe/edit_pwd')" title="修改密码" icon="lock-open">
             建议定期修改，更安全
           </u-cell-item>
-          <u-cell-item @click="goto('')" title="绑定邮箱" icon="email">
-            方便找回密码等
+          <u-cell-item @click="goto('/pages/setting/safe/email')" title="邮箱" icon="email">
+            <text v-if="userInfo.email" style="color: #999;">{{ userInfo.email }}</text>
+            <text v-else style="color: #e90808;">未绑定</text>
           </u-cell-item>
           <u-cell-item @click="goto('')" title="绑定微信" icon="weixin-fill">
             小程序可快速登录

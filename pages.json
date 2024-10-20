@@ -173,6 +173,13 @@
         "navigationBarTitleText": "推送设置",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/setting/safe/email",
+      "style": {
+        "navigationBarTitleText": "设置邮箱",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {

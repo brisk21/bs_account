@@ -132,6 +132,16 @@ const install = (Vue, vm) => {
         return vm.$u.get('push_setting', params);
     }
 
+    //邮箱验证码发送
+    const send_code = (params) => {
+        return vm.$u.get('code/send', params);
+    }
+
+    //保存邮箱
+    const updateEmail = (params) => {
+        return vm.$u.put('update-email', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -160,7 +170,9 @@ const install = (Vue, vm) => {
         feedback,
         setDisplay,
         setPush,
-        getPush
+        getPush,
+        send_code,
+        updateEmail
     };
 }
 
