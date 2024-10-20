@@ -26,10 +26,10 @@ export default {
   data() {
     return {
       form: {
-        day_set: true,
-        week_set: true,
-        month_set: true,
-        year_set: true
+        day_set: false,
+        week_set: false,
+        month_set: false,
+        year_set: false
       }
     };
   },
@@ -50,7 +50,6 @@ export default {
         return;
       }
       this.$u.api.getPush().then(res => {
-        console.log(res)
         if (res.code == 0 && res.data){
           this.$nextTick(() => {
           this.form = res.data
