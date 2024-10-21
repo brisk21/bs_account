@@ -69,7 +69,7 @@
       <view class="line">
         <text class="popup_type">备注：</text>
         <input type="textarea" v-model="formData.remark" @input="onRemarkInput" placeholder="添加备注"
-               style="font-size: 28rpx;width: 70%;" clearable border border-color="gray" auto-height :confirm-type="null"/>
+               style="font-size: 28rpx;width: 70%;" clearable border border-color="gray" auto-height />
       </view>
 
       <view class="line">
