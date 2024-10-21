@@ -170,9 +170,10 @@ export default {
   methods: {
     setDisplay(type){
       console.log(type)
+      this.is_pulling = false;
       this.eye[type] = !this.eye[type]
       this.$u.api.setDisplay({type:type}).then((res)=>{
-         this.$u.toast(res.msg,500)
+         //this.$u.toast(res.msg,500)
         if (res.code === 0){
           this.getList()
         }
