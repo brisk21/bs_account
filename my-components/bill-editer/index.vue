@@ -46,10 +46,18 @@
       </view>
 
       <u-line></u-line>
-
+      <view class="line">
+        <text class="popup_type">{{formData.type===10?'收入':'支出'}}方式：</text>
+        <u-tag class="amount_type"  v-for="(item,index) in amount_type" :text="item" :type="formData.amount_type===item?'primary':'info'"
+                @click="setAmountType(item)"
+                border-color="e5e5e5"
+                mode="plain"
+               size="mini"
+        ></u-tag>
+      </view>
       <view class="line">
         <view class="date">
-          <text class="popup_type">日期</text>
+          <text class="popup_type">日期：</text>
           <view style="font-size: 28rpx;font-weight: 600;" @click="picker_show = true">
             {{ formData.date }}
             <u-icon name="arrow-right" class="u-icon-wrap u-cell__right-icon-wrap"></u-icon>
@@ -59,12 +67,13 @@
         <u-button class="save_btn" type="success" size="medium" @click="submit()">保存</u-button>
       </view>
       <view class="line">
-        <text class="popup_type">备注</text>
+        <text class="popup_type">备注：</text>
         <input type="textarea" v-model="formData.remark" @input="onRemarkInput" placeholder="添加备注"
-               style="font-size: 28rpx;width: 70%;" clearable border border-color="gray" :auto-height="true"/>
+               style="font-size: 28rpx;width: 70%;" clearable border border-color="gray" auto-height :confirm-type="null"/>
       </view>
+
       <view class="line">
-        <text class="popup_type">附件图片</text>
+        <text class="popup_type">附件图片：</text>
         <upload-file
             :action="action"
             :header="header"
@@ -101,6 +110,8 @@ export default {
   data() {
     return {
       type: 0,
+      //资金途径（来源、去向）：支付宝、微信、银行卡、现金、其他
+      amount_type: ['微信','支付宝','银行卡', '现金', '其他'],
       list: ['支出', '收入'],
       formData: {
         id: 0,
@@ -109,6 +120,7 @@ export default {
         category_id: 0,
         date: '',
         remark: '',
+        amount_type:'',
         image: null
       },
       pickerOption: {
@@ -154,6 +166,12 @@ export default {
     }
   },
   methods: {
+
+    setAmountType(item) {
+      console.log('t',item)
+      this.formData.amount_type = item
+    },
+
     handleFileUploadSuccess({url, index, fileList,res}) {
       console.log('文件上传成功:', url);
        if (res.code == 0) {
@@ -259,6 +277,7 @@ export default {
       this.$u.api.getCashflowInfo(id).then(res => {
         let data = res.data
         this.formData = data
+        this.type = data.type === 20 ? 0 : 1
         if (data.image) {
           this.initialFiles = [{url: data.image}]
         }
@@ -286,6 +305,10 @@ export default {
     .selector {
       width: 80%;
     }
+  }
+
+  .amount_type{
+    margin: 5px;
   }
 
   .category-item {
@@ -349,7 +372,7 @@ export default {
 
 .popup_type {
   font-size: 28rpx;
-  padding-right: 30rpx;
+  padding-right: 0rpx;
 }
 
 .u-cell__right-icon-wrap {

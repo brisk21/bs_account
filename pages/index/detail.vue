@@ -13,26 +13,32 @@
       <u-line></u-line>
 
       <view class="line">
-        <text class="type">日期</text>
+        <text class="type">日期：</text>
         <view style="font-size: 28rpx;font-weight: 600;">
           {{ info.date }}
         </view>
       </view>
       <view class="line">
-        <text class="type">分类</text>
+        <text class="type">分类：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
           {{ info.category.name }}
         </view>
       </view>
+      <view class="line">
+        <text class="type">{{info.type===10?'收入':'支出'}}方式：</text>
+        <view style="font-size: 25rpx;font-weight: 600;">
+          {{ info.amount_type || '无' }}
+        </view>
+      </view>
 
       <view class="line">
-        <text class="type">备注</text>
-        <view style="font-size: 28rpx;width: 70%;">
+        <text class="type">备注：</text>
+        <view style="font-size: 28rpx;width: 70%;text-align: left">
           {{ info.remark || '暂无备注' }}
         </view>
       </view>
       <view class="line" v-if="info.image">
-        <text class="type">附件</text>
+        <text class="type">附件：</text>
         <view style="font-size: 28rpx;width: 70%;">
          <u-image  @click="previewImg()"  height="150rpx" width="150rpx" :src="info.image"></u-image>
         </view>
@@ -153,7 +159,7 @@ export default {
 
 .type {
   font-size: 28rpx;
-  padding-right: 30rpx;
+  padding-right: 10rpx;
 }
 
 .photo_icon {
