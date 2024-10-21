@@ -20,10 +20,16 @@
 			</view>
 			<button type="primary"  class="confirm-btn" @click="login()">账号登录</button>
 
-      <button v-if="is_wx" type="primary" size="default" class="confirm-btn-wx"   @click="wxlogin">微信一键登录</button>
+      <view class="wx" v-if="is_wx" >
+       <u-icon @click="wxlogin" class="icon" name="https://jz.api.alipay168.cn/static/image/wx-login.png" size="100" color="#09bb07" ></u-icon>
+          <br>
+          <text  @click="wxlogin">微信登录</text>
+      </view>
+
 			<!-- 			<view class="forget-section">
 				忘记密码?
 			</view> -->
+
 		</view>
 		<view class="register-section">
 			还没有账号?
@@ -66,7 +72,22 @@
 			},
       // #ifdef MP
       wxlogin(){
-        getCode()
+        uni.showModal({
+          title: '是否使用微信登录',
+          content: '若不存在账号则自动创建新账号，是否继续？',
+          confirmText: '确定',
+          cancelText: '取消',
+          success: res => {
+            if (res.confirm) {
+              uni.showLoading({
+                title: '正在登录....'
+              })
+               getCode()
+              uni.hideLoading()
+            }
+          }
+        })
+
       },
       // #endif
 			login() {
@@ -107,6 +128,10 @@
 		width: 100vw;
 		height: 100vh;
 		background: #fff;
+    .u-image{
+      width: 150rpx;
+      height: 150rpx;
+    }
 	}
 
 	.wrapper {
@@ -215,4 +240,8 @@
 			height: 72rpx;
 		}
 	}
+  .wx {
+    text-align: center;
+    margin: 40rpx auto auto;
+  }
 </style>
