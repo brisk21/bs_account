@@ -42,6 +42,12 @@
       </u-empty>
     </view>
     <template v-else>
+      <view class="search" style="margin-top: 100px">
+        <view class="search-box">
+          <u-search :clearable="true" :show-action="false" :show-action-icon="false" :show-action-text="false"
+                    placeholder="搜索" v-model="search_key" @search="search"></u-search>
+        </view>
+      </view>
       <view v-if="cashflow.list.length > 0" class="scroll data-list">
         <scroll-view :refresher-enabled="false"  :scroll-y="true" class="scroll-view"
        scroll-into-view="top"  >
@@ -403,7 +409,7 @@ export default {
 
   .data-list {
     position: absolute;
-    top: 88px;
+    top: 188px;
     width: 100%;
     padding-bottom: 80px;
   }
