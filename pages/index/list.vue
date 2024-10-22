@@ -3,21 +3,6 @@
   <view class="container">
 
     <view class="top">
-      <u-navbar
-          :is-back="false"
-          title="明细"
-          :background="bg"
-          title-bold
-          title-color="white"
-          :border-bottom="false"
-
-      >
-
-        <view slot="right">
-          <u-icon name="order" size="larger" style="margin-right: 20px" class="search-icon" @click="toSearch()" ></u-icon>
-        </view>
-
-      </u-navbar>
       <view class="line">
         <view class="item">
           <view class="header-text"> {{ year }} 年</view>
@@ -190,7 +175,7 @@ export default {
   methods: {
     toSearch(){
       uni.navigateTo({
-        url: '/pages/index/list'
+        url: '/pages/search/search'
       })
     },
     setDisplay(type){
