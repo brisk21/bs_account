@@ -1,141 +1,94 @@
 <template>
-
   <view class="container">
-
-    <view class="top">
-      <view class="line">
-        <view class="item">
-          <view class="header-text"> {{ year }} 年</view>
-        </view>
-        <view class="item">
-          <view class="header-text">收入
-            <u-icon :name="eye.in ? 'eye' : 'eye-off'" class="setDisplay" @click="setDisplay('in')"></u-icon>
-
-          </view>
-        </view>
-        <view class="item">
-          <view class="header-text">支出<u-icon class="setDisplay" @click="setDisplay('out')" :name="eye.out ? 'eye' : 'eye-off'"> </u-icon></view>
-        </view>
-      </view>
-      <view class="line data">
-        <view class="item">
-          <view class="month-content">
-            <view class="month-area" @click="clickDate">
-              <view class="month font-2x">{{ month }}</view>
-              <view class="month_str">月</view>
-              <u-icon class="icon-area" name="arrow-down-fill" color="#fff" size="30"></u-icon>
-            </view>
-            <view class="bar"></view>
-          </view>
-        </view>
-        <view class="item">
-          <view class="font-2x">￥{{ cashflow.in }}</view>
-        </view>
-        <view class="item">
-          <view class="font-2x">￥{{ cashflow.out }}</view>
-        </view>
-      </view>
-    </view>
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
         <button size="mini" slot="bottom" class="go-to-login" @click="toLogin()">立即登录</button>
       </u-empty>
     </view>
     <template v-else>
-      <view class="search" style="margin-top: 100px">
+      <view class="search">
+        <u-dropdown>
+          <u-dropdown-item v-model="form.type" title="账单类型" :options="type" @change="set_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.amount_type" title="收支方式" :options="amount_type" @change="set_amount_type"></u-dropdown-item>
+        </u-dropdown>
         <view class="search-box">
-          <u-search :clearable="true" :show-action="false" :show-action-icon="false" :show-action-text="false"
-                    placeholder="搜索" v-model="search_key" @search="search"></u-search>
+          <u-search :clearable="true" :show-action="true" :show-action-icon="true"
+                    input-align="left" placeholder="关键词搜索"
+                    v-model="form.keywords"
+                    action-text="搜索"
+                    @search="toSearch" @custom="toSearch"></u-search>
         </view>
       </view>
-      <view v-if="cashflow.list.length > 0" class="scroll data-list">
-        <scroll-view :refresher-enabled="false"  :scroll-y="true" class="scroll-view"
-       scroll-into-view="top"  >
-          <view>
-            <view v-for="(item, index) in cashflow.list" :key="index">
-              <view class="u-flex list-box">
-                <view class="u-m-r-10 u-flex-1">
-                  <view class="header-text"> {{ item.time }} {{ item.week }}</view>
-                </view>
-                <view class="u-m-r-10 u-flex-1">
-                  <view class="header-text">收入 ￥{{ item.in }}</view>
-                </view>
-                <view class="u-m-r-10 u-flex-1">
-                  <view class="header-text">支出 ￥{{ item.out }}</view>
-                </view>
-              </view>
-
-              <view class="list-box-children" v-for="(item1, index1) in item.list" :key="index1"
-                    @click="toDetail(item1.id)">
-                <view class="u-flex icon">
-                  <u-icon :name="item1.category.icon" color="#42b479"></u-icon>
-                </view>
-                <view class="box-left">
-                  {{ item1.category.name }}
-                </view>
-                <view class="box-remark">
-                  {{ item1.remark || '无' }}
-                </view>
-                <view class="u-flex-1 box-right amount-green" v-if="item1.type==20">
-                  -￥{{ item1.amount }}
-                </view>
-                <view class="u-flex-1 box-right amount-red" v-else>
-                  +￥{{ item1.amount }}
-                </view>
-              </view>
-            </view>
+      <view v-if="list.length > 0" class="scroll data-list">
+        <view class="list-box-children" v-for="(item, index) in list" :key="index"
+              @click="toDetail(item.id)">
+          <view class="u-flex icon">
+            <u-icon :name="item.category.icon" color="#42b479"></u-icon>
           </view>
-        </scroll-view>
+          <view class="box-left">
+            {{ item.category.name }}
+          </view>
+          <view class="box-remark">
+            {{ item.amount_type || '' }}
+          </view>
+          <view class="u-flex-1 box-right amount-green" v-if="item.type==20">
+            -￥{{ item.amount }}
+          </view>
+          <view class="u-flex-1 box-right amount-red" v-else>
+            +￥{{ item.amount }}
+          </view>
+          <view class="u-flex-1 box-right item-date">
+            {{item.date}}
+          </view>
+        </view>
+        <view class="no-more" v-if="no_more && list.length>10">
+          我也是有底线的！！！
+        </view>
       </view>
       <view v-else class="empty">
         <u-empty text="暂无明细" mode="list"></u-empty>
       </view>
     </template>
-    <fab></fab>
-    <u-picker mode="time" v-model="picker_show" :params="picker_params" :default-time="picker_time"
-              @confirm="pickerConfirm"></u-picker>
-
+    <u-back-top :scroll-top="scrollTop"></u-back-top>
   </view>
 
 </template>
 
 <script>
-import {getCode} from '@/common/login.js'
-import fab from '@/my-components/fab/index.vue'
-
 export default {
-  components: {
-    fab
-  },
+  components: {},
   data() {
     return {
-      bg: {
-         backgroundColor: '#42b479',
-         color:"white"
+      type: [
+        {label: '全部', value: 0,},
+        {label: '收入', value: 10,},
+        {label: '支出', value: 20,}
+      ],
+      amount_type: [
+        {label: '全部', value: '',},
+        {label: '支付宝', value: '支付宝',},
+        {label: '微信', value: '微信',},
+        {label: '银行卡', value: '银行卡',},
+        {label: '现金', value: '现金',},
+        {label: '其他', value: '其他',}
+      ],
+      form: {
+        keywords: '',
+        type: 0,
+        amount_type: '',
+        page: 0,
+        limit: 20
       },
-      eye:{
-        in:true,
-        out:true
+      bg: {
+        backgroundColor: '#42b479',
+        color: "white"
       },
       is_fresh: false,
       is_pulling: false,
-      picker_params: {
-        year: true,
-        month: true,
-        day: false,
-        hour: false,
-        minute: false,
-        second: false
-      },
-      picker_show: false,
-      picker_time: "",
-      cashflow: {
-        in: "0.00",
-        list: [],
-        out: "0.00"
-      },
-      year: "",
-      month: ""
+
+      list: [],
+      scrollTop: 0,
+      no_more: false
     }
   },
   onReady() {
@@ -144,132 +97,91 @@ export default {
       duration: 0 // 滚动动画时长，设置为0则无动画直接跳转
     });
   },
-  //下拉
-  onPullDownRefresh() {
-    console.log("下拉刷新")
-    if (this.hasLogin && !this.is_fresh){
+  //触底
+  onReachBottom() {
+    console.log("触底")
+    if (this.hasLogin && !this.is_fresh) {
       this.is_fresh = true;
       let that = this;
       that.getList();
       setTimeout(function () {
         that.is_fresh = false;
-        uni.stopPullDownRefresh()
-      },1000)
+      }, 1000)
 
-    }else{
-      setTimeout(()=>{
+    }
+
+  },
+
+  //下拉
+  onPullDownRefresh() {
+    console.log("下拉刷新")
+    if (this.hasLogin && !this.is_fresh) {
+      this.is_fresh = true;
+      let that = this;
+      that.getList(true);
+      setTimeout(function () {
+        that.is_fresh = false;
         uni.stopPullDownRefresh()
-      },500)
+      }, 1000)
+
+    } else {
+      setTimeout(() => {
+        uni.stopPullDownRefresh()
+      }, 500)
 
     }
 
   },
   onShow() {
     console.log('onShow')
-   this.init_data()
   },
   onLoad(options) {
     console.log('onLoad')
-    this.init_data()
+    this.getList()
   },
   created() {
     console.log('created')
-    this.init_data()
 
   },
-
+  onPageScroll(e) {
+    this.scrollTop = e.scrollTop;
+  },
   methods: {
-    toSearch(){
-      uni.navigateTo({
-        url: '/pages/search/search'
-      })
+    set_type(value) {
+      this.form.type = value
+      this.getList(true)
+
     },
-    setDisplay(type){
-      console.log(type)
-      this.is_pulling = false;
-      this.eye[type] = !this.eye[type]
-      this.$u.api.setDisplay({type:type}).then((res)=>{
-         //this.$u.toast(res.msg,500)
-        if (res.code === 0){
-          this.getList()
-        }
-      })
+    set_amount_type(value) {
+      this.form.amount_type = value
+      this.getList(true)
     },
-
-    init_data() {
-       // 获取当前日期
-      let currentDate = new Date();
-
-      // 手动设置时区为UTC+8（假设中国标准时间）
-      let chinaTimezoneOffset = 8 * 60; // 8 hours offset
-      let chinaCurrentDate = new Date(currentDate.getTime() + chinaTimezoneOffset * 60 * 1000);
-
-      // 格式化日期为 YYYY-MM-DD
-      let formattedDate = chinaCurrentDate.toISOString().substring(0, 10);
-
-      // 分割日期字符串
-      let dateParts = formattedDate.split("-");
-
-      // 确保日期字符串格式正确
-      if (dateParts.length === 3) {
-          // 提取年份和月份
-          this.year = dateParts[0];
-          this.month = dateParts[1];
-      } else {
-          console.error("日期格式错误");
-          this.year = "";
-          this.month = "";
-      }
-
-      // 构造 picker_time 字段
-       this.picker_time = `${this.year}-${this.month}`
-       console.log(this.picker_time)
-        this.getList()
+    toSearch() {
+      this.getList(true)
     },
-
-    clickDate() {
-      this.picker_show = true;
-    },
-    cashflowReset() {
-      this.cashflow = {
-        in: "0.00",
-        list: [],
-        out: "0.00"
-      }
-    },
-    pickerConfirm(e) {
-      console.log(e)
-      if (this.picker_params.year) this.year = e.year;
-      if (this.picker_params.month) this.month = e.month;
-
-      this.picker_time = this.year + "-" + this.month;
-      this.getList()
-    },
-
-
-    getList() {
-      this.cashflow = {
-        in: "0.00",
-        list: [],
-        out: "0.00"
-      }
+    getList(is_init) {
       if (!this.hasLogin) {
         return
       }
-      if (this.is_pulling){
+      if (this.is_pulling) {
         return;
       }
       let that = this;
-
-      let cashbook_id = 1
-      let year = Number(this.year)
-      let month = Number(this.month)
-
+      if (is_init) {
+        this.form.page = 0
+        this.list = []
+        this.no_more = false
+      }
       this.is_pulling = true
-      this.$u.api.getCashflowList(cashbook_id, year, month).then(res => {
-        if (res.code ==0){
-          this.cashflow = res.data
-          this.eye = res.data.show_set
+      this.form.page += 1
+      this.$u.api.bill_list(this.form).then(res => {
+        if (res.code == 0) {
+          if (res.data.list.length > 0) {
+            this.list = this.list.concat(res.data.list)
+          } else {
+            this.no_more = true
+          }
+
         }
 
       }).catch(() => {
@@ -288,15 +200,6 @@ export default {
     },
     toLogin() {
       this.goToLoginPage()
-      return;
-
-      // #ifndef MP
-      this.goToLoginPage()
-      // #endif
-
-      // #ifdef MP
-      getCode()
-      // #endif
     }
   },
 
@@ -308,7 +211,7 @@ export default {
   background-color: white;
 
   // scroll-view 通过flex 布局 自适应
- /* height: 100vh;*/
+  /* height: 100vh;*/
   display: flex;
   flex-direction: column;
 
@@ -316,15 +219,12 @@ export default {
     flex: 1;
     overflow: scroll;
   }
+
   .need_login {
     margin-top: 45%;
     background: white;
   }
 
-  .scroll-view {
-    text-align: center;
-    height: 100%;
-  }
 
   // 自适应结束
 
@@ -333,8 +233,19 @@ export default {
     padding: 15rpx;
   }
 
+  .search-box {
+    margin: 10rpx;
+  }
+
   .list-box {
     padding: 18rpx 18rpx 18rpx 40rpx;
+  }
+
+  .no-more {
+    text-align: center;
+    color: rgb(200, 196, 196);
+    margin-top: 10rpx;
+    margin-bottom: 10rpx;
   }
 
   .list-box-children {
@@ -394,7 +305,7 @@ export default {
 
     .box-remark {
       font-weight: 500;
-      width: 300rpx;
+      width: 100rpx;
       margin-left: 50rpx;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -405,85 +316,26 @@ export default {
       -webkit-box-orient: vertical;
       color: #c8c4c4;
     }
+    .item-date{
+      width: 100px;
+    }
   }
 
   .data-list {
-    position: absolute;
-    top: 188px;
+    position: relative;
+    top: 0px;
     width: 100%;
-    padding-bottom: 80px;
   }
+
   .empty {
     margin-top: 200px;
   }
 }
 
-.setDisplay{
-  margin-left: 10rpx;
-}
 .go-to-login {
   border-radius: 10rpx;
   background: $uni-theme-color;
   color: #fff;
 }
 
-.top {
-  position: fixed;
-  top: var(NavigationBar, 44px); /* 使用计算属性，默认值为 44px */
-  z-index: 99;
-  text-align: center;
-  margin: 0 auto;
-  width: 100%;
-
-  .line {
-    display: flex;
-    color: #fff;
-    background-color: $uni-theme-color;
-    padding-left: 30rpx;
-    padding-right: 30rpx;
-    padding-bottom: 30rpx;
-
-
-    &.data {
-      padding-right: 20rpx;
-
-      .item {
-        flex: 1;
-      }
-
-      .font-2x {
-        font-size: 40rpx;
-      }
-
-    }
-
-    .item {
-      flex: 1;
-    }
-
-    .header-text {
-      font-size: 36rpx;
-    }
-
-    .bar {
-      margin: 0;
-      padding-left: 50rpx;
-      border-right-width: 1px;
-      border-right-style: solid;
-      height: 50rpx;
-      transform: scaleX(0.5);
-      border-color: #fff;
-    }
-
-    .month-content {
-      display: flex;
-
-      .month-area {
-        display: flex;
-        // align-items: flex-end;
-        align-items: center;
-      }
-    }
-  }
-}
 </style>

@@ -10,9 +10,7 @@
           title-bold
           title-color="white"
           :border-bottom="false"
-
       >
-
         <view slot="right">
           <u-icon name="order" size="larger" style="margin-right: 20px" class="search-icon" @click="toSearch()" ></u-icon>
         </view>
@@ -297,15 +295,6 @@ export default {
     },
     toLogin() {
       this.goToLoginPage()
-      return;
-
-      // #ifndef MP
-      this.goToLoginPage()
-      // #endif
-
-      // #ifdef MP
-      getCode()
-      // #endif
     }
   },
 
@@ -417,8 +406,12 @@ export default {
   }
 
   .data-list {
-    position: absolute;
-    top: 88px;
+    position: relative;
+     top: 132px;
+     /* #ifdef MP */
+     top: 352rpx;
+    /* #endif */
+
     width: 100%;
     padding-bottom: 80px;
   }
@@ -443,6 +436,7 @@ export default {
   text-align: center;
   margin: 0 auto;
   width: 100%;
+  height: 248rpx;
 
   .line {
     display: flex;
