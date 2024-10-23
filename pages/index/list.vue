@@ -19,7 +19,7 @@
                     @search="toSearch" @custom="toSearch"></u-search>
         </view>
       </view>
-      <view v-if="list.length > 0" class="scroll data-list">
+      <view  v-if="list.length > 0" class="scroll data-list">
         <u-table>
           <u-tr>
             <u-th>笔数</u-th>
@@ -194,6 +194,9 @@ export default {
       }
       this.is_pulling = true
       this.form.page += 1
+      uni.showLoading({
+        title: '数据加载中...',
+      })
       this.$u.api.bill_list(this.form).then(res => {
         if (res.code == 0) {
           this.total_amount = res.data.total_amount
@@ -215,6 +218,7 @@ export default {
         setTimeout(function () {
           that.is_fresh = false;
           that.is_pulling = false
+          uni.hideLoading()
         }, 1000)
       })
     },
