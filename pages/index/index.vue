@@ -3,7 +3,7 @@
   <view class="container">
 
     <view class="top">
-      <u-navbar
+<!--      <u-navbar
           :is-back="false"
           title="明细"
           :background="bg"
@@ -15,7 +15,7 @@
           <u-icon name="order" size="larger" style="margin-right: 20px" class="search-icon" @click="toSearch()" ></u-icon>
         </view>
 
-      </u-navbar>
+      </u-navbar>-->
       <view class="line">
         <view class="item">
           <view class="header-text"> {{ year }} 年</view>
@@ -28,6 +28,9 @@
         </view>
         <view class="item">
           <view class="header-text">支出<u-icon class="setDisplay" @click="setDisplay('out')" :name="eye.out ? 'eye' : 'eye-off'"> </u-icon></view>
+        </view>
+        <view class="item">
+          <view class="header-text"> <u-icon name="order"   class="search-icon" @click="toSearch()" ></u-icon></view>
         </view>
       </view>
       <view class="line data">
@@ -46,6 +49,9 @@
         </view>
         <view class="item">
           <view class="font-2x">￥{{ cashflow.out }}</view>
+        </view>
+        <view class="item">
+          <view class="font-2x"></view>
         </view>
       </view>
     </view>
@@ -107,7 +113,6 @@
 </template>
 
 <script>
-import {getCode} from '@/common/login.js'
 import fab from '@/my-components/fab/index.vue'
 
 export default {
@@ -407,11 +412,7 @@ export default {
 
   .data-list {
     position: relative;
-     top: 132px;
-     /* #ifdef MP */
-     top: 352rpx;
-    /* #endif */
-
+    top: 176rpx;
     width: 100%;
     padding-bottom: 80px;
   }
@@ -436,7 +437,7 @@ export default {
   text-align: center;
   margin: 0 auto;
   width: 100%;
-  height: 248rpx;
+  height: 176rpx;
 
   .line {
     display: flex;
