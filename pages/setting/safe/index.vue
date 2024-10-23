@@ -16,9 +16,9 @@
             <text v-if="userInfo.email" style="color: #999;">{{ userInfo.email }}</text>
             <text v-else style="color: #e90808;">未绑定</text>
           </u-cell-item>
-          <u-cell-item @click="goto('')" title="绑定微信" icon="weixin-fill">
+<!--          <u-cell-item @click="goto('')" title="绑定微信" icon="weixin-fill">
             小程序可快速登录
-          </u-cell-item>
+          </u-cell-item>-->
 
 				</u-cell-group>
 			</view>
