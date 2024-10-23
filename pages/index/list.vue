@@ -20,6 +20,21 @@
         </view>
       </view>
       <view v-if="list.length > 0" class="scroll data-list">
+        <u-table>
+          <u-tr>
+            <u-th>笔数</u-th>
+            <u-th>收入</u-th>
+            <u-th>支出</u-th>
+            <u-th>差额</u-th>
+          </u-tr>
+          <u-tr>
+            <u-td>{{ total }}</u-td>
+            <u-td>{{ total_income }}</u-td>
+            <u-td>{{ total_outcome }}</u-td>
+            <u-td>{{ diff_amount }}</u-td>
+          </u-tr>
+
+        </u-table>
         <view class="list-box-children" v-for="(item, index) in list" :key="index"
               @click="toDetail(item.id)">
           <view class="u-flex icon">
@@ -87,6 +102,11 @@ export default {
       is_pulling: false,
 
       list: [],
+      total_amount: 0,
+      total_income: 0,
+      total_outcome: 0,
+      diff_amount: 0,
+      total: 0,
       scrollTop: 0,
       no_more: false
     }
@@ -176,6 +196,11 @@ export default {
       this.form.page += 1
       this.$u.api.bill_list(this.form).then(res => {
         if (res.code == 0) {
+          this.total_amount = res.data.total_amount
+          this.total_income = res.data.total_income
+          this.total_outcome = res.data.total_outcome
+          this.total = res.data.total
+          this.diff_amount = res.data.diff_amount
           if (res.data.list.length > 0) {
             this.list = this.list.concat(res.data.list)
           } else {
