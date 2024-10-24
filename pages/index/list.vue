@@ -126,7 +126,7 @@ export default {
       that.getList();
       setTimeout(function () {
         that.is_fresh = false;
-      }, 1000)
+      }, 300)
 
     }
 
@@ -179,7 +179,7 @@ export default {
     toSearch() {
       this.getList(true)
     },
-    getList(is_init) {
+    async getList(is_init) {
       if (!this.hasLogin) {
         return
       }
@@ -197,9 +197,8 @@ export default {
       uni.showLoading({
         title: '数据加载中...',
       })
-      this.$u.api.bill_list(this.form).then(res => {
+     await this.$u.api.bill_list(this.form).then(res => {
         if (res.code == 0) {
-          this.total_amount = res.data.total_amount
           this.total_income = res.data.total_income
           this.total_outcome = res.data.total_outcome
           this.total = res.data.total
