@@ -24,14 +24,15 @@
                       :active-color="scss.uniThemeColor" :current="formData.queryType" height="60" font-size="25">
         </u-subsection>
       </view>
-      <StatisticLeiXingBingTu class="chart-data" :list="statisticTypeData" :loading-type="loadingType">
-      </StatisticLeiXingBingTu>
-      <!--<view class="title">
-        <text class="text">
-          按月统计收支
-        </text>
-      </view>
-      <StatisticShouZhiZhuZhuangTu></StatisticShouZhiZhuZhuangTu> -->
+
+      <qiun-data-charts class="chart-data" v-if="chartPieData" type="pie" :opts="pieOpts" :loading-type="loadingType"
+                        :chartData="chartPieData"/>
+
+      <qiun-data-charts class="chart-data" v-if="chartBarData" type="column" :opts="chartBarOpts"
+                        :loading-type="loadingType" :chartData="chartBarData"
+                        :ontouch="true"
+      />
+
     </view>
 
 
@@ -42,7 +43,8 @@
 
     <!-- #ifdef MP-->
     <view class="ad-container" v-if="userInfo && userInfo.position.statistics_page">
-       <ad-custom unit-id="adunit-8b8c1d986d8b9ff3" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
+      <ad-custom unit-id="adunit-8b8c1d986d8b9ff3" bindload="adLoad" binderror="adError"
+                 bindclose="adClose"></ad-custom>
     </view>
     <!-- #endif -->
 
@@ -52,18 +54,65 @@
 
 <script>
 import scss from '@/uni.scss'
-import StatisticLeiXingBingTu from '@/my-components/charts/statistic-lei-xing-bing-tu.vue'
-// import StatisticShouZhiZhuZhuangTu from '@/my-components/charts/statistic-shou-zhi-zhu-zhuang-tu.vue'
 import dayjs from '@/dayjs.min.js'
 
 export default {
-  components: {
-    StatisticLeiXingBingTu,
-    // StatisticShouZhiZhuZhuangTu
-  },
+  components: {},
   data() {
     return {
       scss,
+      pieOpts: {
+        "title": {
+          "text": ''
+        },
+        "legend": {
+          "show": true,
+          "position": "bottom",
+          float: 'left'
+        },
+        "extra": {
+          "pie": {
+            "activeOpacity": 1,
+            "border": false,
+          },
+        }
+      },
+      chartPieData: null,
+      chartBarData: null,
+      chartBarOpts: {
+        update: true,
+        enableScroll: true, // 启用横向滚动
+        legend: {},
+        xAxis: {
+          disableGrid: true,
+          type: 'grid',
+          gridType: 'dash',
+          itemCount: 7,//x轴单屏显示数据的数量，默认为5个
+          scrollShow: true,//新增是否显示滚动条，默认false
+          scrollAlign: 'left',//滚动条初始位置
+          scrollBackgroundColor: '#F7F7FF',//默认为 #EFEBEF
+          scrollColor: '#DEE7F7',//默认为 #A6A6A6
+        },
+        yAxis: {
+          showTitle: true,
+          padding: 10,
+          data: [
+            {
+              title: '收支情况',
+              min: 0
+            }
+          ]
+        },
+        extra: {
+          column: {
+            type: "stack",
+            width: 30,
+            activeBgColor: "#000000",
+            activeBgOpacity: 0.08,
+            labelPosition: "center"
+          }
+        }
+      },
       loadingType: 3,
       typeList: ['支出', '收入'],
       queryTypeList: ['月', '年'],
@@ -77,8 +126,14 @@ export default {
         queryType: 0,
         type: 0,
       },
-      statisticTypeData: []
     }
+  },
+  onShow() {
+    this.dateReset()
+    this.getStatisticData()
+  },
+  onLoad(options) {
+
   },
   computed: {
     pickerParams() {
@@ -91,9 +146,9 @@ export default {
         second: false
       }
     },
-     userInfo() {
-				return this.$store.getters.user
-			},
+    userInfo() {
+      return this.$store.getters.user
+    },
   },
   methods: {
     typeChange(index) {
@@ -118,19 +173,31 @@ export default {
       if (this.formData.queryType === 0) {
         params.month = Number(this.datePicker.month)
       }
+      uni.showLoading({
+        title: '加载中...'
+      })
+      this.chartPieData = null
+      this.chartBarData = null
       this.$u.api.getStatisticData(params).then(res => {
         this.loadingType = 3;
-        if (res.code == 0 && res.data.length) {
-          this.$nextTick(() => {
-            this.statisticTypeData = res.data
-          })
-        } else {
+        if (res.code == 0) {
           let that = this;
           setTimeout(function () {
-            that.loadingType = 0
-          }, 1000)
-          this.statisticTypeData = []
+            if (res.data.category) {
+              that.$nextTick(() => {
+                that.chartPieData = res.data.category
+              })
+            }
+            if (res.data.bar) {
+              that.$nextTick(() => {
+                that.chartBarData = res.data.bar
+              })
+            }
+          },500)
         }
+      }).finally(()=>{
+        that.loadingType = 0
+        uni.hideLoading()
       })
     },
     pickerConfirm(e) {
@@ -149,17 +216,10 @@ export default {
       }
     },
     toLogin() {
-     this.goToLoginPage()
-
-    }
+      this.goToLoginPage()
+    },
   },
-  onShow() {
-    this.dateReset()
-    this.getStatisticData()
-  },
-  onLoad(options) {
 
-  }
 }
 </script>
 
@@ -179,9 +239,11 @@ export default {
 .container {
   background-color: #ffffff;
   margin-bottom: 80rpx;
-  .chart-data{
+
+  .chart-data {
     margin-top: 50px;
   }
+
   .header {
     width: 100%;
     z-index: 100;
@@ -221,7 +283,8 @@ export default {
       }
     }
   }
-  .ad-container{
+
+  .ad-container {
     margin-top: 60rpx;
   }
 }

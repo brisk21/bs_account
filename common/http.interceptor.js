@@ -20,6 +20,10 @@ const install = (Vue, vm) => {
 		}),
 		// 请求拦截部分，如配置，每次请求前都会执行
 		Vue.prototype.$u.http.interceptor.request = (config) => {
+			//console.log(vm.$u.sys(),'sys')
+			config.header.platform = vm.$u.sys().platform
+			config.header.version = vm.$u.sys().appVersion
+			config.header.versionCode = vm.$u.sys().appVersionCode
 			config.header.Authorization = 'Bearer ' + vm.$store.getters.user_token;
 			// 可以对某个url进行特别处理，此url参数为this.$u.get(url)中的url值
 			if (config.url == 'code2token') config.header.noToken = true;
