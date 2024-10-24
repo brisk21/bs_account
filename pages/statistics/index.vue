@@ -24,7 +24,7 @@
                       :active-color="scss.uniThemeColor" :current="formData.queryType" height="60" font-size="25">
         </u-subsection>
       </view>
-      <StatisticLeiXingBingTu :list="statisticTypeData" :loading-type="loadingType">
+      <StatisticLeiXingBingTu class="chart-data" :list="statisticTypeData" :loading-type="loadingType">
       </StatisticLeiXingBingTu>
       <!--<view class="title">
         <text class="text">
@@ -38,6 +38,8 @@
     <u-picker mode="time" v-model="datePicker.picker_show" :default-time="datePicker.picker_time"
               :params="pickerParams" @confirm="pickerConfirm">
     </u-picker>
+
+
     <!-- #ifdef MP-->
     <view class="ad-container" v-if="userInfo && userInfo.position.statistics_page">
        <ad-custom unit-id="adunit-8b8c1d986d8b9ff3" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
@@ -177,7 +179,9 @@ export default {
 .container {
   background-color: #ffffff;
   margin-bottom: 80rpx;
-
+  .chart-data{
+    margin-top: 50px;
+  }
   .header {
     width: 100%;
     z-index: 100;
