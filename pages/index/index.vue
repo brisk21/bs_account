@@ -278,6 +278,9 @@ export default {
       let month = Number(this.month)
 
       this.is_pulling = true
+      uni.showLoading({
+        title: '数据加载中...'
+      })
       this.$u.api.getCashflowList(cashbook_id, year, month).then(res => {
         if (res.code ==0){
           this.cashflow = res.data
@@ -290,6 +293,7 @@ export default {
         setTimeout(function () {
           that.is_fresh = false;
           that.is_pulling = false
+          uni.hideLoading()
         }, 1000)
       })
     },

@@ -13,7 +13,7 @@
         </u-dropdown>
         <view class="search-box">
           <u-search :clearable="true" :show-action="true" :show-action-icon="true"
-                    input-align="left" placeholder="关键词搜索"
+                    input-align="left" placeholder="分类、收支类型、备注查询"
                     v-model="form.keywords"
                     action-text="搜索"
                     @search="toSearch" @custom="toSearch"></u-search>
