@@ -24,7 +24,7 @@ const install = (Vue, vm) => {
 			config.header.platform = vm.$u.sys().platform
 			config.header.version = vm.$u.sys().appVersion
 			config.header.versionCode = vm.$u.sys().appVersionCode
-			config.header.Authorization = 'Bearer ' + vm.$store.getters.user_token;
+			config.header.Authorization = 'Bearer ' + (uni.getStorageSync('UserToken') || '');
 			// 可以对某个url进行特别处理，此url参数为this.$u.get(url)中的url值
 			if (config.url == 'code2token') config.header.noToken = true;
 			// 最后需要将config进行return

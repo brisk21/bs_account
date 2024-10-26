@@ -15,6 +15,8 @@
 
 					</u-cell-item>
 
+          <u-cell-item  @click="goto('/pages/setting/safe/change_account',true)" title="切换账号" icon="man-add">
+          </u-cell-item>
 					<u-cell-item v-if="hasLogin" @click="logout()" title="退出登录" icon="close-circle">
 					</u-cell-item>
 				</u-cell-group>

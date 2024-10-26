@@ -192,6 +192,20 @@
         "navigationBarTitleText": "设置邮箱",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/setting/safe/change_account",
+      "style": {
+        "navigationBarTitleText": "切换账号",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/setting/safe/bind_account",
+      "style": {
+        "navigationBarTitleText": "关联账号",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {

@@ -146,6 +146,24 @@ const install = (Vue, vm) => {
         return vm.$u.put('update-email', params);
     }
 
+    //账号列表
+    const getAccountList = () => {
+        return vm.$u.get('account-list');
+    }
+    //关联账号
+    const bindAccount = (params) => {
+        return vm.$u.post('bind-account', params);
+    }
+    //切换登录
+    const switchAccount = (params) => {
+        return vm.$u.post('switch-account', params);
+    }
+
+    //移除关联
+    const unbindAccount = (params) => {
+        return vm.$u.post('unbind-account', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -177,7 +195,11 @@ const install = (Vue, vm) => {
         setPush,
         getPush,
         send_code,
-        updateEmail
+        updateEmail,
+        getAccountList,
+        bindAccount,
+        switchAccount,
+        unbindAccount
     };
 }
 
