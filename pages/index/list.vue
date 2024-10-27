@@ -10,7 +10,12 @@
         <u-dropdown>
           <u-dropdown-item v-model="form.type" title="账单类型" :options="type" @change="set_type"></u-dropdown-item>
           <u-dropdown-item v-model="form.amount_type" title="收支方式" :options="amount_type" @change="set_amount_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.time_type"
+                           :title="form.time_type==''?'时间':(form.time_type=='year'?form.year:form.year+form.month)"
+                           :options="time_type" @change="set_time_type"></u-dropdown-item>
         </u-dropdown>
+
+
         <view class="search-box">
           <u-search :clearable="true" :show-action="true" :show-action-icon="true"
                     input-align="left" placeholder="分类、收支类型、备注查询"
@@ -63,8 +68,11 @@
       <view v-else class="empty">
         <u-empty text="暂无明细" mode="list"></u-empty>
       </view>
+       <u-picker mode="time" v-model="show_date" :params="params"
+              @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
     </template>
     <u-back-top :scroll-top="scrollTop"></u-back-top>
+
   </view>
 
 </template>
@@ -87,9 +95,17 @@ export default {
         {label: '现金', value: '现金',},
         {label: '其他', value: '其他',}
       ],
+      time_type: [
+        {label: '全部', value: '',},
+        {label: '年份', value: 'year',},
+        {label: '月份', value: 'month',},
+      ],
       form: {
         keywords: '',
         type: 0,
+        month: '',
+        year: '',
+        time_type: '',
         amount_type: '',
         page: 0,
         limit: 20
@@ -108,7 +124,14 @@ export default {
       diff_amount: 0,
       total: 0,
       scrollTop: 0,
-      no_more: false
+      no_more: false,
+      show_date: false, // 控制picker的显示
+      params: {
+        year: true, // 是否显示年
+        month: true, // 是否显示月
+      },
+      startYear: 2000, // 起始年份
+      endYear: new Date().getFullYear(), // 结束年份，设置为当前年份
     }
   },
   onReady() {
@@ -167,6 +190,26 @@ export default {
     this.scrollTop = e.scrollTop;
   },
   methods: {
+
+    cancelTime() {
+      this.form.year = ''
+      this.form.month = ''
+      this.form.time_type = ''
+      this.getList(true)
+    },
+    confirmTime(e) {
+      console.log('选择的年月：', e);
+      if (this.form.time_type=='month'){
+        this.form.year = e.year
+        this.form.month = e.month
+      }else if (this.form.time_type=='year'){
+        this.form.year = e.year
+         this.form.month = ''
+      }else{
+        return ''
+      }
+      this.getList(true)
+    },
     set_type(value) {
       this.form.type = value
       this.getList(true)
@@ -175,6 +218,22 @@ export default {
     set_amount_type(value) {
       this.form.amount_type = value
       this.getList(true)
+    },
+    set_time_type(value) {
+      if (!value){
+        this.form.year = ''
+        this.form.month = ''
+        this.form.time_type = ''
+        this.getList(true);
+        return
+      }
+      if (value==='month'){
+        this.params = {year: true, month: true}
+      }else{
+        this.params = {year: true,month: false}
+      }
+      this.form.time_type = value
+      this.show_date = true
     },
     toSearch() {
       this.getList(true)
