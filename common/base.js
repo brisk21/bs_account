@@ -169,9 +169,15 @@ const install = (Vue, vm) => {
         return vm.$u.get('cashflow-export', params);
     }
 
-    //导入账单
+
+
+    //导入账单数据
     const import_data = (params) => {
         return vm.$u.post('cashflow-import', params);
+    }
+    //下载导入模板
+    const import_tpl = (params) => {
+        return vm.$u.get('cashflow-import-tpl', params);
     }
 
     vm.$u.api = {
@@ -211,7 +217,8 @@ const install = (Vue, vm) => {
         switchAccount,
         unbindAccount,
         export_data,
-        import_data
+        import_data,
+        import_tpl
     };
 }
 
