@@ -12,7 +12,7 @@
           "bounce": "none"
         }
         //"navigationStyle": "custom" ,// 隐藏系统导航栏
-       // "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
+        // "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
       }
     },
     {
@@ -204,6 +204,20 @@
       "path": "pages/setting/safe/bind_account",
       "style": {
         "navigationBarTitleText": "关联账号",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/setting/safe/data",
+      "style": {
+        "navigationBarTitleText": "数据管理",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/setting/safe/import_data",
+      "style": {
+        "navigationBarTitleText": "导入数据",
         "enablePullDownRefresh": false
       }
     }

@@ -6,7 +6,7 @@
           <u-cell-item @click="goto('/pages/setting/safe/index',true)" title="安全中心" icon="lock"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/feedback',true)" title="反馈&建议" icon="volume"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/xieyi',true)" title="协议相关" icon="order"></u-cell-item>
-<!--					<u-cell-item @click="wkf()" title="数据导出" icon="download"></u-cell-item>-->
+
 					<u-cell-item @click="goto('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
 
 					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">

@@ -164,6 +164,16 @@ const install = (Vue, vm) => {
         return vm.$u.post('unbind-account', params);
     }
 
+    //导出账单
+    const export_data = (params) => {
+        return vm.$u.get('cashflow-export', params);
+    }
+
+    //导入账单
+    const import_data = (params) => {
+        return vm.$u.post('cashflow-import', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -199,7 +209,9 @@ const install = (Vue, vm) => {
         getAccountList,
         bindAccount,
         switchAccount,
-        unbindAccount
+        unbindAccount,
+        export_data,
+        import_data
     };
 }
 
