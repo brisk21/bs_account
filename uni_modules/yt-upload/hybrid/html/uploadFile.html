@@ -13,13 +13,13 @@
 	</head>
 
 	<body>
-		
+
 		<div id="content" class="content">
 			<div class="btn">
 				<input :multiple="multiple" @change="onChange" :accept="accept" ref="file" class="file" type="file" />
 			</div>
 		</div>
-		
+
 		<script type="text/javascript" src="js/vue.min.js"></script>
 		<script type="text/javascript">
 			let _this;
@@ -38,7 +38,7 @@
 					this.debug = debug;
 					this.instantly = instantly;
 					this.prohibited = prohibited;
-					this.accept = prohibited.accept; 
+					this.accept = prohibited.accept;
 					this.multiple = prohibited.count > 1;
 					location.href = 'callback?retype=updateOption';
 					}, false);
@@ -153,14 +153,14 @@
 								},
 								false
 							);
-							
+
 							xmlRequest.ontimeout = () => {
 								console.error('请求超时')
 								item.type = 'fail';
 								this.changeFilesItem(item,true);
 								return resolve(false);
 							}
-							
+
 							xmlRequest.onreadystatechange = ev => {
 								if (xmlRequest.readyState == 4) {
 									if (xmlRequest.status == 200) {
@@ -172,7 +172,7 @@
 									} else if (xmlRequest.status == 0) {
 										console.error('status = 0 :请检查请求头Content-Type与服务端是否匹配，服务端已正确开启跨域，并且nginx未拦截阻止请求')
 									}
-									console.error('--ERROR--：status = ' + xmlRequest.status) 
+									console.error('--ERROR--：status = ' + xmlRequest.status)
 									item.type = 'fail';
 									this.changeFilesItem(item,true);
 									return resolve(false);
@@ -180,11 +180,11 @@
 							}
 							xmlRequest.send(form)
 						});
-						
+
 					}
 				}
 			});
-			
+
 		</script>
 	</body>
 

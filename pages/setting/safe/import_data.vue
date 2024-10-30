@@ -12,16 +12,18 @@
     </u-form-item>
     <u-form-item label="选择文件" label-width="200">
       <yt-upload
-          :accept="'.xls,.xlsx'"
+          :accept="'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
           :debug='false'
           instantly
           :count="1"
           ref="ytUpload"
           childId="upload1"
+          formats="xls,xlsx"
           width="100rpx"
           height="100rpx"
           :option="option"
           :size="2"
+          wxFileType="file"
           @progress="onprogress"
           @change="onChange">
         <u-button  class="choose-file" type="primary" size="mini">选择</u-button>
@@ -178,7 +180,7 @@ export default {
           if (result.code === 0) {
             this.result_list = result.data.list
             this.form.file_key = result.data.file_key
-            console.log('responseText', this.result_list)
+            //console.log('responseText', this.result_list)
           } else {
             this.$u.toast(result.msg)
           }
