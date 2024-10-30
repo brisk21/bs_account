@@ -16,7 +16,7 @@
 		methods: {
 			submit(data) {
         uni.showModal({
-          title: '提示',
+          title: '',
           content: '确定修改吗？',
           success: (res) => {
             if (res.confirm) {

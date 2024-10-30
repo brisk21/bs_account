@@ -113,7 +113,8 @@
 
 			logout() {
 				uni.showModal({
-					title: '确定退出登录？',
+					title: '',
+          content: '确定退出登录？',
 					success: (res) => {
 						if (res.confirm) {
 							this.$store.dispatch('logout')

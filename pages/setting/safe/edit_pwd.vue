@@ -78,8 +78,8 @@ export default {
         return;
       }
       uni.showModal({
-        title: '提示',
-        content: '确定提交吗？',
+        title: '',
+        content: '确定提交修改密码吗？',
         success: (res) => {
           if (res.confirm) {
             this.$u.api.updatePwd({

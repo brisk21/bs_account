@@ -114,7 +114,7 @@ export default {
     },
     delCategory(id, index, type) {
       uni.showModal({
-        title: '提示',
+        title: '',
         content: '确定删除吗？',
         success: (res) => {
           if (res.confirm) {

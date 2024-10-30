@@ -97,7 +97,7 @@ export default {
       }
 
       uni.showModal({
-        title: '提示',
+        title: '',
         content: '确定提交保存吗？',
         success: (res) => {
           if (res.confirm) {

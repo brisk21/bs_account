@@ -50,7 +50,7 @@ export default {
         return;
       }
       uni.showModal({
-        title: '提示',
+        title: '',
         content: '是否确定提交关联？',
         success: (res) => {
           if (res.confirm) {

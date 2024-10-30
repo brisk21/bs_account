@@ -99,8 +99,8 @@ export default {
       }
 
       uni.showModal({
-        title: '提示',
-        content: '确定提交吗？',
+        title: '',
+        content: '确定提交修改吗？',
         success: (res) => {
           if (res.confirm) {
             this.$u.api.updateProfile({

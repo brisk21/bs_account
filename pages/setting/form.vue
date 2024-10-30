@@ -89,7 +89,7 @@ export default {
         return;
       }
       uni.showModal({
-        title: '提示',
+        title: '',
         content: '确定提交吗？',
         success: (res) => {
           if (res.confirm) {

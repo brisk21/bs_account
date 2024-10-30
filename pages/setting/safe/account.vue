@@ -54,7 +54,7 @@ export default {
         return;
       }
       uni.showModal({
-        title: '提示',
+        title: '',
         content: '确定提交吗,每个月只能修改一次哦？',
         success: (res) => {
           if (res.confirm) {
