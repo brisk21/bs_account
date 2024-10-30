@@ -111,7 +111,7 @@ export default {
         // 根据你接口需求自定义请求头,默认不要写content-type,让浏览器自适配
         header: {
           // 示例参数可删除
-          'Authorization': 'Bearer ' + this.$store.getters.user_token,
+          'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || ''),
         },
         // 根据你接口需求自定义body参数
         formData: {

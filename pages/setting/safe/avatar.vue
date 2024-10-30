@@ -45,7 +45,7 @@ export default {
       ],
       action: constConfig.baseUrl + '/upload/image',
       header: {
-        'Authorization': 'Bearer ' + this.$store.getters.user_token,
+        'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || ''),
       },
       maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
       maxCount: 1, // 可以设置不同的数量限制
