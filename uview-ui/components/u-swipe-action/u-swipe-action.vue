@@ -198,13 +198,16 @@ export default {
 		// 开始触摸
 		touchstart() {},
 		getActionRect() {
-			this.$uGetRect('.u-swipe-action').then(res => {
-				this.movableAreaWidth = res.width;
-				// 等视图更新完后，再显示右边的可滑动按钮，防止这些按钮会"闪一下"
-				this.$nextTick(() => {
-					this.showBtn = true;
-				})
-			});
+      setTimeout(()=>{
+        this.$uGetRect('.u-swipe-action').then(res => {
+          this.movableAreaWidth = res.width;
+          // 等视图更新完后，再显示右边的可滑动按钮，防止这些按钮会"闪一下"
+          this.$nextTick(() => {
+            this.showBtn = true;
+          })
+        });
+      },300)
+
 		},
 		// 点击内容触发事件
 		contentClick() {
@@ -221,7 +224,7 @@ export default {
 
 <style scoped lang="scss">
 @import "../../libs/css/style.components.scss";
-	
+
 .u-swipe-action {
 	width: auto;
 	height: initial;
