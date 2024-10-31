@@ -63,7 +63,7 @@ export default {
 
       action: constConfig.baseUrl + '/upload/image',
         header: {
-          'Authorization': 'Bearer ' + this.$store.getters.user_token
+          'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || '')
         },
 				fileList: []
 		};
