@@ -180,6 +180,11 @@ const install = (Vue, vm) => {
         return vm.$u.get('cashflow-import-tpl', params);
     }
 
+    //更新日志
+    const updateLog = (params) => {
+        return vm.$u.get('update-log', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -218,7 +223,8 @@ const install = (Vue, vm) => {
         unbindAccount,
         export_data,
         import_data,
-        import_tpl
+        import_tpl,
+        updateLog
     };
 }
 

@@ -9,7 +9,7 @@
 
 					<u-cell-item @click="goto('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
 
-					<u-cell-item @click="goto('/pages/setting/push',true)" title="更新日志" icon="file-text"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/update_log',true)" title="更新日志" icon="file-text"></u-cell-item>
 
 					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
               <text >{{app_version}}</text>
@@ -38,9 +38,7 @@
 	import checkappupdate from 'js_sdk/wonyes-checkappupdate/wonyes/checkappupdate.js'
 	// #endif
 	import constConfig from '@/const.js'
-	import {
-		getCode
-	} from '@/common/login.js'
+
 	export default {
 		components: {
 

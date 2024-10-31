@@ -220,6 +220,13 @@
         "navigationBarTitleText": "导入数据",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/setting/update_log",
+      "style": {
+        "navigationBarTitleText": "更新日志",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {
