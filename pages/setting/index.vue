@@ -9,6 +9,8 @@
 
 					<u-cell-item @click="goto('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
 
+					<u-cell-item @click="goto('/pages/setting/push',true)" title="更新日志" icon="file-text"></u-cell-item>
+
 					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
               <text >{{app_version}}</text>
 						 <u-badge v-if="show_version" count="有新版本" :absolute="false" slot="right-icon"></u-badge>
