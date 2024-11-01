@@ -1,7 +1,13 @@
 <template>
   <view class="container category_form">
-    <u-form-item label="下载模板" label-width="200">
-      <u-link :href="tpl_file_url" :under-line="false" title="下载模板"></u-link>
+
+    <u-form-item label="来源类型" label-width="200">
+      <u-radio-group v-model="form.source_type" class="radio-group" @change="source_type_change">
+        <u-radio v-for="(item,index) in source_type" :key="index" :name="item.value">{{ item.label }}</u-radio>
+      </u-radio-group>
+    </u-form-item>
+    <u-form-item v-if="form.source_type==='bs'" label="下载模板" label-width="200">
+      <u-link :href="tpl_file_url" :under-line="false" title="下载固定格式模板"></u-link>
       <u-link v-if="tpl_file_url"
               :href="tpl_file_url"
               @click="copy(tpl_file_url)"
@@ -10,23 +16,25 @@
       >点击复制到浏览器打开
       </u-link>
     </u-form-item>
+
     <u-form-item label="选择文件" label-width="200">
       <yt-upload
-          :accept="'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
+          :accept="'.csv,application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
           :debug='false'
           instantly
           :count="1"
           ref="ytUpload"
           childId="upload1"
-          formats="xls,xlsx"
-          width="100rpx"
-          height="100rpx"
+          formats="xls,xlsx,csv"
+          width="100%"
+          height="100%"
           :option="option"
           :size="2"
           wxFileType="file"
           @progress="onprogress"
+          @uploadEnd="onUploadEnd"
           @change="onChange">
-        <u-button  class="choose-file" type="primary" size="mini">选择</u-button>
+        <u-button  class="choose-file" type="primary" size="mini">选择文件</u-button>
       </yt-upload>
     </u-form-item>
     <u-form-item label="已选择文件" label-width="200">
@@ -76,15 +84,30 @@
       <u-button class="action-btn" type="success" @click="submit">确定导入</u-button>
 
     </view>
+    <view class="bs-step">
+      <view class="bs_alipay" v-if="form.source_type==='alipay'">
+        <h4>从支付宝导出步骤</h4>
+        <p v-for="(item,index) in readme.alipay" :key="index">{{ index + 1 }}. {{ item }}</p>
+      </view>
+      <view class="bs_wechat" v-if="form.source_type==='wechat'">
+        <h4>从微信导出步骤</h4>
+        <p v-for="(item,index) in readme.wechat" :key="index">{{ index + 1 }}. {{ item }}</p>
+      </view>
+      <view class="bs_custom" v-if="form.source_type==='bs_custom'">
+        <h4>自定义导入步骤</h4>
+        <p v-for="(item,index) in readme.bs_custom" :key="index">{{ index + 1 }}. {{ item }}</p>
+      </view>
+
+    </view>
     <view class="warning">
 
-      <p>1、导入文件必须为excel文件，且为xls或xlsx格式。</p>
-      <p>2、导入文件必须为当前登录用户的账单文件。</p>
-      <p>3、上传文件后,识别到结果请认真查看，然后点击【确定导入】即可导入到您的账单中。</p>
-      <p>4、如果识别结果不正确，请修改excel文件按模板格式填写，重新上传。</p>
-      <p>5、为了保证数据安全，请勿将密码告知他人。</p>
+      <h4>注意事项</h4>
+
+      <p>A、上传文件后,识别到结果请认真查看，然后点击【确定导入】即可导入到您的账单中。</p>
+      <p>B、如果识别结果不正确，请修改excel文件按模板格式填写，重新上传。</p>
+      <p>C、为了保证数据安全，请勿将密码告知他人。</p>
       <!-- #ifdef MP -->
-      <p>6、注意：微信小程序只能从发送记录获取文件，如果导入不成功（点击没反应或者未授权）请使用H5或者APP导入。</p>
+      <p>注意：微信小程序只能从发送记录获取文件，如果导入不成功（点击没反应或者未授权）请使用H5或者APP导入。</p>
       <!-- #endif -->
 
     </view>
@@ -102,6 +125,21 @@ export default {
   },
   data() {
     return {
+      readme: [],
+      source_type: [
+        {
+          label: '支付宝',
+          value: 'alipay'
+        },
+        {
+          label: '微信',
+          value: 'wechat'
+        },
+        {
+          label: '自定义',
+          value: 'bs_custom'
+        }
+      ],
       result_list: [],
       option: {
         // 上传服务器地址，需要替换为你的接口地址
@@ -115,7 +153,7 @@ export default {
         },
         // 根据你接口需求自定义body参数
         formData: {
-          // 'orderId': 1000
+          source_type: 'bs_custom',
         }
       },
       tpl_file_url: '',
@@ -129,6 +167,7 @@ export default {
 
       list: [],
       form: {
+        source_type: 'bs_custom',
         password: '',
         file_key: ''
       },
@@ -142,6 +181,11 @@ export default {
 
   },
   methods: {
+    source_type_change(e){
+      console.log(e)
+      this.form.source_type = e
+      this.option.formData.source_type = e
+    },
 
     getTpl() {
       this.$u.api.import_tpl().then(res => {
@@ -149,6 +193,7 @@ export default {
           this.$u.toast(res.msg)
         } else {
           this.tpl_file_url = res.data.url
+          this.readme = res.data.readme
         }
       })
     },
@@ -169,9 +214,11 @@ export default {
       this.$refs['ytUpload'].clear(name);
       this.result_list = []
       this.form.file_key = ''
+      uni.hideLoading()
     },
     // 上传进度回调
     onprogress(item) {
+      console.log('上传进度', item);
       // 更新当前状态变化的文件
       this.files.set(item.name, item);
       if (item.responseText) {
@@ -199,9 +246,16 @@ export default {
       this.$forceUpdate();
 
     },
+    onUploadEnd(){
+      uni.hideLoading()
+    },
     // 文件选择回调
     onChange(files) {
-      //console.log('当前选择的文件列表：', JSON.stringify([...files.values()]));
+      uni.showLoading({
+        title: '执行中...',
+        mask: true
+      })
+     console.log('当前选择的文件列表：', JSON.stringify([...files.values()]));
       // 更新选择的文件
       this.files = files;
 
@@ -238,17 +292,22 @@ export default {
         content: '确定提交吗，上面的数据将导入到账单记录中？',
         success: (res) => {
           if (res.confirm) {
+            uni.showLoading({
+              title: '导入中...'
+            })
             this.$u.api.import_data(this.form).then(res => {
               this.$u.toast(res.msg);
               if (res.code !== 0) {
                 return
               }
               setTimeout(function () {
-                 //去首页
+                //去首页
                 uni.switchTab({
                   url: '/pages/index/index'
                 })
-              },500)
+              }, 500)
+            }).finally(()=>{
+              uni.hideLoading()
             })
           }
         }
@@ -270,16 +329,21 @@ export default {
 
   }
 
-  .warning{
+  .bs-step {
+    margin-top: 20px;
+    padding: 10px;
+    color: #00A7EA;
+  }
+
+  .warning {
     padding: 10px;
     background-color: #fff;
     color: red;
   }
+
   .choose-file {
-    width: 100rpx;
     vertical-align: center;
-    height: 60rpx;
-    line-height: 100rpx;
+
   }
 
   .buttons {
