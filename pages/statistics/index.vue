@@ -25,13 +25,19 @@
         </u-subsection>
       </view>
 
+      <view v-if="chartPieData || chartBarData" class="chart-container">
+
       <qiun-data-charts class="chart-data" v-if="chartPieData" type="pie" :opts="pieOpts" :loading-type="loadingType"
                         :chartData="chartPieData"/>
 
-      <qiun-data-charts class="chart-data" v-if="chartBarData" type="column" :opts="chartBarOpts"
+      <qiun-data-charts  class="chart-data" v-if="chartBarData" type="column" :opts="chartBarOpts"
                         :loading-type="loadingType" :chartData="chartBarData"
                         :ontouch="true"
       />
+      </view>
+      <view class="no-data" v-else>
+        <u-empty text="暂无数据,请选择其它时间" mode="order"></u-empty>
+      </view>
 
     </view>
 
@@ -244,6 +250,9 @@ export default {
     margin-top: 50px;
   }
 
+  .no-data{
+    margin-top: 30px;
+  }
   .header {
     width: 100%;
     z-index: 100;
