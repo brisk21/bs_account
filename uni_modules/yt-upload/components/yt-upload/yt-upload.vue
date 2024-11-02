@@ -281,7 +281,7 @@ export default {
         return;
       }
 
-      // #ifdef MP-WEIXIN
+     
 
       //微信平台bug，要重新实例化并设置url，formdata无法给后端，不知道是什么bug
       let formData = this.option.formData;
@@ -290,6 +290,7 @@ export default {
       for (let key in formData) {
         this.option.url += '&' + key + '=' + formData[key]
       }
+	  console.log('this.option',this.option)
       this._size = 0;
       let WEBID = this.childId + new Date().getTime();
       this.ytFile = new YtjFile({
@@ -318,10 +319,10 @@ export default {
       if (!this.isShow) {
         return;
       }
+	   // #ifdef MP-WEIXIN
       let count = this.count - this._size;
       this.ytFile.chooseMessageFile(this.wxFileType, count);
-      uni.hideLoading()
-      // #endif
+	  // #endif
     },
     toast(msg) {
       uni.showToast({
