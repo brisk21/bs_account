@@ -1,5 +1,5 @@
 <template>
-  <view class="container category_form">
+  <view class="container">
 
     <u-form-item label="来源类型" label-width="200">
       <u-radio-group v-model="form.source_type" class="radio-group" @change="source_type_change">
@@ -59,18 +59,20 @@
 
 
     <view class="result-list" v-if="result_list.length > 0">
-      <u-table>
+      <u-table >
         <u-tr>
           <u-th>金额</u-th>
           <u-th>类型</u-th>
           <u-th>日期</u-th>
           <u-th>分类</u-th>
+          <u-th>备注</u-th>
         </u-tr>
         <u-tr v-for="(item,index) in result_list" :key="index">
           <u-td>{{ item.amount }}</u-td>
           <u-td>{{ item.type === 10 ? '收入' : '支出' }}</u-td>
-          <u-td>{{ item.date }}</u-td>
-          <u-td>{{ item.category_name }}</u-td>
+          <u-td class="item-date">{{ item.date }}</u-td>
+          <u-td class="item-category">{{ item.category_name }}</u-td>
+          <u-td class="item-remark">{{ item.remark }}</u-td>
         </u-tr>
 
       </u-table>
@@ -318,7 +320,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.category_form {
+.container {
   width: 100%;
   height: 100%;
   padding: 10px;
@@ -327,6 +329,13 @@ export default {
     overflow: hidden;
     width: 98%;
 
+  }
+
+  .result-list{
+    .item-remark,.item-date,.item-category{
+      overflow: scroll;
+      white-space: nowrap;
+    }
   }
 
   .bs-step {
