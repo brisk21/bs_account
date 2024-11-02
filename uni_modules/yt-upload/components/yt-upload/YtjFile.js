@@ -204,7 +204,10 @@ export class YtjFile {
 			},
 			fail:function (err) {
 				console.log('打开失败',err)
-				this.toast(`打开失败`);
+				uni.showToast({
+					title: '打开失败',
+					icon: 'none'
+				});
 			}
 		})
 	}

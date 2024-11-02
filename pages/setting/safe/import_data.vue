@@ -6,7 +6,7 @@
         <u-radio v-for="(item,index) in source_type" :key="index" :name="item.value">{{ item.label }}</u-radio>
       </u-radio-group>
     </u-form-item>
-    <u-form-item v-if="form.source_type==='bs'" label="下载模板" label-width="200">
+    <u-form-item v-if="form.source_type==='bs_custom'" label="下载模板" label-width="200">
       <u-link :href="tpl_file_url" :under-line="false" title="下载固定格式模板"></u-link>
       <u-link v-if="tpl_file_url"
               :href="tpl_file_url"
@@ -34,7 +34,7 @@
           @progress="onprogress"
           @uploadEnd="onUploadEnd"
           @change="onChange">
-        <u-button  class="choose-file" type="primary" size="mini">选择文件</u-button>
+<!--        <u-button  class="choose-file" type="primary" size="mini">选择文件</u-button>-->
       </yt-upload>
     </u-form-item>
     <u-form-item label="已选择文件" label-width="200">
@@ -182,11 +182,14 @@ export default {
   mounted() {
 
   },
+  watch: {
+
+  },
   methods: {
     source_type_change(e){
-      console.log(e)
-      this.form.source_type = e
-      this.option.formData.source_type = e
+      this.$nextTick(() => {
+        this.option.formData.source_type = e
+      })
     },
 
     getTpl() {
@@ -241,7 +244,7 @@ export default {
       //console.log('打印对象', JSON.stringify(this.files.get(item.name)));
       // 微信小程序Map对象for循环不显示，所以转成普通数组，不要问为什么，我也不知道
       // #ifdef MP-WEIXIN
-      this.wxFiles = [...this.files.values()];
+      //this.wxFiles = [...this.files.values()];
       // #endif
 
       // 强制更新视图
@@ -309,7 +312,9 @@ export default {
                 })
               }, 500)
             }).finally(()=>{
-              uni.hideLoading()
+              setTimeout(function (){
+                uni.hideLoading()
+              },1000)
             })
           }
         }

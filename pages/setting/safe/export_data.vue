@@ -87,7 +87,9 @@ export default {
                 }, 3000)
               }
             }).finally(()=>{
-              uni.hideLoading()
+              setTimeout(function (){
+                uni.hideLoading()
+              },1000)
             })
 
           }
