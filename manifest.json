@@ -2,8 +2,8 @@
     "name" : "随手记",
     "appid" : "__UNI__3CF9076",
     "description" : "记账，不只是记录",
-    "versionName" : "1.0.18",
-    "versionCode" : 118,
+    "versionName" : "1.0.19",
+    "versionCode" : 119,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,

@@ -227,6 +227,13 @@
         "navigationBarTitleText": "更新日志",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/setting/safe/export_data",
+      "style": {
+        "navigationBarTitleText": "导出账单",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {
