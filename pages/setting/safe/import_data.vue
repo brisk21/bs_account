@@ -20,7 +20,7 @@
     <u-form-item label="选择文件" label-width="200">
       <yt-upload
           :accept="'.csv,application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
-          :debug='true'
+          :debug='false'
           instantly
           :count="1"
           ref="ytUpload"
