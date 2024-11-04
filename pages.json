@@ -234,6 +234,20 @@
         "navigationBarTitleText": "导出账单",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/budget/budget",
+      "style": {
+        "navigationBarTitleText": "预算管理",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/setting/beian",
+      "style": {
+        "navigationBarTitleText": "应用备案号",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {

@@ -4,11 +4,16 @@
 			<view class="menu-list">
 				<u-cell-group>
 					<u-cell-item @click="goto('/pages/setting/safe/index',true)" title="安全中心" icon="lock"></u-cell-item>
+          <u-cell-item @click="goto('/pages/setting/safe/change_account',true)" title="切换账号" icon="man-add">
+					</u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/feedback',true)" title="反馈&建议"
 						icon="volume"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/xieyi',true)" title="协议相关" icon="order"></u-cell-item>
 
 					<u-cell-item @click="goto('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/beian',true)" title="应用备案号" icon="fingerprint">
+            桂ICP备16004757号-5A
+          </u-cell-item>
 
 					<u-cell-item @click="goto('/pages/setting/update_log',true)" title="更新日志"
 						icon="file-text"></u-cell-item>
@@ -19,8 +24,7 @@
 
 					</u-cell-item>
 
-					<u-cell-item @click="goto('/pages/setting/safe/change_account',true)" title="切换账号" icon="man-add">
-					</u-cell-item>
+
 					<u-cell-item v-if="hasLogin" @click="logout()" title="退出登录" icon="close-circle">
 					</u-cell-item>
 				</u-cell-group>
