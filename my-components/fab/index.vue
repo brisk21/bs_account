@@ -2,13 +2,19 @@
   <view v-if="hasLogin" ref="writeBtn" class="write_btn"
         @touchstart="handleTouchStart"
         @touchmove="handleTouchMove"
-        :style="{ transform: `translate(${btnPosition.x}px, ${btnPosition.y}px)` }" @click="onClickIcon()">
+        :style="{ transform: `translate(${btnPosition.x}px, ${btnPosition.y}px)` }" @click="onClickIcon(url)">
     <u-icon class="icon" name="edit-pen"></u-icon>
   </view>
 </template>
 
 <script>
 export default {
+  props : {
+    url: {
+      type: String,
+      default: '/pages/bill/add'
+    }
+  },
   data() {
     return {
       btnPosition: {x: 0, y: 0},
@@ -38,7 +44,7 @@ export default {
     },
     onClickIcon() {
       uni.navigateTo({
-        url: '/pages/bill/add'
+        url: this.url
       });
     }
   }

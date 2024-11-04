@@ -12,7 +12,7 @@
 
 					<u-cell-item @click="goto('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/beian',true)" title="应用备案号" icon="fingerprint">
-            桂ICP备16004757号-5A
+            {{beian_no}}
           </u-cell-item>
 
 					<u-cell-item @click="goto('/pages/setting/update_log',true)" title="更新日志"
@@ -52,6 +52,7 @@
 		},
 		data() {
 			return {
+        beian_no:'桂ICP备16004757号-5A',
 				app_version: null,
 				show_version: false,
 				phone_height: "0",
@@ -156,6 +157,9 @@
 		},
 		onLoad(options) {
 			this.getSystemInfo()
+      // #ifdef MP-WEIXIN
+      this.beian_no = '桂ICP备16004757号-4X';
+      // #endif
 		},
 		onShow() {
 			if (this.hasLogin) {

@@ -50,11 +50,13 @@
 					</u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/category')" title="收支类型" icon="grid"></u-cell-item>
 
-          <u-cell-item @click="goto('/pages/setting/index',false)" title="设置中心" icon="setting">
+          <u-cell-item @click="goto('/pages/budget/budget',false)" title="预算管理" icon="rmb-circle">
 					</u-cell-item>
 				</u-cell-group>
 			</view>
 		</view>
+
+
    <!-- #ifdef MP-->
     <ad-custom v-if="userInfo && userInfo.position.user_center" unit-id="adunit-2ce0331ff2925c38" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
     <!-- #endif -->
@@ -103,6 +105,10 @@
 					this.$u.toast('请登录后查看');
 					return
 				}
+        if (!path){
+          this.$u.toast('暂未开放')
+          return
+        }
 				uni.navigateTo({
 					url: path
 				})
@@ -154,7 +160,6 @@
           position: fixed;
           right: 15px;
           z-index: 10;
-          top: 15px;
           color: white;
       }
 

@@ -8,9 +8,7 @@
 	// #endif
   import constConfig from '@/const.js'
 
-	import {
-		getCode
-	} from '@/common/login.js'
+
 	export default {
 		onLaunch: function() {
 		 // #ifdef APP-PLUS

@@ -248,6 +248,13 @@
         "navigationBarTitleText": "应用备案号",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/budget/detail",
+      "style": {
+        "navigationBarTitleText": "预算详情",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {

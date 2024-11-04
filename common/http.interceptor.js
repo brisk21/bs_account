@@ -1,7 +1,5 @@
 import constConfig from '@/const.js'
-import {
-	getCode
-} from '@/common/login.js'
+
 const install = (Vue, vm) => {
 	Vue.prototype.$u.http.setConfig({
 			baseUrl: constConfig.baseUrl, // 请求的本域名

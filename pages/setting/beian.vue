@@ -4,7 +4,7 @@
       <view class="menu-list">
         <u-cell-group>
           <u-cell-item title="随手记备案号" :arrow="false">
-            桂ICP备16004757号-5A
+            {{ beian_no }}
           </u-cell-item>
           <u-cell-item title="查询链接" >
             <u-link :href="'https://beian.miit.gov.cn/'"
@@ -24,12 +24,16 @@
 export default {
   components: {},
   data() {
-    return {}
+    return {
+      beian_no:'桂ICP备16004757号-5A'
+    }
   },
 
   methods: {},
   onLoad(options) {
-
+      // #ifdef MP-WEIXIN
+      this.beian_no = '桂ICP备16004757号-4X';
+      // #endif
   },
   onShow() {
 
