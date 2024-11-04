@@ -1,7 +1,14 @@
 <template>
 	<view class="container">
-		<fab></fab>
+    	<fab></fab>
+
+
 		<view class="user-section">
+      <view class="setting" >
+        <view class="setting-item" @click="goto('/pages/setting/index',true)">
+          <u-icon name="setting" size="50"></u-icon>
+        </view>
+      </view>
 			<view class="bg"></view>
 			<view class="user-info-box">
 				<view class="portrait-box" @click="goto('/pages/setting/safe/avatar',true)">
@@ -43,7 +50,7 @@
 					</u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/category')" title="收支类型" icon="grid"></u-cell-item>
 
-          <u-cell-item @click="goto('/pages/setting/index',false)" title="设置" icon="setting">
+          <u-cell-item @click="goto('/pages/setting/index',false)" title="设置中心" icon="setting">
 					</u-cell-item>
 				</u-cell-group>
 			</view>
@@ -143,6 +150,14 @@
 			height: 100%;
 			background-color: $uni-theme-color;
 		}
+    .setting{
+          position: fixed;
+          right: 15px;
+          z-index: 10;
+          top: 15px;
+          color: white;
+      }
+
 	}
 
 	.user-info-box {

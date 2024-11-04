@@ -171,6 +171,7 @@ function check(param = {}) {
 			dataType: 'json',
 			success: (result) => {
 				let res = result.data	
+				console.log('check update res',res)
 				let data = res.data
 				if (data && res.code === 0 && data.url) {
 					if(/\.wgt$/i.test(data.url) || (platform == 'android' &&  /\.apk$/i.test(data.url))){
@@ -228,10 +229,13 @@ function startdownload(param,data){
 									title: '安装升级包失败:' + JSON.stringify(e),
 									icon: 'none'
 								})
+								plus.downloader.clear();
 							});
 						} else {
 							plus.nativeUI.alert("下载升级包失败，请手动去站点下载安装，错误码: " + status);
+							plus.downloader.clear();
 						}
+						plus.nativeUI.closeWaiting();  
 				});
 				
 				let wrapwidth=parseInt(plus.screen.resolutionWidth / 2);

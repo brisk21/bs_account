@@ -3,30 +3,33 @@
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
-          <u-cell-item @click="goto('/pages/setting/safe/index',true)" title="安全中心" icon="lock"></u-cell-item>
-					<u-cell-item @click="goto('/pages/setting/feedback',true)" title="反馈&建议" icon="volume"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/safe/index',true)" title="安全中心" icon="lock"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/feedback',true)" title="反馈&建议"
+						icon="volume"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/xieyi',true)" title="协议相关" icon="order"></u-cell-item>
 
 					<u-cell-item @click="goto('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
 
-					<u-cell-item @click="goto('/pages/setting/update_log',true)" title="更新日志" icon="file-text"></u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/update_log',true)" title="更新日志"
+						icon="file-text"></u-cell-item>
 
-					<u-cell-item   @click="check_update()" title="当前版本" icon="reload">
-              <text >{{app_version}}</text>
-						 <u-badge v-if="show_version" count="有新版本" :absolute="false" slot="right-icon"></u-badge>
+					<u-cell-item @click="check_update()" title="当前版本" icon="reload">
+						<text>{{app_version}}</text>
+						<u-badge v-if="show_version" count="有新版本" :absolute="false" slot="right-icon"></u-badge>
 
 					</u-cell-item>
 
-          <u-cell-item  @click="goto('/pages/setting/safe/change_account',true)" title="切换账号" icon="man-add">
-          </u-cell-item>
+					<u-cell-item @click="goto('/pages/setting/safe/change_account',true)" title="切换账号" icon="man-add">
+					</u-cell-item>
 					<u-cell-item v-if="hasLogin" @click="logout()" title="退出登录" icon="close-circle">
 					</u-cell-item>
 				</u-cell-group>
 			</view>
 		</view>
-    <!-- #ifdef MP-->
-    <ad-custom v-if="userInfo && userInfo.position.setting_page" unit-id="adunit-1709c673b8c4e1e0" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
-    <!-- #endif-->
+		<!-- #ifdef MP-->
+		<ad-custom v-if="userInfo && userInfo.position.setting_page" unit-id="adunit-1709c673b8c4e1e0" bindload="adLoad"
+			binderror="adError" bindclose="adClose"></ad-custom>
+		<!-- #endif-->
 
 
 
@@ -45,7 +48,7 @@
 		},
 		data() {
 			return {
-        app_version: null,
+				app_version: null,
 				show_version: false,
 				phone_height: "0",
 				scroll_view_height: "100",
@@ -71,31 +74,35 @@
 		},
 		methods: {
 
-      //获取系统版本信息
-      getSystemInfo() {
+			//获取系统版本信息
+			getSystemInfo() {
 				let info = uni.getSystemInfoSync();
+        //console.log(info)
 
-        this.app_version = info.appVersion
+				this.app_version = info.appWgtVersion|| info.appVersion;
 
-        this.check_app(info);
+				this.check_app(info);
 			},
 
-      check_app(info) {
-        let that = this
-        this.$u.api.checkAppVersion({platform:info.platform,version:info.appVersion}).then(res => {
+			check_app(info) {
+				let that = this
+				this.$u.api.checkAppVersion({
+					platform: info.platform,
+					version: this.app_version
+				}).then(res => {
 					if (res.code == 0) {
-					    that.show_version = true;
+						that.show_version = true;
 					}
 				})
 			},
 
 
 			check_update() {
-        if (uni.getSystemInfoSync().platform=='h5'){
-          this.$u.toast('请在APP端更新')
-          return
-        }
-        // #ifdef APP-PLUS
+				if (uni.getSystemInfoSync().platform == 'h5') {
+					this.$u.toast('请在APP端更新')
+					return
+				}
+				// #ifdef APP-PLUS
 				checkappupdate.check({
 					title: "检测到有新版本！",
 					content: "请升级app到最新版本！",
@@ -105,7 +112,7 @@
 					barbackground: "rgba(50,50,50,0.8)", //进度条背景色，默认灰色，可自定义rgba形式色值
 					barbackgroundactive: "rgba(32,165,58,1)" //进度条前景色色，默认绿色，可自定义rgba形式色值
 				})
-        // #endif
+				// #endif
 
 
 			},
@@ -114,7 +121,7 @@
 			logout() {
 				uni.showModal({
 					title: '',
-          content: '确定退出登录？',
+					content: '确定退出登录？',
 					success: (res) => {
 						if (res.confirm) {
 							this.$store.dispatch('logout')
@@ -144,8 +151,8 @@
 			}
 		},
 		onLoad(options) {
-      this.getSystemInfo()
-    },
+			this.getSystemInfo()
+		},
 		onShow() {
 			if (this.hasLogin) {
 				this.$store.dispatch('getUserInfo')
