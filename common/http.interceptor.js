@@ -44,6 +44,7 @@ const install = (Vue, vm) => {
 				console.log('执行了 401')
 				// 退出登录 清理本地缓存
 				vm.$store.dispatch('logout')
+				vm.$u.toast('登录状态已过期，请重新登录')
 				return false;
 			} else {
 				if (res.data.code == 401){

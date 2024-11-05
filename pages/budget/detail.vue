@@ -13,13 +13,15 @@
         <u-switch v-model="form.time_limit"></u-switch>
       </u-form-item>
       <u-form-item label="开始时间" v-if="form.time_limit">
-        <u-input @click.native.prevent="chooseTime(1)" placeholder="请选择开始时间"  border :maxlength="10" type="text" clearable class="bs_form_input"
-                 v-model="form.start_time" />
-
+        <view class="time_label" @click.native.prevent="chooseTime(1)">
+          {{form.start_time ||　"请选择开始时间"}} <u-icon name="arrow-right"></u-icon>
+        </view>
       </u-form-item>
       <u-form-item label="结束时间" v-if="form.time_limit">
-        <u-input placeholder="请选择结束时间" border :maxlength="10" type="text" clearable class="bs_form_input"
-                 v-model="form.end_time" @click.native.prevent="chooseTime(2)"/>
+        <view class="time_label" @click.native.prevent="chooseTime(2)">
+          {{form.end_time ||　"请选择结束时间"}} <u-icon name="arrow-right"></u-icon>
+        </view>
+
       </u-form-item>
       <u-form-item label="备注">
         <u-input placeholder="请输入备注" border :maxlength="250" type="textarea" clearable class="bs_form_input"
