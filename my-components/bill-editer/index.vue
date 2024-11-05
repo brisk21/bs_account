@@ -47,13 +47,20 @@
 
       <u-line></u-line>
       <view class="line">
-        <text class="popup_type">{{formData.type===10?'收入':'支出'}}方式：</text>
-        <u-tag class="amount_type"  v-for="(item,index) in amount_type" :text="item" :type="formData.amount_type===item?'primary':'info'"
-                @click="setAmountType(item)"
-                border-color="e5e5e5"
-                mode="plain"
+        <text class="popup_type">{{ formData.type === 10 ? '收入' : '支出' }}方式：</text>
+        <u-tag class="amount_type" v-for="(item,index) in amount_type" :text="item"
+               :type="formData.amount_type===item?'primary':'info'"
+               @click="setAmountType(item)"
+               border-color="e5e5e5"
+               mode="plain"
                size="mini"
         ></u-tag>
+      </view>
+      <view class="line">
+        <text class="popup_type">关联预算：</text>
+        {{ formData.budget_title || '' }}
+        <u-button @click="show_budget_list = true" size="mini" v-if="budget_list.length>0">选择预算</u-button>
+        <u-button @click="goto('/pages/budget/detail',true)" size="mini" v-else>添加预算</u-button>
       </view>
       <view class="line">
         <view class="date">
@@ -69,7 +76,7 @@
       <view class="line">
         <text class="popup_type">备注：</text>
         <input type="textarea" v-model="formData.remark" @input="onRemarkInput" placeholder="添加备注"
-               style="font-size: 28rpx;width: 70%;" clearable border border-color="gray" auto-height />
+               style="font-size: 28rpx;width: 70%;" clearable border border-color="gray" auto-height/>
       </view>
 
       <view class="line">
@@ -90,6 +97,7 @@
 
     <u-picker mode="time" v-model="picker_show" :params="pickerOption" :default-time="formData.date"
               @confirm="pickerConfirm"></u-picker>
+    <u-select v-model="show_budget_list" :list="budget_list" @confirm="confirmBudget"></u-select>
   </view>
 </template>
 
@@ -97,6 +105,8 @@
 import dayjs from '@/dayjs.min.js'
 import constConfig from '@/const.js'
 import uploadFile from "@/components/UploadFile.vue";
+import budget from "@/common/budget";
+
 export default {
   components: {
     uploadFile
@@ -110,17 +120,20 @@ export default {
   data() {
     return {
       type: 0,
+      show_budget_list: false,
       //资金途径（来源、去向）：支付宝、微信、银行卡、现金、其他
-      amount_type: ['微信','支付宝','银行卡', '现金', '其他'],
+      amount_type: ['微信', '支付宝', '银行卡', '现金', '其他'],
       list: ['支出', '收入'],
       formData: {
         id: 0,
+        budge_id: 0,
         type: 20,
         amount: '',
         category_id: 0,
+        budget_title: '',
         date: '',
         remark: '',
-        amount_type:'',
+        amount_type: '',
         image: null
       },
       pickerOption: {
@@ -146,6 +159,7 @@ export default {
         size: '20',
         type: 'clear'
       },
+      budget_list: [],
 
       initialFiles: [],
       action: constConfig.baseUrl + '/upload/image',
@@ -168,13 +182,18 @@ export default {
   methods: {
 
     setAmountType(item) {
-      console.log('t',item)
+      console.log('t', item)
       this.formData.amount_type = item
     },
+    confirmBudget(item) {
+      console.log('选中预算', item[0].label)
+      this.formData.budget_id = item[0].value
+      this.formData.budget_title = item[0].label
+    },
 
-    handleFileUploadSuccess({url, index, fileList,res}) {
+    handleFileUploadSuccess({url, index, fileList, res}) {
       console.log('文件上传成功:', url);
-       if (res.code == 0) {
+      if (res.code == 0) {
         this.formData.image = res.data.full_url
       } else {
         this.$u.toast(res.msg)
@@ -215,6 +234,17 @@ export default {
       })
 
     },
+    get_budget() {
+      budget.budget_list({
+        data_type: 'option'
+      }).then(res => {
+        if (res.code == 0) {
+          this.budget_list = res.data.list
+        }
+      })
+    },
+
+
     setCurCategory(item) {
       console.log(item, 'click')
       if (item.is_set) {
@@ -254,6 +284,19 @@ export default {
     onRemarkInput(e) {
       this.formData.remark = e.detail.value;
     },
+    goto(path, auth = true) {
+      if (auth && !this.hasLogin) {
+        this.$u.toast('请登录后查看');
+        return
+      }
+      if (!path) {
+        this.$u.toast('暂未开放')
+        return
+      }
+      uni.navigateTo({
+        url: path
+      })
+    },
     submit() {
       console.log(this.$store.getters, 'getters')
       if (!this.formData.category_id) {
@@ -286,6 +329,7 @@ export default {
   },
   created() {
     this.getCategory()
+    this.get_budget()
     this.formData.date = dayjs().format('YYYY-MM-DD')
   }
 }
@@ -307,7 +351,7 @@ export default {
     }
   }
 
-  .amount_type{
+  .amount_type {
     margin: 5px;
   }
 

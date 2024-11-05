@@ -13,6 +13,7 @@
           <u-dropdown-item v-model="form.time_type"
                            :title="form.time_type==''?'时间':(form.time_type=='year'?form.year:form.year+form.month)"
                            :options="time_type" @change="set_time_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.budget_id" title="关联预算" :options="budget_list" @change="set_budget_type"></u-dropdown-item>
         </u-dropdown>
 
 
@@ -78,6 +79,8 @@
 </template>
 
 <script>
+import budget from "@/common/budget";
+
 export default {
   components: {},
   data() {
@@ -100,9 +103,13 @@ export default {
         {label: '年份', value: 'year',},
         {label: '月份', value: 'month',},
       ],
+      budget_list: [
+          {label: '全部', value: ''}
+      ],
       form: {
         keywords: '',
         type: 0,
+        budget_id: 0,
         month: '',
         year: '',
         time_type: '',
@@ -180,6 +187,10 @@ export default {
   },
   onLoad(options) {
     console.log('onLoad')
+    if (options.budget_id){
+      this.form.budget_id = options.budget_id
+    }
+    this.get_budget()
     this.getList()
   },
   created() {
@@ -219,6 +230,10 @@ export default {
       this.form.amount_type = value
       this.getList(true)
     },
+    set_budget_type(value) {
+      this.form.budget_id = value
+      this.getList(true)
+    },
     set_time_type(value) {
       if (!value){
         this.form.year = ''
@@ -234,6 +249,16 @@ export default {
       }
       this.form.time_type = value
       this.show_date = true
+    },
+    get_budget() {
+      budget.budget_list({
+        data_type: 'option'
+      }).then(res => {
+        if (res.code == 0 && res.data.list.length > 0) {
+          this.budget_list = this.budget_list.concat(res.data.list)
+
+        }
+      })
     },
     toSearch() {
       this.getList(true)

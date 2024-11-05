@@ -18,7 +18,7 @@ const budget_add = (params) => {
 };
 
 const budget_edit = (params) => {
-    return Vue.prototype.$u.put('budget/edit', params);
+    return Vue.prototype.$u.put('budget/update', params);
 };
 
 export default {

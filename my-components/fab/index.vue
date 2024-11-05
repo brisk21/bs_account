@@ -3,7 +3,7 @@
         @touchstart="handleTouchStart"
         @touchmove="handleTouchMove"
         :style="{ transform: `translate(${btnPosition.x}px, ${btnPosition.y}px)` }" @click="onClickIcon(url)">
-    <u-icon class="icon" name="edit-pen"></u-icon>
+    <u-icon class="icon" :name="icon_name"></u-icon>
   </view>
 </template>
 
@@ -13,6 +13,10 @@ export default {
     url: {
       type: String,
       default: '/pages/bill/add'
+    },
+    icon_name: {
+      type: String,
+      default: 'edit-pen'
     }
   },
   data() {

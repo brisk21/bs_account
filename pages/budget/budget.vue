@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <fab :bg="bg" :is-show="hasLogin" :url="'/pages/budget/detail'"></fab>
+    <fab :bg="bg" :is-show="hasLogin" icon_name="plus" :url="'/pages/budget/detail'"></fab>
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
         <button size="mini" slot="bottom" class="go-to-login" @click="toLogin()">立即登录</button>
@@ -8,8 +8,6 @@
     </view>
     <template v-else>
       <view class="search">
-
-
         <view class="search-box">
           <u-search :clearable="true" :show-action="true" :show-action-icon="true"
                     input-align="left" placeholder="名称查询"
@@ -18,36 +16,47 @@
                     @search="toSearch" @custom="toSearch"></u-search>
         </view>
       </view>
-      <view  v-if="list.length > 0" class="scroll data-list">
+      <view v-if="list.length > 0" class="scroll data-list">
+      <view class="list" v-for="(item, index) in list" :key="index"
+            @click="toDetail(item.budget_id)">
+        <view class="item">
+          <view class="title">
+            {{ item.title }}
+          </view>
+          <view class="amount">
+            预算金额：￥{{ item.amount }}
+          </view>
+          <view class="amount-real">
+            实际金额：￥ <text :class="item.real_amount>item.amount?'bs_red':'bs_green'">{{ item.real_amount }}</text>
+          <template v-if="item.real_amount>0">
+            <text  class="view-list" @click.stop="to_detail(item.budget_id)">查看账单</text>
+            <u-icon   name="arrow-right" size="30" color="#19a6de" @click.native.stop="to_detail(item.budget_id)"></u-icon>
+          </template>
 
-        <view class="list-box-children" v-for="(item, index) in list" :key="index"
-              @click="toDetail(item.id)">
-          <view class="u-flex icon">
-            <u-icon :name="item.category.icon" color="#42b479"></u-icon>
+
           </view>
-          <view class="box-left">
-            {{ item.category.name }}
+          <view class="leave_amount">
+            剩余预算：￥ <text :class="item.leave_amount<0?'bs_red':'bs_green'">{{ item.leave_amount }}</text>
+            <text v-if="item.leave_amount<0" class="bs_red">(超)</text>
           </view>
-          <view class="box-remark">
-            {{ item.amount_type || '' }}
+          <view class="time">
+            时间：{{ item.time_set }}
           </view>
-          <view class="u-flex-1 box-right amount-green" v-if="item.type==20">
-            -￥{{ item.amount }}
+          <view class="remark time">
+           备注：{{ item.remark || '无'}}
           </view>
-          <view class="u-flex-1 box-right amount-red" v-else>
-            +￥{{ item.amount }}
-          </view>
-          <view class="u-flex-1 box-right item-date">
-            {{item.date}}
+          <view class="remark">
+            <u-icon name="more-dot-fill" size="30" color="#999"></u-icon>
           </view>
         </view>
-        <view class="no-more" v-if="no_more && list.length>10">
-          我也是有底线的！！！
-        </view>
       </view>
-      <view v-else class="empty">
-        <u-empty text="暂无数据" mode="list"></u-empty>
+      <view class="no-more" v-if="no_more && form.page > 1">
+        我也是有底线的！！！
       </view>
+    </view>
+    <view v-else class="empty">
+      <u-empty text="暂无数据" mode="list"></u-empty>
+    </view>
 
     </template>
     <u-back-top :scroll-top="scrollTop"></u-back-top>
@@ -126,10 +135,11 @@ export default {
   },
   onShow() {
     console.log('onShow')
+     this.getList(true)
   },
   onLoad(options) {
     console.log('onLoad')
-    this.getList()
+
   },
   created() {
     console.log('created')
@@ -139,7 +149,11 @@ export default {
     this.scrollTop = e.scrollTop;
   },
   methods: {
-
+    to_detail(id){
+      uni.navigateTo({
+        url: `/pages/index/list?budget_id=${id}`
+      });
+    },
     toSearch() {
       this.getList(true)
     },
@@ -212,6 +226,16 @@ export default {
     margin-top: 45%;
     background: white;
   }
+  .bs_red{
+    color: #ff0000;
+  }
+  .bs_green{
+    color: #00ff00;
+  }
+  .no-more{
+    text-align: center;
+    margin: 20px auto;
+  }
 
 
   // 自适应结束
@@ -225,105 +249,52 @@ export default {
     margin: 10rpx;
   }
 
-  .list-box {
-    padding: 18rpx 18rpx 18rpx 40rpx;
+/* 整个列表的样式 */
+.scroll.data-list {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* 列表项的样式 */
+.list {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+  .title,.amount,.amount-real,.leave_amount,.leave_amount,.time,.remark{
+    margin-bottom: 17rpx;
   }
+/* 预算名称样式 */
+.title {
+  font-size: 18px;
+  color: #333;
+  font-weight: 400;
 
-  .no-more {
-    text-align: center;
-    color: rgb(200, 196, 196);
-    margin-top: 10rpx;
-    margin-bottom: 10rpx;
-  }
+}
 
-  .list-box-children {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-    position: relative;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 26rpx 32rpx;
-    font-size: 28rpx;
-    line-height: 50rpx;
-    color: #606266;
-    background-color: #fff;
-    text-align: left;
+/* 预算金额样式 */
+.amount {
+  font-size: 14px;
+  color: #0658ee;
+}
 
-    .icon {
-      font-size: 50rpx;
-      padding-right: 10rpx;
-    }
-
-    .box-icon {
-      width: 50rpx;
-      height: 50rpx;
-      margin-right: 35rpx;
-    }
-
-    .box-left {
-      width: auto;
-      font-weight: 500;
-      font-size: 28rpx;
-    }
-
-    .box-right {
-      overflow: hidden;
-      text-align: right;
-      vertical-align: middle;
-      color: #909399;
-      font-size: 26rpx;
-
-    }
-
-    .amount-green {
-      color: #42b479;
-    }
-
-    .amount-red {
-      color: #ff0000;
-    }
-
-    .box-remark {
-      font-weight: 500;
-      width: 100rpx;
-      margin-left: 50rpx;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -ms-text-overflow: ellipsis;
-      display: -webkit-box;
-      line-clamp: 1;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      color: #c8c4c4;
-    }
-    .item-date{
-      width: 100px;
-    }
-  }
-
-  .data-list {
-    position: relative;
-    top: 0px;
-    width: 100%;
-  }
-
-  .empty {
-    margin-top: 200px;
+/* 实际金额样式 */
+.amount-real {
+  font-size: 14px;
+  .view-list{
+    margin-left: 30rpx;
+    color: #19a6de;
   }
 }
 
-.go-to-login {
-  border-radius: 10rpx;
-  background: $uni-theme-color;
-  color: #fff;
+/* 时间样式 */
+.time {
+  font-size: 14px;
+  color: #999;
+}
 }
 
 </style>

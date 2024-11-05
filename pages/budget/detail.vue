@@ -13,25 +13,27 @@
         <u-switch v-model="form.time_limit"></u-switch>
       </u-form-item>
       <u-form-item label="开始时间" v-if="form.time_limit">
+        <u-input @click.native.prevent="chooseTime(1)" placeholder="请选择开始时间"  border :maxlength="10" type="text" clearable class="bs_form_input"
+                 v-model="form.start_time" />
 
-        <u-input placeholder="请选择开始时间" border :maxlength="10" type="text" clearable class="bs_form_input"
-                 v-model="form.start_time" @click="show_start_time=true"/>
-        <u-picker mode="time" v-model="show_start_time" :params="params"
-                  @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
       </u-form-item>
       <u-form-item label="结束时间" v-if="form.time_limit">
         <u-input placeholder="请选择结束时间" border :maxlength="10" type="text" clearable class="bs_form_input"
-                 v-model="form.end_time" @click="show_end_time=true"/>
-        <u-picker mode="time" v-model="show_end_time" :params="params"
-                  @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
+                 v-model="form.end_time" @click.native.prevent="chooseTime(2)"/>
+      </u-form-item>
+      <u-form-item label="备注">
+        <u-input placeholder="请输入备注" border :maxlength="250" type="textarea" clearable class="bs_form_input"
+                 v-model="form.remark"/>
       </u-form-item>
 
     </u-form>
     <view class="buttons">
-      <u-button class="action-btn" type="default" @click="close">取消</u-button>
-      <u-button class="action-btn" type="primary" @click="submitCategory">保存</u-button>
+      <u-button v-if="form.budget_id>0" class="action-btn" type="warning" @click="del()">删除</u-button>
+      <u-button class="action-btn" type="primary" @click="submit">保存</u-button>
 
     </view>
+    <u-picker mode="time" v-model="show_time" :params="params"
+                  @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
   </view>
 
 </template>
@@ -49,10 +51,11 @@ export default {
         amount: '',
         time_limit: false,
         start_time: null,
-        end_time: null
+        end_time: null,
+        remark: ''
       },
-      show_start_time: false,
-      show_end_time: false,
+      show_time: false,
+      time_index: 0,
       params: {
         year: true, // 是否显示年
         month: true, // 是否显示月
@@ -65,7 +68,9 @@ export default {
   onLoad(options) {
     if (options.id) {
       this.id = options.id;
-      api.budget_detail(this.id).then(res => {
+      api.budget_detail({
+        budget_id: options.id
+      }).then(res => {
         if (res.code == 0) {
           this.form = res.data.info;
         }
@@ -78,40 +83,88 @@ export default {
   }
   ,
   methods: {
+    chooseTime(index) {
+      console.log(index)
+      this.show_time=true;
+      this.time_index=index
+    },
     cancelTime() {
     },
     confirmTime(e) {
       console.log('选择的年月：', e);
+      if (this.time_index==1){
+        this.form.start_time = e.year + '-' + e.month + '-' + e.day
+      }else{
+        this.form.end_time = e.year + '-' + e.month + '-' + e.day
+      }
 
     },
-    close() {
+    del() {
+      uni.showModal({
+        title: '',
+        content: '确定删除吗？数据不可恢复哦',
+        success: (res) => {
+          if (res.confirm) {
+            api.budget_delete({
+              budget_id: this.id
+            }).then(res => {
+              this.$u.toast(res.msg);
+              if (res.code == 0) {
+                setTimeout(function (){
+                  uni.navigateBack()
+                },1000)
+              }
+            })
+          } else if (res.cancel) {
+            this.$u.toast('已取消');
+          }
+        }
+      })
+
 
     } ,
-    async submitCategory() {
-      let name = this.value;
-      let type = this.type;
-      if (!name) {
-        this.$u.toast('请输入分类名称');
+    async submit() {
+
+      if (!this.form.title) {
+        this.$u.toast('请输入预算名称');
+        return;
+      }else if (this.form.title.length>100){
+        this.$u.toast('预算名称过长');
         return;
       }
-      if (!type) {
-        this.$u.toast('请选择分类类型');
+      if (!this.form.amount) {
+        this.$u.toast('请设置预算金额');
         return;
+      }else if (isNaN(this.form.amount)){
+        this.$u.toast('请输入正确的预算金额');
+        return;
+      }else if (this.form.amount<=0){
+        this.$u.toast('预算金额必须大于0');
+        return;
+      }
+      if (this.form.time_limit){
+        if (!this.form.start_time){
+          this.$u.toast('请选择开始时间');
+          return;
+        }else if (!this.form.end_time){
+          this.$u.toast('请选择结束时间');
+          return;
+        }
       }
       uni.showModal({
         title: '',
         content: '确定提交吗？',
         success: (res) => {
           if (res.confirm) {
-            if (this.id > 0) {
-              this.$u.api.updateCategory({id: this.id, name: name, type: type, sort: this.sort}).then(res => {
+            if (this.form.budget_id > 0) {
+             api.budget_edit(this.form).then(res => {
                 this.$u.toast(res.msg);
                 if (res.code == 0) {
                   uni.navigateBack()
                 }
               })
             } else {
-              this.$u.api.createCategory({name: name, type: type, sort: this.sort}).then(res => {
+              api.budget_add(this.form).then(res => {
                 this.$u.toast(res.msg);
                 if (res.code == 0) {
                   uni.navigateBack()
@@ -139,8 +192,12 @@ export default {
 
   .buttons {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20rpx;
+    justify-content: space-evenly;
+    margin-top: 50rpx;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
 
     .action-btn {
       width: 100%;
