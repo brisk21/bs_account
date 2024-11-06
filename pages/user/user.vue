@@ -4,11 +4,7 @@
 
 
 		<view class="user-section">
-      <view class="setting" >
-        <view class="setting-item" @click="goto('/pages/setting/index',true)">
-          <u-icon name="setting" size="50"></u-icon>
-        </view>
-      </view>
+
 			<view class="bg"></view>
 			<view class="user-info-box">
 				<view class="portrait-box" @click="goto('/pages/setting/safe/avatar',true)">
@@ -24,6 +20,11 @@
 
 					</view>
 				</view>
+        <view class="setting" >
+        <view class="setting-item" @click="goto('/pages/setting/index',true)">
+          <u-icon name="setting" size="50"></u-icon>
+        </view>
+      </view>
 			</view>
 		</view>
 		<view class="tj-sction">
@@ -157,8 +158,8 @@
 			background-color: $uni-theme-color;
 		}
     .setting{
-          position: fixed;
-          right: 15px;
+          position: absolute;
+          right: 0;
           z-index: 10;
           color: white;
       }

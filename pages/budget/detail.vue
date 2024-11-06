@@ -13,12 +13,12 @@
         <u-switch v-model="form.time_limit"></u-switch>
       </u-form-item>
       <u-form-item label="开始时间" v-if="form.time_limit">
-        <view class="time_label" @click.native.prevent="chooseTime(1)">
+        <view class="time_label" @click.stop="chooseTime(1)">
           {{form.start_time ||　"请选择开始时间"}} <u-icon name="arrow-right"></u-icon>
         </view>
       </u-form-item>
       <u-form-item label="结束时间" v-if="form.time_limit">
-        <view class="time_label" @click.native.prevent="chooseTime(2)">
+        <view class="time_label" @click.stop="chooseTime(2)">
           {{form.end_time ||　"请选择结束时间"}} <u-icon name="arrow-right"></u-icon>
         </view>
 
@@ -104,7 +104,7 @@ export default {
     del() {
       uni.showModal({
         title: '',
-        content: '确定删除吗？数据不可恢复哦',
+        content: '确定删除吗？删除后不再在列表显示',
         success: (res) => {
           if (res.confirm) {
             api.budget_delete({

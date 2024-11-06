@@ -230,7 +230,7 @@ export default {
     color: #ff0000;
   }
   .bs_green{
-    color: #00ff00;
+    color: green;
   }
   .no-more{
     text-align: center;
