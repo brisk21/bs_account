@@ -12,7 +12,7 @@
     </view>
     <view class="charts">
       <view class="title">
-        <text class="text" @click="datePicker.picker_show = true">
+        <text class="text" @click="datePicker.picker_show = true;show_box = false">
           按{{ formData.queryType === 0 ? '月' : '年' }}统计:
           <text>{{ datePicker.year }} 年</text>
           <text
@@ -27,13 +27,19 @@
 
       <view v-if="chartPieData || chartBarData" class="chart-container">
 
-      <qiun-data-charts class="chart-data" v-if="chartPieData" type="pie" :opts="pieOpts" :loading-type="loadingType"
-                        :chartData="chartPieData"/>
+        <qiun-data-charts class="chart-data" v-if="chartPieData && show_box" :type="chartPieType" :opts="pieOpts"
+                          :loading-type="loadingType"
+                          :chartData="chartPieData"/>
 
-      <qiun-data-charts  class="chart-data" v-if="chartBarData" type="column" :opts="chartBarOpts"
-                        :loading-type="loadingType" :chartData="chartBarData"
-                        :ontouch="true"
-      />
+        <qiun-data-charts class="chart-data" v-if="chartBarData && show_box" :type="chartBarType" :opts="chartBarOpts"
+                          :loading-type="loadingType" :chartData="chartBarData"
+                          :ontouch="true"
+        />
+        <qiun-data-charts class="chart-data" v-if="chartLineData && show_box" :type="chartLineType"
+                          :opts="chartLineOpts"
+                          :loading-type="loadingType" :chartData="chartLineData"
+                          :ontouch="true"
+        />
       </view>
       <view class="no-data" v-else>
         <u-empty text="暂无数据,请选择其它时间" mode="order"></u-empty>
@@ -43,16 +49,8 @@
 
 
     <u-picker mode="time" v-model="datePicker.picker_show" :default-time="datePicker.picker_time"
-              :params="pickerParams" @confirm="pickerConfirm">
+              :params="pickerParams" @confirm="pickerConfirm" z-index="99999" :mask-close-able="false">
     </u-picker>
-
-
-    <!-- #ifdef MP-->
-    <view class="ad-container" v-if="userInfo && userInfo.position.statistics_page">
-      <ad-custom unit-id="adunit-8b8c1d986d8b9ff3" bindload="adLoad" binderror="adError"
-                 bindclose="adClose"></ad-custom>
-    </view>
-    <!-- #endif -->
 
 
   </view>
@@ -67,6 +65,7 @@ export default {
   data() {
     return {
       scss,
+      show_box: true,
       pieOpts: {
         "title": {
           "text": ''
@@ -83,11 +82,16 @@ export default {
           },
         }
       },
+      chartPieType: 'pie',
+      chartLineType: 'line',
+      chartBarType: 'column',
       chartPieData: null,
       chartBarData: null,
+      chartLineData: null,
+      chartLineOpts: null,
       chartBarOpts: {
         update: true,
-        enableScroll: true, // 启用横向滚动
+        enableScroll: true,
         legend: {},
         xAxis: {
           disableGrid: true,
@@ -166,6 +170,7 @@ export default {
       this.getStatisticData()
     },
     getStatisticData() {
+      let that = this
       if (!this.hasLogin) {
         return
       }
@@ -191,22 +196,37 @@ export default {
           setTimeout(function () {
             if (res.data.category) {
               that.$nextTick(() => {
+                that.chartPieType = res.data.category.type
+                that.pieOpts = res.data.category.option
                 that.chartPieData = res.data.category
               })
             }
             if (res.data.bar) {
               that.$nextTick(() => {
+                that.chartBarType = res.data.bar.type
+                that.chartBarOpts = res.data.bar.option
                 that.chartBarData = res.data.bar
               })
             }
-          },500)
+            if (res.data.line) {
+              that.$nextTick(() => {
+                that.chartLineType = res.data.line.type
+                that.chartLineData = res.data.line.chartData
+                that.charlineOpts = res.data.line.option
+              })
+            }
+          }, 500)
         }
-      }).finally(()=>{
+      }).finally(() => {
         that.loadingType = 0
-        uni.hideLoading()
+        setTimeout(function () {
+          that.is_fresh = false;
+          that.is_pulling = false
+        }, 1000)
       })
     },
     pickerConfirm(e) {
+      this.show_box = true
       if (this.pickerParams.year) this.datePicker.year = e.year;
       if (this.pickerParams.month) this.datePicker.month = e.month;
       this.datePicker.picker_time = this.datePicker.year + "-" + this.datePicker.month;
@@ -248,11 +268,13 @@ export default {
 
   .chart-data {
     margin-top: 50px;
+    z-index: 100;
   }
 
-  .no-data{
+  .no-data {
     margin-top: 30px;
   }
+
   .header {
     width: 100%;
     z-index: 100;
@@ -291,6 +313,14 @@ export default {
         width: 200rpx;
       }
     }
+  }
+
+  canvas {
+    z-index: 100 !important;
+  }
+
+  .u-datetime-picke {
+    z-index: 99999;
   }
 
   .ad-container {
