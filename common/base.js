@@ -11,13 +11,6 @@ const install = (Vue, vm) => {
             // #ifdef MP-WEIXIN
             platform: 'wx',
             // #endif
-
-            // #ifdef MP-QQ
-            platform: 'qq',
-            // #endif
-            // #ifdef MP-TOUTIAO
-            platform: 'tt',
-            // #endif
         });
     }
 
