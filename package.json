@@ -1,6 +1,6 @@
 {
-    "id": "iamxcd-yqapp",
-    "name": "记账",
+    "id": "bs_acount",
+    "name": "随手记",
     "version": "1.0.0",
     "description": "thinkphp6+uniapp 开发的记账APP",
     "keywords": [
@@ -12,5 +12,8 @@
             "uni-app前端模板",
             "uni-app前端项目模板"
         ]
+    },
+    "dependencies": {
+        "mp-html": "^2.5.0"
     }
 }
