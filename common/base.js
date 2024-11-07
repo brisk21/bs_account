@@ -1,7 +1,7 @@
 // 实际上 如果不用Xbuild意义不大了 没有自动补全~
 // 如果没有通过拦截器配置域名的话，可以在这里写上完整的URL(加上域名部分)
 const indexUrl = 'mp/';
-
+import { encrypt } from './crypto.js';
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
 const install = (Vue, vm) => {
@@ -51,10 +51,10 @@ const install = (Vue, vm) => {
     }
 
     const updateAccount = (data) => {
-        return vm.$u.put('updateAccount', data);
+        return vm.$u.put('updateAccount', encrypt(data));
     }
     const updatePwd = (data) => {
-        return vm.$u.put('updatePwd ', data);
+        return vm.$u.put('updatePwd ', encrypt(data));
     }
 
     const delCashflow = (id) => {
@@ -68,7 +68,7 @@ const install = (Vue, vm) => {
     }
 
     const login = (data) => {
-        return vm.$u.post('login', data);
+        return vm.$u.post('login', encrypt(data));
     }
     const register = (data) => {
         return vm.$u.post('register', data);
@@ -145,7 +145,7 @@ const install = (Vue, vm) => {
     }
     //关联账号
     const bindAccount = (params) => {
-        return vm.$u.post('bind-account', params);
+        return vm.$u.post('bind-account', encrypt(params));
     }
     //切换登录
     const switchAccount = (params) => {
@@ -159,14 +159,14 @@ const install = (Vue, vm) => {
 
     //导出账单
     const export_data = (params) => {
-        return vm.$u.get('cashflow-export', params);
+        return vm.$u.get('cashflow-export', encrypt(params));
     }
 
 
 
     //导入账单数据
     const import_data = (params) => {
-        return vm.$u.post('cashflow-import', params);
+        return vm.$u.post('cashflow-import', encrypt(params));
     }
     //下载导入模板
     const import_tpl = (params) => {

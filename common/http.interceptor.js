@@ -1,5 +1,5 @@
 import constConfig from '@/const.js'
-
+//import { encrypt } from './crypto.js';
 const install = (Vue, vm) => {
 	Vue.prototype.$u.http.setConfig({
 			baseUrl: constConfig.baseUrl, // 请求的本域名
@@ -25,6 +25,17 @@ const install = (Vue, vm) => {
 			config.header.Authorization = 'Bearer ' + (uni.getStorageSync('UserToken') || '');
 			// 可以对某个url进行特别处理，此url参数为this.$u.get(url)中的url值
 			if (config.url == 'code2token') config.header.noToken = true;
+
+			// 对需要加密的参数进行加密处理
+
+			// 对需要加密的参数进行加密处理
+			//console.log(config.method)
+			/*if (config.method === 'POST' || config.method === 'PUT' ) {
+				// 假设只有POST请求需要加密，并且不是免Token的接口
+				config.data =  encrypt(config.data);
+				console.log('加密参数', config.data)
+			}*/
+
 			// 最后需要将config进行return
 			return config;
 			// 如果return一个false值，则会取消本次请求
