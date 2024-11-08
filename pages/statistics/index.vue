@@ -25,20 +25,9 @@
         </u-subsection>
       </view>
 
-      <view v-if="chartPieData || chartBarData" class="chart-container">
-
-        <qiun-data-charts class="chart-data" v-if="chartPieData && show_box" :type="chartPieType" :opts="pieOpts"
-                          :loading-type="loadingType"
-                          :chartData="chartPieData"/>
-
-        <qiun-data-charts class="chart-data" v-if="chartBarData && show_box" :type="chartBarType" :opts="chartBarOpts"
-                          :loading-type="loadingType" :chartData="chartBarData"
-                          :ontouch="true"
-        />
-        <qiun-data-charts class="chart-data" v-if="chartLineData && show_box" :type="chartLineType"
-                          :opts="chartLineOpts"
-                          :loading-type="loadingType" :chartData="chartLineData"
-                          :ontouch="true"
+      <view v-if="show_box && list.length > 0" class="chart-container">
+        <qiun-data-charts class="chart-data" v-for="(item,index) in list" :key="index" :type="item.type" :opts="item.option" :loading-type="loadingType"
+          :chart-data="item.chart_data"
         />
       </view>
       <view class="no-data" v-else>
@@ -49,7 +38,7 @@
 
 
     <u-picker mode="time" v-model="datePicker.picker_show" :default-time="datePicker.picker_time"
-              :params="pickerParams" @confirm="pickerConfirm" z-index="99999" :mask-close-able="false">
+              :params="pickerParams" @confirm="pickerConfirm" z-index="99999" :mask-close-able="false" @cancel="show_box = true">
     </u-picker>
 
 
@@ -65,64 +54,8 @@ export default {
   data() {
     return {
       scss,
+      list:[],
       show_box: true,
-      pieOpts: {
-        "title": {
-          "text": ''
-        },
-        "legend": {
-          "show": true,
-          "position": "bottom",
-          float: 'left'
-        },
-        "extra": {
-          "pie": {
-            "activeOpacity": 1,
-            "border": false,
-          },
-        }
-      },
-      chartPieType: 'pie',
-      chartLineType: 'line',
-      chartBarType: 'column',
-      chartPieData: null,
-      chartBarData: null,
-      chartLineData: null,
-      chartLineOpts: null,
-      chartBarOpts: {
-        update: true,
-        enableScroll: true,
-        legend: {},
-        xAxis: {
-          disableGrid: true,
-          type: 'grid',
-          gridType: 'dash',
-          itemCount: 7,//x轴单屏显示数据的数量，默认为5个
-          scrollShow: true,//新增是否显示滚动条，默认false
-          scrollAlign: 'left',//滚动条初始位置
-          scrollBackgroundColor: '#F7F7FF',//默认为 #EFEBEF
-          scrollColor: '#DEE7F7',//默认为 #A6A6A6
-        },
-        yAxis: {
-          showTitle: true,
-          padding: 10,
-          data: [
-            {
-              title: '收支情况',
-              min: 0
-            }
-          ]
-        },
-        extra: {
-          column: {
-            type: "stack",
-            width: 30,
-            activeBgColor: "#000000",
-            activeBgOpacity: 0.08,
-            labelPosition: "center"
-          }
-        }
-      },
       loadingType: 3,
       typeList: ['支出', '收入'],
       queryTypeList: ['月', '年'],
@@ -193,29 +126,7 @@ export default {
         this.loadingType = 3;
         if (res.code == 0) {
           let that = this;
-          setTimeout(function () {
-            if (res.data.category) {
-              that.$nextTick(() => {
-                that.chartPieType = res.data.category.type
-                that.pieOpts = res.data.category.option
-                that.chartPieData = res.data.category
-              })
-            }
-            if (res.data.bar) {
-              that.$nextTick(() => {
-                that.chartBarType = res.data.bar.type
-                that.chartBarOpts = res.data.bar.option
-                that.chartBarData = res.data.bar
-              })
-            }
-            if (res.data.line) {
-              that.$nextTick(() => {
-                that.chartLineType = res.data.line.type
-                that.chartLineData = res.data.line.chartData
-                that.charlineOpts = res.data.line.option
-              })
-            }
-          }, 500)
+          this.list = res.data.list
         }
       }).finally(() => {
         that.loadingType = 0
