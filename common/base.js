@@ -178,6 +178,15 @@ const install = (Vue, vm) => {
         return vm.$u.get('update-log', params);
     }
 
+    //统计设置
+    const statistic_get = (params) => {
+        return vm.$u.get('statistic/setting', params);
+    }
+
+    const statistic_set = (params) => {
+        return vm.$u.put('statistic/setting', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -217,7 +226,9 @@ const install = (Vue, vm) => {
         export_data,
         import_data,
         import_tpl,
-        updateLog
+        updateLog,
+        statistic_get,
+        statistic_set
     };
 }
 

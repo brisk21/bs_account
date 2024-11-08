@@ -9,6 +9,12 @@
       <u-subsection :list="typeList" @change="typeChange" :animation="false" active-color="#ffffff"
                     :current="formData.type" mode="subsection" style="width: 200rpx;" height="60" font-size="25">
       </u-subsection>
+      <view class="setting">
+        <view class="setting-item" @click="goto('/pages/statistics/set',true)">
+          <u-icon name="grid" size="50"></u-icon>
+        </view>
+      </view>
+
     </view>
     <view class="charts">
       <view class="title">
@@ -26,8 +32,14 @@
       </view>
 
       <view v-if="show_box && list.length > 0" class="chart-container">
-        <qiun-data-charts class="chart-data" v-for="(item,index) in list" :key="index" :type="item.type" :opts="item.option" :loading-type="loadingType"
-          :chart-data="item.chart_data"
+        <qiun-data-charts class="chart-data"
+                          v-for="(item,index) in list"
+                          :key="index"
+                          :type="item.type"
+                          :opts="item.options"
+                          :loading-type="loadingType"
+                          :chart-data="item.chart_data"
+                          :ontouch="true"
         />
       </view>
       <view class="no-data" v-else>
@@ -38,8 +50,13 @@
 
 
     <u-picker mode="time" v-model="datePicker.picker_show" :default-time="datePicker.picker_time"
-              :params="pickerParams" @confirm="pickerConfirm" z-index="99999" :mask-close-able="false" @cancel="show_box = true">
+              :params="pickerParams" @confirm="pickerConfirm" z-index="99999" :mask-close-able="false"
+              @cancel="show_box = true">
     </u-picker>
+    <view class="alert-tip">
+      <u-alert-tips type="error" :show="show_tips" @close="closeStaticsTips" title="温馨提示"
+                    :description="'右上角点击进去可以配置需要显示的统计哦'" close-able></u-alert-tips>
+    </view>
 
 
   </view>
@@ -54,8 +71,9 @@ export default {
   data() {
     return {
       scss,
-      list:[],
+      list: [],
       show_box: true,
+      show_tips: true,
       loadingType: 3,
       typeList: ['支出', '收入'],
       queryTypeList: ['月', '年'],
@@ -76,7 +94,8 @@ export default {
     this.getStatisticData()
   },
   onLoad(options) {
-
+    let show_tips = uni.getStorageSync('statistics_tips');
+    this.show_tips = !show_tips
   },
   computed: {
     pickerParams() {
@@ -94,6 +113,11 @@ export default {
     },
   },
   methods: {
+    closeStaticsTips() {
+      console.log('close', this.show_tips)
+      this.show_tips = false
+      uni.setStorageSync('statistics_tips', 1);//避免重复弹窗
+    },
     typeChange(index) {
       this.formData.type = index
       this.getStatisticData()
@@ -120,10 +144,11 @@ export default {
       uni.showLoading({
         title: '加载中...'
       })
-      this.chartPieData = null
-      this.chartBarData = null
+      this.show_box = false
+      this.list = []
+      this.loadingType = 3;
       this.$u.api.getStatisticData(params).then(res => {
-        this.loadingType = 3;
+
         if (res.code == 0) {
           let that = this;
           this.list = res.data.list
@@ -133,6 +158,7 @@ export default {
         setTimeout(function () {
           that.is_fresh = false;
           that.is_pulling = false
+          that.show_box = true
         }, 1000)
       })
     },
@@ -155,6 +181,19 @@ export default {
     toLogin() {
       this.goToLoginPage()
     },
+    goto(path, auth = true) {
+      if (auth && !this.hasLogin) {
+        this.$u.toast('请登录后查看');
+        return
+      }
+      if (!path) {
+        this.$u.toast('暂未开放')
+        return
+      }
+      uni.navigateTo({
+        url: path
+      })
+    }
   },
 
 }
@@ -177,10 +216,18 @@ export default {
   background-color: #ffffff;
   margin-bottom: 80rpx;
 
-  .chart-data {
-    margin-top: 50px;
-    z-index: 100;
+  .chart-container {
+    .chart-data {
+      margin-top: 50px;
+      z-index: 100;
+    }
+
   }
+
+  .alert-tip {
+    margin-top: 40rpx;
+  }
+
 
   .no-data {
     margin-top: 30px;
@@ -194,6 +241,13 @@ export default {
 
     background-color: $uni-theme-color;
     padding: 20px 20px 20px 20px;
+
+    .setting {
+      position: absolute;
+      right: 20rpx;
+      z-index: 10;
+      color: white;
+    }
   }
 
   .charts {

@@ -255,6 +255,13 @@
         "navigationBarTitleText": "预算详情",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/statistics/set",
+      "style": {
+        "navigationBarTitleText": "统计配置",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {
