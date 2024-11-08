@@ -48,19 +48,26 @@
       <u-line></u-line>
       <view class="line">
         <text class="popup_type">{{ formData.type === 10 ? '收入' : '支出' }}方式：</text>
-        <u-tag class="amount_type" v-for="(item,index) in amount_type" :text="item"
-               :type="formData.amount_type===item?'primary':'info'"
-               @click="setAmountType(item)"
-               border-color="e5e5e5"
-               mode="plain"
-               size="mini"
+        <u-tag
+            v-if="formData.amount_type"
+            :closeable="true"
+               :text="formData.amount_type"
+               @close="unsetAmountType()"
         ></u-tag>
+        <u-button v-else @click="show_amount_type_list = true" size="mini" >选择方式</u-button>
       </view>
-      <view class="line">
+      <view class="line" v-if="formData.type===20">
         <text class="popup_type">关联预算：</text>
-        {{ formData.budget_title || '' }}
-        <u-button @click="show_budget_list = true" size="mini" v-if="budget_list.length>0">选择预算</u-button>
-        <u-button @click="goto('/pages/budget/detail',true)" size="mini" v-else>添加预算</u-button>
+        <u-tag :closeable="true"
+               v-if="formData.budget_id>0"
+               :text="formData.budget_title"
+               @close="unsetBudget()"
+        ></u-tag>
+
+        <u-button @click="show_budget_list = true" size="mini"
+                  v-if="budget_list.length>0 && !formData.budget_title">选择预算</u-button>
+        <u-button @click="goto('/pages/budget/detail',true)" size="mini"
+                  v-if="budget_list.length<=0">添加预算</u-button>
       </view>
       <view class="line">
         <view class="date">
@@ -98,6 +105,7 @@
     <u-picker mode="time" v-model="picker_show" :params="pickerOption" :default-time="formData.date"
               @confirm="pickerConfirm"></u-picker>
     <u-select v-model="show_budget_list" :list="budget_list" @confirm="confirmBudget"></u-select>
+    <u-select v-model="show_amount_type_list" :list="amount_type_list" @confirm="confirmAmountType"></u-select>
   </view>
 </template>
 
@@ -121,8 +129,16 @@ export default {
     return {
       type: 0,
       show_budget_list: false,
+      show_amount_type_list: false,
       //资金途径（来源、去向）：支付宝、微信、银行卡、现金、其他
-      amount_type: ['微信', '支付宝', '银行卡', '现金', '其他'],
+      amount_type_list:[
+          { 'label':'微信','value':'微信',},
+          { 'label':'支付宝','value':'支付宝',},
+          { 'label':'银行卡','value':'银行卡',},
+          { 'label':'现金','value':'现金',},
+          { 'label':'信用卡','value':'信用卡',},
+          { 'label':'其他','value':'其他',}
+      ],
       list: ['支出', '收入'],
       formData: {
         id: 0,
@@ -179,11 +195,29 @@ export default {
       console.log(id)
     }
   },
-  methods: {
+  onShow() {
 
+  },
+  created() {
+    this.getCategory()
+    this.get_budget()
+    this.formData.date = dayjs().format('YYYY-MM-DD')
+  },
+  methods: {
+    unsetBudget() {
+      this.formData.budget_id = 0
+      this.formData.budget_title = ''
+    },
+    unsetAmountType() {
+      this.formData.amount_type = ''
+    },
     setAmountType(item) {
       console.log('t', item)
       this.formData.amount_type = item
+    },
+    confirmAmountType(item) {
+      console.log('选中方式', item[0].label)
+      this.formData.amount_type = item[0].label
     },
     confirmBudget(item) {
       console.log('选中预算', item[0].label)
@@ -326,12 +360,8 @@ export default {
         }
       })
     },
-  },
-  created() {
-    this.getCategory()
-    this.get_budget()
-    this.formData.date = dayjs().format('YYYY-MM-DD')
   }
+
 }
 </script>
 
