@@ -7,34 +7,44 @@
     </view>
     <view class="category-list">
       <view class="out-list" v-show="formData.type == 20">
-        <template v-if="out_list.length>0">
+        <template v-if="out_list.length > 0">
           <u-grid :col="5" :border="true">
+            <!-- 显示前10个项目 -->
             <u-grid-item
-                v-for="(item,index) in out_list"
+                v-for="(item, index) in showOutList"
                 :key="item.id"
-                :bg-color="item.id && formData.category_id==item.id?'#71d5a1':''"
+                :bg-color="item.id && formData.category_id == item.id ? '#71d5a1' : ''"
                 @click="setCurCategory(item)"
             >
               <u-icon :name="item.icon" :size="46"></u-icon>
               <view class="grid-text">{{ item.name }}</view>
             </u-grid-item>
           </u-grid>
+          <!-- 显示全部按钮 -->
+          <view v-if="out_list.length > 10" class="show_btn">
+            <u-button size="mini" type="primary" @click="toggleShowAll(20)">{{ show_out_txt }}</u-button>
+          </view>
         </template>
       </view>
       <view class="in-list" v-show="formData.type == 10">
 
-        <template v-if="in_list.length>0">
+        <template v-if="in_list.length > 0">
           <u-grid :col="5" :border="true">
+            <!-- 显示前10个项目 -->
             <u-grid-item
-                v-for="(item,index) in in_list"
+                v-for="(item, index) in showInList"
                 :key="item.id"
-                :bg-color="item.id && formData.category_id==item.id?'#71d5a1':''"
+                :bg-color="item.id && formData.category_id == item.id ? '#71d5a1' : ''"
                 @click="setCurCategory(item)"
             >
               <u-icon :name="item.icon" :size="46"></u-icon>
               <view class="grid-text">{{ item.name }}</view>
             </u-grid-item>
           </u-grid>
+          <!-- 显示全部按钮 -->
+          <view v-if="in_list.length > 10" class="show_btn">
+            <u-button size="mini" type="primary" @click="toggleShowAll(10)">{{ show_in_txt }}</u-button>
+          </view>
         </template>
       </view>
     </view>
@@ -51,10 +61,10 @@
         <u-tag
             v-if="formData.amount_type"
             :closeable="true"
-               :text="formData.amount_type"
-               @close="unsetAmountType()"
+            :text="formData.amount_type"
+            @close="unsetAmountType()"
         ></u-tag>
-        <u-button v-else @click="show_amount_type_list = true" size="mini" >选择方式</u-button>
+        <u-button v-else @click="show_amount_type_list = true" size="mini">选择方式</u-button>
       </view>
       <view class="line" v-if="formData.type===20">
         <text class="popup_type">关联预算：</text>
@@ -65,9 +75,11 @@
         ></u-tag>
 
         <u-button @click="show_budget_list = true" size="mini"
-                  v-if="budget_list.length>0 && !formData.budget_title">选择预算</u-button>
+                  v-if="budget_list.length>0 && !formData.budget_title">选择预算
+        </u-button>
         <u-button @click="goto('/pages/budget/detail',true)" size="mini"
-                  v-if="budget_list.length<=0">添加预算</u-button>
+                  v-if="budget_list.length<=0">添加预算
+        </u-button>
       </view>
       <view class="line">
         <view class="date">
@@ -127,17 +139,23 @@ export default {
   },
   data() {
     return {
+      showOutList: [],
+      showInList: [],
+      showInAll: false,
+      showOutAll: false,
+      show_out_txt: '展开全部',
+      show_in_txt: '展开全部',
       type: 0,
       show_budget_list: false,
       show_amount_type_list: false,
       //资金途径（来源、去向）：支付宝、微信、银行卡、现金、其他
-      amount_type_list:[
-          { 'label':'微信','value':'微信',},
-          { 'label':'支付宝','value':'支付宝',},
-          { 'label':'银行卡','value':'银行卡',},
-          { 'label':'现金','value':'现金',},
-          { 'label':'信用卡','value':'信用卡',},
-          { 'label':'其他','value':'其他',}
+      amount_type_list: [
+        {'label': '微信', 'value': '微信',},
+        {'label': '支付宝', 'value': '支付宝',},
+        {'label': '银行卡', 'value': '银行卡',},
+        {'label': '现金', 'value': '现金',},
+        {'label': '信用卡', 'value': '信用卡',},
+        {'label': '其他', 'value': '其他',}
       ],
       list: ['支出', '收入'],
       formData: {
@@ -249,6 +267,34 @@ export default {
       this.formData.type = index === 0 ? 20 : 10;
       this.formData.category_id = null
     },
+    toggleShowAll(type) {
+      let status = type === 10 ? this.showInAll : this.showOutAll
+      let text = ''
+      if (!status) {
+        if (type === 20) {
+          this.showOutList = this.out_list;
+        } else {
+          this.showInList = this.in_list;
+        }
+        text = '收起'
+      } else {
+        if (type === 20) {
+          this.showOutList = this.out_list.slice(0, 10);
+        } else {
+          this.showInList = this.in_list.slice(0, 10);
+        }
+        text = '展开全部'
+      }
+      type === 20 ? this.showOutAll = !this.showOutAll : this.showInAll = !this.showInAll
+      if (type === 10) {
+        this.show_in_txt = text
+      } else {
+        this.show_out_txt = text
+      }
+      this.$forceUpdate()
+
+
+    },
     getCategory() {
       this.$u.api.getCategory(0).then(res => {
         //type10=收入，type20=支出
@@ -262,6 +308,8 @@ export default {
           }
           this.in_list = this.listSet(this.in_list)
           this.out_list = this.listSet(this.out_list)
+          this.showOutList = this.out_list.slice(0, 10);
+          this.showInList = this.in_list.slice(0, 10);
         }
       }).catch(err => {
         console.log(err)
@@ -309,10 +357,6 @@ export default {
       this.formData.date = e.year + '-' + e.month + "-" + e.day;
     },
     onInput(e) {
-      console.log(e)
-      /*let v = e.detail.value;
-      v = v.replace(/^\D*([1-9]\d{0,6}\.?\d{0,2})?.*$/, '$1');//输入数字
-      this.formData.amount = v;*/
       return e.detail.value;
     },
     onRemarkInput(e) {
@@ -337,10 +381,6 @@ export default {
         this.$u.toast('请选择分类')
         return
       }
-      /*if (this.formData.amount <= 0){
-        this.$u.toast('请输入金额')
-        return
-      }*/
       if (!this.formData.date) {
         this.$u.toast('请选择日期')
         return
@@ -379,6 +419,11 @@ export default {
     .selector {
       width: 80%;
     }
+  }
+
+  .show_btn {
+    margin-top: 25rpx;
+    text-align: center;
   }
 
   .amount_type {
