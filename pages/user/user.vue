@@ -53,6 +53,8 @@
 
           <u-cell-item @click="goto('/pages/budget/budget',false)" title="预算管理" icon="rmb-circle">
 					</u-cell-item>
+          <u-cell-item @click="goto('/pages/setting/help',false)" title="帮助中心" icon="question-circle">
+					</u-cell-item>
 				</u-cell-group>
 			</view>
 		</view>
@@ -161,6 +163,10 @@
           position: absolute;
           right: 0;
           z-index: 10;
+          // #ifdef MP-WEIXIN
+           top: 80rpx;
+          // #endif
+
           color: white;
       }
 
@@ -212,7 +218,7 @@
 
 		.num {
 			font-size: 40rpx;
-			color: $uni-text-color;
+			color: dodgerblue;
 			margin-bottom: 8upx;
 		}
 	}

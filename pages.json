@@ -262,6 +262,13 @@
         "navigationBarTitleText": "统计配置",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/setting/help",
+      "style": {
+        "navigationBarTitleText": "帮助中心",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {
