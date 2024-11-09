@@ -8,12 +8,15 @@
     <template v-else>
       <view class="search">
         <u-dropdown>
-          <u-dropdown-item v-model="form.type" title="账单类型" :options="type" @change="set_type"></u-dropdown-item>
-          <u-dropdown-item v-model="form.amount_type" title="收支方式" :options="amount_type" @change="set_amount_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.type" title="分类" :options="type" @change="set_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.amount_type" title="收支方式" :options="amount_type"
+                           @change="set_amount_type"></u-dropdown-item>
           <u-dropdown-item v-model="form.time_type"
                            :title="form.time_type==''?'时间':(form.time_type=='year'?form.year:form.year+form.month)"
                            :options="time_type" @change="set_time_type"></u-dropdown-item>
-          <u-dropdown-item v-model="form.budget_id" title="关联预算" :options="budget_list" @change="set_budget_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.budget_id" title="预算" :options="budget_list"
+                           @change="set_budget_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.sort" title="排序" :options="sort_list" @change="set_sort"></u-dropdown-item>
         </u-dropdown>
 
 
@@ -25,7 +28,7 @@
                     @search="toSearch" @custom="toSearch"></u-search>
         </view>
       </view>
-      <view  v-if="list.length > 0" class="scroll data-list">
+      <view v-if="list.length > 0" class="scroll data-list">
         <u-table>
           <u-tr>
             <u-th>笔数</u-th>
@@ -59,7 +62,7 @@
             +￥{{ item.amount }}
           </view>
           <view class="u-flex-1 box-right item-date">
-            {{item.date}}
+            {{ item.date }}
           </view>
         </view>
         <view class="no-more" v-if="no_more && list.length>10">
@@ -69,8 +72,8 @@
       <view v-else class="empty">
         <u-empty text="暂无明细" mode="list"></u-empty>
       </view>
-       <u-picker mode="time" v-model="show_date" :params="params"
-              @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
+      <u-picker mode="time" v-model="show_date" :params="params"
+                @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
     </template>
     <u-back-top :scroll-top="scrollTop"></u-back-top>
 
@@ -85,6 +88,13 @@ export default {
   components: {},
   data() {
     return {
+      sort_list: [
+        {label: '默认', value: ''},
+        {label: '金额降序', value: 'amount_desc'},
+        {label: '金额升序', value: 'amount_asc'},
+        {label: '日期降序', value: 'date_desc'},
+        {label: '日期升序', value: 'date_asc'}
+      ],
       type: [
         {label: '全部', value: 0,},
         {label: '收入', value: 10,},
@@ -95,6 +105,7 @@ export default {
         {label: '支付宝', value: '支付宝',},
         {label: '微信', value: '微信',},
         {label: '银行卡', value: '银行卡',},
+        {label: '信用卡', value: '信用卡',},
         {label: '现金', value: '现金',},
         {label: '其他', value: '其他',}
       ],
@@ -104,7 +115,7 @@ export default {
         {label: '月份', value: 'month',},
       ],
       budget_list: [
-          {label: '全部', value: ''}
+        {label: '全部', value: ''}
       ],
       form: {
         keywords: '',
@@ -114,6 +125,7 @@ export default {
         year: '',
         time_type: '',
         amount_type: '',
+        sort: '',
         page: 0,
         limit: 20
       },
@@ -187,7 +199,7 @@ export default {
   },
   onLoad(options) {
     console.log('onLoad')
-    if (options.budget_id){
+    if (options.budget_id) {
       this.form.budget_id = options.budget_id
     }
     this.get_budget()
@@ -210,13 +222,13 @@ export default {
     },
     confirmTime(e) {
       console.log('选择的年月：', e);
-      if (this.form.time_type=='month'){
+      if (this.form.time_type == 'month') {
         this.form.year = e.year
         this.form.month = e.month
-      }else if (this.form.time_type=='year'){
+      } else if (this.form.time_type == 'year') {
         this.form.year = e.year
-         this.form.month = ''
-      }else{
+        this.form.month = ''
+      } else {
         return ''
       }
       this.getList(true)
@@ -230,22 +242,26 @@ export default {
       this.form.amount_type = value
       this.getList(true)
     },
+    set_sort(value) {
+      this.form.sort = value
+      this.getList(true)
+    },
     set_budget_type(value) {
       this.form.budget_id = value
       this.getList(true)
     },
     set_time_type(value) {
-      if (!value){
+      if (!value) {
         this.form.year = ''
         this.form.month = ''
         this.form.time_type = ''
         this.getList(true);
         return
       }
-      if (value==='month'){
+      if (value === 'month') {
         this.params = {year: true, month: true}
-      }else{
-        this.params = {year: true,month: false}
+      } else {
+        this.params = {year: true, month: false}
       }
       this.form.time_type = value
       this.show_date = true
@@ -281,7 +297,7 @@ export default {
       uni.showLoading({
         title: '数据加载中...',
       })
-     await this.$u.api.bill_list(this.form).then(res => {
+      await this.$u.api.bill_list(this.form).then(res => {
         if (res.code == 0) {
           this.total_income = res.data.total_income
           this.total_outcome = res.data.total_outcome
@@ -428,7 +444,8 @@ export default {
       -webkit-box-orient: vertical;
       color: #c8c4c4;
     }
-    .item-date{
+
+    .item-date {
       width: 100px;
     }
   }
