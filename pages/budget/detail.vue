@@ -9,6 +9,10 @@
         <u-input placeholder="请输入预算金额" border :maxlength="10" type="number" clearable class="bs_form_input"
                  v-model="form.amount"/>
       </u-form-item>
+      <u-form-item label="排序">
+        <u-input placeholder="排序，越大越靠前" border :maxlength="10" type="number" clearable class="bs_form_input"
+                 v-model="form.sort"/>
+      </u-form-item>
       <u-form-item label="时间限制">
         <u-switch v-model="form.time_limit"></u-switch>
       </u-form-item>
@@ -54,7 +58,8 @@ export default {
         time_limit: false,
         start_time: null,
         end_time: null,
-        remark: ''
+        remark: '',
+        sort: null
       },
       show_time: false,
       time_index: 0,

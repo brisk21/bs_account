@@ -45,9 +45,6 @@
           <view class="remark time">
            备注：{{ item.remark || '无'}}
           </view>
-          <view class="remark">
-            <u-icon name="more-dot-fill" size="30" color="#999"></u-icon>
-          </view>
         </view>
       </view>
       <view class="no-more" v-if="no_more && form.page > 1">
