@@ -58,11 +58,14 @@
 				password: '',
 			}
 		},
-		onLoad() {
+		onLoad(option) {
 			this.getCaptcha()
        // #ifdef MP
       this.is_wx = true
       // #endif
+      if (option.account){
+        this.form.account = option.account
+      }
 		},
 		methods: {
 			toRegist() {

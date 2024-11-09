@@ -1,10 +1,10 @@
 <template>
   <view class="container bs_form">
-    <u-form-item label="邮箱">
+    <u-form-item label="邮箱" label-width="150">
       <u-input placeholder="请输入邮箱" border :maxlength="60" type="email" clearable class="category_form_input"
                v-model="form.email"/>
     </u-form-item>
-    <u-form-item label="验证码">
+    <u-form-item label="验证码" label-width="150">
      <u-input class="input-code"  v-model="form.code" border :maxlength="6" type="number" placeholder="请输入验证码"   />
       <u-button  type="primary" slot="right"  :disabled="!get_code"   @click="getCode()"  >{{ code_text }}</u-button>
     </u-form-item>

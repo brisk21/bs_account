@@ -38,7 +38,7 @@
 						this.$u.toast(res.msg);
 						return
 					}
-          console.log(res.data)
+          //console.log(res.data)
 					this.info = res.data
 				})
 			}

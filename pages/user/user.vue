@@ -28,15 +28,15 @@
 			</view>
 		</view>
 		<view class="tj-sction">
-			<view class="tj-item">
+			<view class="tj-item" @click="goto('/pages/index/list',true)">
 				<text class="num">{{userInfo.sign_in_day || 0}}</text>
 				<text>使用天数</text>
 			</view>
-			<view class="tj-item">
+			<view class="tj-item" @click="goto('/pages/index/list',true)">
 				<text class="num">{{userInfo.all_bill_day || 0}}</text>
 				<text>总记账天数</text>
 			</view>
-			<view class="tj-item">
+			<view class="tj-item" @click="goto('/pages/index/list',true)">
 				<text class="num">{{userInfo.all_bill_count || 0}}</text>
 				<text>总记账笔数</text>
 			</view>
