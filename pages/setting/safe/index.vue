@@ -19,7 +19,7 @@
           <u-cell-item @click="goto('/pages/setting/safe/data')" title="数据管理" icon="order">
             导入和导出账单数据
           </u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/cancel_account')" title="注销账号" icon="delete" is-link>
+          <u-cell-item @click="goto('/pages/setting/safe/cancel_account')" title="注销账号" icon="warning">
             <text v-if="userInfo.cancel_expire">{{userInfo.cancel_expire}}将彻底注销</text>
             <text v-else>注销账号，数据将清空</text>
           </u-cell-item>

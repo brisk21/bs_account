@@ -71,7 +71,7 @@ const install = (Vue, vm) => {
         return vm.$u.post('login', encrypt(data));
     }
     const register = (data) => {
-        return vm.$u.post('register', data);
+        return vm.$u.post('register', encrypt(data));
     }
 
     const getNotificationList = (params) => {

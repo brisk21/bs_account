@@ -51,6 +51,7 @@
 
     <view class="input_box">
       <view class="line">
+       <text class="must">*</text>
         <input type="digit" min="0" max="999999999" v-model="formData.amount" class="amount_input" placeholder="0.00"
                @confirm="submit()"/>
       </view>
@@ -66,6 +67,18 @@
         ></u-tag>
         <u-button v-else @click="show_amount_type_list = true" size="mini">选择方式</u-button>
       </view>
+
+      <view class="line">
+        <view class="date">
+          <text class="popup_type"><text class="must">*</text>日期：</text>
+          <view style="font-size: 28rpx;font-weight: 600;" @click="picker_show = true">
+            {{ formData.date }}
+            <u-icon name="arrow-right" class="u-icon-wrap u-cell__right-icon-wrap"></u-icon>
+          </view>
+        </view>
+
+        <u-button class="save_btn" type="success" size="medium" @click="submit()">保存</u-button>
+      </view>
       <view class="line" v-if="formData.type===20">
         <text class="popup_type">关联预算：</text>
         <u-tag :closeable="true"
@@ -80,17 +93,6 @@
         <u-button @click="goto('/pages/budget/detail',true)" size="mini"
                   v-if="budget_list.length<=0">添加预算
         </u-button>
-      </view>
-      <view class="line">
-        <view class="date">
-          <text class="popup_type">日期：</text>
-          <view style="font-size: 28rpx;font-weight: 600;" @click="picker_show = true">
-            {{ formData.date }}
-            <u-icon name="arrow-right" class="u-icon-wrap u-cell__right-icon-wrap"></u-icon>
-          </view>
-        </view>
-
-        <u-button class="save_btn" type="success" size="medium" @click="submit()">保存</u-button>
       </view>
       <view class="line">
         <text class="popup_type">备注：</text>
@@ -149,14 +151,7 @@ export default {
       show_budget_list: false,
       show_amount_type_list: false,
       //资金途径（来源、去向）：支付宝、微信、银行卡、现金、其他
-      amount_type_list: [
-        {'label': '微信', 'value': '微信',},
-        {'label': '支付宝', 'value': '支付宝',},
-        {'label': '银行卡', 'value': '银行卡',},
-        {'label': '现金', 'value': '现金',},
-        {'label': '信用卡', 'value': '信用卡',},
-        {'label': '其他', 'value': '其他',}
-      ],
+      amount_type_list: [],
       list: ['支出', '收入'],
       formData: {
         id: 0,
@@ -298,18 +293,28 @@ export default {
     getCategory() {
       this.$u.api.getCategory(0).then(res => {
         //type10=收入，type20=支出
-        if (res.code == 0 && res.data.length > 0) {
-          for (let i = 0; i < res.data.length; i++) {
-            if (res.data[i].type === 10) {
-              this.in_list.push(res.data[i])
-            } else {
-              this.out_list.push(res.data[i])
+        if (res.code == 0) {
+          let category = res.data.category
+          if (category.length > 0) {
+            for (let i = 0; i < category.length; i++) {
+              if (category.type === 10) {
+                this.in_list.push(category[i])
+              } else {
+                this.out_list.push(category[i])
+              }
             }
+            this.in_list = this.listSet(this.in_list)
+            this.out_list = this.listSet(this.out_list)
+            this.showOutList = this.out_list.slice(0, 10);
+            this.showInList = this.in_list.slice(0, 10);
           }
-          this.in_list = this.listSet(this.in_list)
-          this.out_list = this.listSet(this.out_list)
-          this.showOutList = this.out_list.slice(0, 10);
-          this.showInList = this.in_list.slice(0, 10);
+          if (res.data.accountTypes){
+            this.amount_type_list = res.data.accountTypes
+          }
+          if (!this.formData.id && res.data.default_amount_type){
+            this.formData.amount_type = res.data.default_amount_type
+          }
+
         }
       }).catch(err => {
         console.log(err)
@@ -420,7 +425,9 @@ export default {
       width: 80%;
     }
   }
-
+.must{
+  color: $uni-color-error;
+}
   .show_btn {
     margin-top: 25rpx;
     text-align: center;
