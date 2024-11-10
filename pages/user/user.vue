@@ -14,6 +14,7 @@
 				<view class="info-box">
 					<view v-if="hasLogin" @click="goto('/pages/setting/safe/avatar',true)">
 						<text class="username" >{{userInfo.nick_name || '游客'}}</text>
+            <text @click.native.stop="goto('/pages/setting/safe/cancel_account',true)" v-if="userInfo.cancel_expire" style="color: #e90808;">（即将注销）</text>
 					</view>
 					<view v-else>
 						<text class="username" @click="goToLoginPage()">点击登录</text>

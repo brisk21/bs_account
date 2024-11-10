@@ -1,7 +1,7 @@
 // 实际上 如果不用Xbuild意义不大了 没有自动补全~
 // 如果没有通过拦截器配置域名的话，可以在这里写上完整的URL(加上域名部分)
 const indexUrl = 'mp/';
-import { encrypt } from './crypto.js';
+import {encrypt} from './crypto.js';
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
 const install = (Vue, vm) => {
@@ -163,7 +163,6 @@ const install = (Vue, vm) => {
     }
 
 
-
     //导入账单数据
     const import_data = (params) => {
         return vm.$u.post('cashflow-import', encrypt(params));
@@ -185,6 +184,16 @@ const install = (Vue, vm) => {
 
     const statistic_set = (params) => {
         return vm.$u.put('statistic/setting', params);
+    }
+
+    //注销
+    const cancelAccount = (params) => {
+        return vm.$u.post('cancel-account', encrypt(params));
+    }
+
+    // 取消注销
+    const regretCancelAccount = (params) => {
+        return vm.$u.post('regret-cancel', encrypt(params));
     }
 
     vm.$u.api = {
@@ -228,7 +237,9 @@ const install = (Vue, vm) => {
         import_tpl,
         updateLog,
         statistic_get,
-        statistic_set
+        statistic_set,
+        cancelAccount,
+        regretCancelAccount
     };
 }
 

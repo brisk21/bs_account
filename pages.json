@@ -269,6 +269,13 @@
         "navigationBarTitleText": "帮助中心",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/setting/safe/cancel_account",
+      "style": {
+        "navigationBarTitleText": "注销账户",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {
