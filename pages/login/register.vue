@@ -21,7 +21,21 @@
           </u-form-item>
         </u-form>
       </view>
-      <button class="confirm-btn" @click="register()">注册</button>
+      <button class="confirm-btn" :disabled="!form.agree" @click="register()">注册</button>
+      <view class="xieyi">
+        <u-checkbox class="xiey-checkbox" v-model="form.agree"></u-checkbox>
+        <text>注册即代表同意</text>
+        <text class="link">
+          <u-link :href="'https://jz.api.alipay168.cn/api/agreement/register'"
+                  :under-line="false">《注册协议》
+          </u-link>
+        </text>
+        <text class="link">
+          <u-link :href="'https://jz.api.alipay168.cn/api/agreement/privacy'"
+                  :under-line="false">《隐私政策》
+          </u-link>
+        </text>
+      </view>
     </view>
   </view>
 </template>
@@ -31,6 +45,7 @@ export default {
   data() {
     return {
       form: {
+        agree: false,
         account: '',
         password: '',
         password1: '',
@@ -54,6 +69,14 @@ export default {
       })
     },
     register() {
+      if (!this.form.agree){
+        this.$u.toast('请先同意注册协议')
+        return
+      }
+      if (!this.form.account) {
+        this.$u.toast('请输入账号');
+        return
+      }
       if (this.form.password != this.form.password1) {
         this.$u.toast('两次密码不一致');
         return
@@ -98,7 +121,10 @@ export default {
   background: #fff;
   padding-bottom: 40upx;
 }
-
+.xieyi {
+  margin-top: 30rpx;
+  margin-left: 30rpx;
+}
 
 .title {
   text-align: center;
