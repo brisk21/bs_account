@@ -297,7 +297,7 @@ export default {
           let category = res.data.category
           if (category.length > 0) {
             for (let i = 0; i < category.length; i++) {
-              if (category.type === 10) {
+              if (category[i].type === 10) {
                 this.in_list.push(category[i])
               } else {
                 this.out_list.push(category[i])

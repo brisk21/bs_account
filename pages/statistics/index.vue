@@ -43,7 +43,7 @@
         />
       </view>
       <view class="no-data" v-else>
-        <u-empty text="暂无数据,请选择其它时间" mode="order"></u-empty>
+        <u-empty text="数据哪去了" mode="list"></u-empty>
       </view>
 
     </view>
@@ -53,10 +53,10 @@
               :params="pickerParams" @confirm="pickerConfirm" z-index="99999" :mask-close-able="false"
               @cancel="show_box = true">
     </u-picker>
-    <view class="alert-tip">
+<!--    <view class="alert-tip">
       <u-alert-tips type="error" :show="show_tips" @close="closeStaticsTips" title="温馨提示"
                     :description="'右上角点击进去可以配置需要显示的统计哦'" close-able></u-alert-tips>
-    </view>
+    </view>-->
 
 
   </view>
@@ -141,21 +141,23 @@ export default {
       if (this.formData.queryType === 0) {
         params.month = Number(this.datePicker.month)
       }
-      uni.showLoading({
-        title: '加载中...'
-      })
+      uni.showLoading()
       this.show_box = false
       this.list = []
       this.loadingType = 3;
       this.$u.api.getStatisticData(params).then(res => {
-
+        uni.showLoading({
+          title: '处理中...'
+        })
         if (res.code == 0) {
           let that = this;
           this.list = res.data.list
         }
       }).finally(() => {
-        that.loadingType = 0
+
         setTimeout(function () {
+          that.loadingType = 0
+          uni.hideLoading()
           that.is_fresh = false;
           that.is_pulling = false
           that.show_box = true

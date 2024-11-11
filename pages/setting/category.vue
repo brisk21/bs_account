@@ -89,7 +89,7 @@ export default {
     getCategory() {
       this.in_list = []
       this.out_list = []
-      this.$u.api.getCategory(0).then(res => {
+      this.$u.api.getCategory(-1).then(res => {
         //type10=收入，type20=支出
         if (res.code == 0 && res.data.length > 0) {
           for (let i = 0; i < res.data.length; i++) {

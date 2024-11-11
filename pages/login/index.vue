@@ -23,16 +23,14 @@
       <view class="xieyi">
         <u-checkbox class="xiey-checkbox" v-model="form.agree"></u-checkbox>
         <text>注册即代表同意</text>
-        <text class="link">
-          <u-link :href="'https://jz.api.alipay168.cn/api/agreement/register'"
-                  :under-line="false">《注册协议》
-          </u-link>
-        </text>
-        <text class="link">
-          <u-link :href="'https://jz.api.alipay168.cn/api/agreement/privacy'"
-                  :under-line="false">《隐私政策》
-          </u-link>
-        </text>
+        <u-link @click="copy('https://jz.api.alipay168.cn/api/agreement/register')"
+                :href="'https://jz.api.alipay168.cn/api/agreement/register'"
+                :under-line="false">《注册协议》
+        </u-link>
+        <u-link @click="copy('https://jz.api.alipay168.cn/api/agreement/privacy')"
+                :href="'https://jz.api.alipay168.cn/api/agreement/privacy'"
+                :under-line="false">《隐私政策》
+        </u-link>
       </view>
 
       <view class="wx" v-if="is_wx">
@@ -84,6 +82,22 @@ export default {
     }
   },
   methods: {
+    copy(e) {
+      // #ifdef MP
+      uni.setClipboardData({
+        data: e,
+        success: function () {
+          uni.showToast({
+            title: '链接已复制，请在浏览器打开'
+          })
+        },
+        fail: function (err) {
+          console.log('copy fail', err)
+        }
+      })
+      // #endif
+
+    },
     toRegist() {
       uni.navigateTo({
         url: '/pages/login/register'

@@ -25,6 +25,13 @@ const install = (Vue, vm) => {
 			config.header.Authorization = 'Bearer ' + (uni.getStorageSync('UserToken') || '');
 			// 可以对某个url进行特别处理，此url参数为this.$u.get(url)中的url值
 			if (config.url == 'code2token') config.header.noToken = true;
+			// #ifdef MP-WEIXIN
+			config.header.bs_from =  'xcx';
+			// #endif
+			// #ifdef H5
+			config.header.bs_from =  'h5';
+			// #endif
+
 
 			// 对需要加密的参数进行加密处理
 
