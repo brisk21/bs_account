@@ -82,9 +82,9 @@
 			//获取系统版本信息
 			getSystemInfo() {
 				let info = uni.getSystemInfoSync();
-        //console.log(info)
+       console.log(info)
 
-				this.app_version = info.appWgtVersion|| info.appVersion;
+				this.app_version = info.appVersion;
 
 				this.check_app(info);
 			},
@@ -93,6 +93,7 @@
 				let that = this
 				this.$u.api.checkAppVersion({
 					platform: info.platform,
+					appWgtVersion: info.appWgtVersion||info.appVersion,
 					version: this.app_version
 				}).then(res => {
 					if (res.code == 0) {

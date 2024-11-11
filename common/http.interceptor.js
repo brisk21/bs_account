@@ -22,14 +22,15 @@ const install = (Vue, vm) => {
 			config.header.platform = vm.$u.sys().platform
 			config.header.version = vm.$u.sys().appVersion
 			config.header.versionCode = vm.$u.sys().appVersionCode
+			config.header.appWgtVersion = vm.$u.sys().appWgtVersion || vm.$u.sys().appVersionCode
 			config.header.Authorization = 'Bearer ' + (uni.getStorageSync('UserToken') || '');
 			// 可以对某个url进行特别处理，此url参数为this.$u.get(url)中的url值
 			if (config.url == 'code2token') config.header.noToken = true;
 			// #ifdef MP-WEIXIN
-			config.header.bs_from =  'xcx';
+			config.header.bsfrom =  'xcx';
 			// #endif
 			// #ifdef H5
-			config.header.bs_from =  'h5';
+			config.header.bsfrom =  'h5';
 			// #endif
 
 
