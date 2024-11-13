@@ -117,6 +117,10 @@ const install = (Vue, vm) => {
         return vm.$u.post('feedback', params);
     }
 
+    const feedback_list = (params) => {
+        return vm.$u.get('feedback-list', params);
+    }
+
     const setDisplay = (params) => {
         return vm.$u.post('cashflow-display', params);
     }
@@ -223,6 +227,7 @@ const install = (Vue, vm) => {
         getCategoryInfo,
         checkAppVersion,
         feedback,
+        feedback_list,
         setDisplay,
         setPush,
         getPush,
