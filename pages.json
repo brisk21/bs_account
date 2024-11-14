@@ -276,6 +276,13 @@
         "navigationBarTitleText": "注销账户",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/extend/index",
+      "style": {
+        "navigationBarTitleText": "扩展中心",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {
