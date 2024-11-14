@@ -8,54 +8,44 @@
 
     </view>
     <u-cell-group>
-       <u-cell-item  :arrow="false" title="管理分类" :title-style="{color: '#1953c3',fontWeight:'bold'}">
+       <u-cell-item  :arrow="false" title="右边可开启删除按钮" :title-style="{color: '#a3a390'}">
           <u-switch slot="right-icon" v-model="action"  ></u-switch>
        </u-cell-item>
     </u-cell-group>
 
-    <u-cell-group v-show="type === 0">
-      <u-cell-item v-for="(item,index) in out_list" :key="index" :title="item.name" :arrow="false">
-        <u-icon slot="icon" size="40" :name="item.icon"></u-icon>
+    <u-grid :col="3" v-show="type === 0" >
+      <u-grid-item v-for="(item, index) in out_list" :key="index" @click="toEdit(item)">
+        <u-icon :name="item.icon" :size="46"></u-icon>
+        <view class="grid-text">{{ item.name }}</view>
+        <!-- 删除图标 -->
+        <u-icon v-show="action" color="red" name="close-circle" class="delete-icon" @click.native.stop="delCategory(item.id,index,1)"></u-icon>
+      </u-grid-item>
+    </u-grid>
 
-        <view slot="right-icon" v-show="action">
-          <u-button plain   type="primary" size="mini" @click="toEdit(item)">
-            <u-icon size="32" margin-right="20" class="edit-btn" name="edit-pen"></u-icon>
-          </u-button>
-          <u-button style="margin-left: 10px"  size="mini" @click="delCategory(item.id,index,1)">
-            <u-icon size="32" name="close"></u-icon>
-          </u-button>
-        </view>
-      </u-cell-item>
-    </u-cell-group>
-
-    <u-cell-group v-show="type === 1">
-      <u-cell-item v-for="(item,index) in in_list" :key="index" :title="item.name" :arrow="false">
-        <u-icon slot="icon" size="40" :name="item.icon"></u-icon>
-
-        <view slot="right-icon" v-show="action">
-          <u-button plain   type="primary" size="mini" @click="toEdit(item)">
-            <u-icon size="32" margin-right="20" class="edit-btn" name="edit-pen"></u-icon>
-          </u-button>
-          <u-button style="margin-left: 10px"  size="mini" @click="delCategory(item.id,index,1)">
-            <u-icon size="32" name="close"></u-icon>
-          </u-button>
-        </view>
-      </u-cell-item>
-    </u-cell-group>
-    <view class="bottom_btn">
-      <u-button type="primary" plain @click="open">新增</u-button>
-    </view>
-
-
+    <u-grid :col="3" v-show="type === 1">
+      <u-grid-item v-for="(item, index) in in_list" :key="index" @click="toEdit(item)">
+        <u-icon :name="item.icon" :size="46"></u-icon>
+        <view class="grid-text">{{ item.name }}</view>
+        <!-- 删除图标 -->
+        <u-icon v-show="action" color="red" name="close-circle" class="delete-icon" @click.native.stop="delCategory(item.id,index,1)"></u-icon>
+      </u-grid-item>
+    </u-grid>
+    <fab :bg="bg" :is-show="hasLogin" icon_name="plus" :url="'/pages/setting/category_form?type='+type"></fab>
   </view>
 </template>
 
 <script>
-
+import fab from "@/my-components/fab/index.vue";
 export default {
-  components: {},
+  components: {
+    fab
+  },
   data() {
     return {
+      bg: {
+        backgroundColor: '#20b4bc',
+        color: "white"
+      },
       action: false,
       categoryName: '',
       show: false,
@@ -69,20 +59,9 @@ export default {
     //this.getCategory()
   },
   onShow() {
-    console.log('show')
     this.getCategory()
   },
   methods: {
-    open() {
-      uni.navigateTo({
-        url: '/pages/setting/category_form',
-        success: (res) => {
-        },
-        fail: (res) => {
-        }
-      })
-    },
-
     typeChange(index) {
       this.type = index;
     },
@@ -169,6 +148,22 @@ export default {
       margin-right: 30px !important;
     }
   }
+
+
+  .grid-text {
+    font-size: 28rpx;
+    margin-top: 4rpx;
+    color: #606266; /* 你可以根据需要调整颜色 */
+  }
+
+  .delete-icon {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    font-size: 36rpx;
+    color: #f56c6c;
+  }
+
 
 }
 </style>

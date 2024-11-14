@@ -97,6 +97,9 @@ const install = (Vue, vm) => {
     const updateCategory = (params) => {
         return vm.$u.put('category', params);
     }
+    const icon_list = () => {
+        return vm.$u.get('icon-list');
+    }
 
     const createCategory = (params) => {
         return vm.$u.post('category', params);
@@ -223,6 +226,7 @@ const install = (Vue, vm) => {
         createCategory,
         delCategory,
         updateCategory,
+        icon_list,
         getStatisticData,
         getCategoryInfo,
         checkAppVersion,
