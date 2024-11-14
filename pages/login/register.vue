@@ -7,7 +7,7 @@
       <view class="input-content">
         <u-form :model="form" ref="uForm">
           <u-form-item>
-            <u-input placeholder="请输入用户名" v-model="form.account"/>
+            <u-input placeholder="登录账号，建议使用邮箱、手机号" v-model="form.account"/>
           </u-form-item>
           <u-form-item>
             <u-input type="password" placeholder="请输入密码" v-model="form.password"/>

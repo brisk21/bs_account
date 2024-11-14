@@ -75,7 +75,7 @@ export default {
   methods: {
     open() {
       uni.navigateTo({
-        url: '/pages/setting/form',
+        url: '/pages/setting/category_form',
         success: (res) => {
         },
         fail: (res) => {
@@ -104,7 +104,7 @@ export default {
     },
     toEdit(item) {
       uni.navigateTo({
-        url: '/pages/setting/form?id=' + item.id + '&type=' + item.type + '&name=' + item.name,
+        url: '/pages/setting/category_form?id=' + item.id + '&type=' + item.type + '&name=' + item.name,
         success: (res) => {
         },
         fail: (res) => {

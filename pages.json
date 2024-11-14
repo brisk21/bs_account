@@ -118,7 +118,7 @@
       }
     },
     {
-      "path": "pages/setting/form",
+      "path": "pages/setting/category_form",
       "style": {
         "navigationBarTitleText": "分类操作",
         "app-plus": {
