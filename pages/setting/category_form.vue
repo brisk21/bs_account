@@ -22,7 +22,7 @@
     </u-form-item>
     <u-form-item label="图标" v-if="iconList.length > 0">
       <u-icon v-if="form.icon" :name="form.icon" size="46"></u-icon>
-      <u-button @click="showPopup" size="mini">选择图标</u-button>
+      <u-button class="choose-icon" @click="showPopup" size="mini">选择图标</u-button>
       <u-popup mode="bottom" v-model:show="isShowPopup" border-radius="10" round>
         <u-grid :col="3" >
           <u-grid-item v-for="(item, index) in iconList" :key="index" @click="selectIcon(item.icon)">
@@ -166,6 +166,11 @@ export default {
     color: #606266; /* 你可以根据需要调整颜色 */
   }
 
+  .choose-icon{
+    // #ifdef MP-WEIXIN
+    margin-left: 40rpx;
+    // #endif
+  }
   .buttons {
     display: flex;
     justify-content: space-between;
