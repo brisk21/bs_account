@@ -3,19 +3,6 @@
   <view class="container">
 
     <view class="top">
-<!--      <u-navbar
-          :is-back="false"
-          title="明细"
-          :background="bg"
-          title-bold
-          title-color="white"
-          :border-bottom="false"
-      >
-        <view slot="right">
-          <u-icon name="order" size="larger" style="margin-right: 20px" class="search-icon" @click="toSearch()" ></u-icon>
-        </view>
-
-      </u-navbar>-->
       <view class="line">
         <view class="item">
           <view class="header-text"> {{ year }} 年</view>
@@ -81,7 +68,7 @@
               <view class="list-box-children" v-for="(item1, index1) in item.list" :key="index1"
                     @click="toDetail(item1.id)">
                 <view class="u-flex icon">
-                  <u-icon :name="item1.category.icon" color="#42b479"></u-icon>
+                  <u-icon :name="item1.category.icon" color="#42b479" size="46"></u-icon>
                 </view>
                 <view class="box-left">
                   {{ item1.category.name }}

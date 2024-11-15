@@ -23,7 +23,7 @@
     <u-form-item label="图标" v-if="iconList.length > 0">
       <u-icon v-if="form.icon" :name="form.icon" size="46"></u-icon>
       <u-button class="choose-icon" @click="showPopup" size="mini">选择图标</u-button>
-      <u-popup mode="bottom" v-model:show="isShowPopup" border-radius="10" round>
+      <u-popup mode="bottom" v-model:show="isShowPopup" border-radius="10" round length="60%">
         <u-grid :col="3" >
           <u-grid-item v-for="(item, index) in iconList" :key="index" @click="selectIcon(item.icon)">
             <u-icon :name="item.icon" :size="item.size" ></u-icon>

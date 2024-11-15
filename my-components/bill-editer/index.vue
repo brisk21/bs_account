@@ -204,16 +204,18 @@ export default {
     value(id) {
       if (id !== null) {
         this.getCashflowInfo(id)
+      }else{
+        this.get_budget()
       }
       console.log(id)
     }
   },
+
   onShow() {
 
   },
   created() {
     this.getCategory()
-    this.get_budget()
     this.formData.date = dayjs().format('YYYY-MM-DD')
   },
   methods: {
@@ -402,6 +404,9 @@ export default {
         let data = res.data
         this.formData = data
         this.type = data.type === 20 ? 0 : 1
+        this.$nextTick(() => {
+          this.get_budget()
+        })
         if (data.image) {
           this.initialFiles = [{url: data.image}]
         }

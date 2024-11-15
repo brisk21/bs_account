@@ -41,12 +41,18 @@
       <view v-if="historyList.length <= 0" class="empty">
       <u-empty text="暂无数据" mode="message"></u-empty>
       </view>
-      <view>
-        <u-collapse>
-          <u-collapse-item :title="item.title" v-for="(item, index) in historyList" :key="index">
-            <rich-text :nodes="item.content"></rich-text>
-          </u-collapse-item>
-        </u-collapse>
+      <view v-else>
+        <u-cell-group>
+          <u-cell-item icon="map" :title="item.title"  v-for="(item, index) in historyList" :key="index" @click="open(index,item)"
+                    :value="item.status_text"
+          ></u-cell-item>
+        </u-cell-group>
+
+        <u-popup v-model="show" mode="bottom" border-radius="15" length="60%" safe-area-inset-bottom closeable	>
+          <view class="content">
+            <u-parse :html="content" :selectable="true"></u-parse>
+          </view>
+        </u-popup>
         </view>
 
 
@@ -61,6 +67,8 @@ import constConfig from '@/const.js'
 export default {
   data() {
     return {
+      show: false,
+      content: '',
       list: [{
         name: '提交反馈'
       }, {
@@ -103,6 +111,10 @@ export default {
     this.getFeedbackList()
   },
   methods: {
+    open(index,item){
+      this.content = item.content
+      this.show = true
+    },
     change(index) {
       this.current = index;
     },
@@ -179,6 +191,10 @@ export default {
 .container {
 
   padding: 30rpx;
+  .content{
+    min-height: 600rpx;
+    padding: 80rpx 10px 10px;
+  }
 }
 
 </style>

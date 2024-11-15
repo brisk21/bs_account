@@ -56,8 +56,10 @@
 					</u-cell-item>
           <u-cell-item @click="goto('/pages/setting/help',false)" title="帮助中心" icon="question-circle">
 					</u-cell-item>
+          <!-- #ifndef MP-->
           <u-cell-item @click="goto('/pages/extend/index',false)" title="扩展插件" icon="grid">
 					</u-cell-item>
+          <!-- #endif -->
 				</u-cell-group>
 			</view>
 		</view>

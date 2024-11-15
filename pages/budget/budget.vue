@@ -48,7 +48,7 @@
           </view>
 
           <view class="profit  bs-item" v-if="item.type===0">
-            收支差额：<text :class="item.profit>=0?'bs_red':'bs_green'">{{item.profit>=0?'+':'-'}} ￥{{ item.profit }} 元</text>
+            收支差额：￥ <text :class="item.profit>=0?'bs_red':'bs_green'">{{ item.profit }} 元</text>
           </view>
           <view class="time  bs-item">
             时间：{{ item.time_set }}

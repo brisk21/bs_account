@@ -47,7 +47,7 @@
         <view class="list-box-children" v-for="(item, index) in list" :key="index"
               @click="toDetail(item.id)">
           <view class="u-flex icon">
-            <u-icon :name="item.category.icon" color="#42b479"></u-icon>
+            <u-icon :name="item.category.icon" color="#42b479" size="46"></u-icon>
           </view>
           <view class="box-left">
             {{ item.category.name }}
@@ -55,7 +55,7 @@
           <view class="box-remark">
             {{ item.amount_type || '' }}
           </view>
-          <view class="u-flex-1 box-right amount-green" v-if="item.type==20">
+          <view class="u-flex-1 box-right amount-green" v-if="item.type===20">
             -￥{{ item.amount }}
           </view>
           <view class="u-flex-1 box-right amount-red" v-else>
