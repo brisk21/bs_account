@@ -204,8 +204,6 @@ export default {
     value(id) {
       if (id !== null) {
         this.getCashflowInfo(id)
-      }else{
-        this.get_budget()
       }
       console.log(id)
     }
@@ -215,6 +213,9 @@ export default {
 
   },
   created() {
+    if (this.value === 0){
+      this.get_budget()
+    }
     this.getCategory()
     this.formData.date = dayjs().format('YYYY-MM-DD')
   },
