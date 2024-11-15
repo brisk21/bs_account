@@ -1,15 +1,24 @@
 <template>
   <view class="container bs_form">
+
+
     <u-form label-width="150">
-      <u-form-item label="名称">
+      <u-form-item label="预算名称" required>
         <u-input placeholder="请输入预算名称" border :maxlength="128" type="text" clearable class="bs_form_input"
                  v-model="form.title"/>
       </u-form-item>
-      <u-form-item label="金额">
-        <u-input placeholder="请输入预算金额" border :maxlength="10" type="number" clearable class="bs_form_input"
+      <u-form-item label="预算类型" required>
+        <u-radio-group v-model="form.type" shape="circle" style="display: flex;">
+          <u-radio label="1" :name="20">支出</u-radio>
+          <u-radio label="2" :name="10">收入</u-radio>
+          <u-radio label="2" :name="0">综合</u-radio>
+        </u-radio-group>
+      </u-form-item>
+      <u-form-item label="预算额度" required>
+        <u-input placeholder="请输入预算额度" border :maxlength="10" type="number" clearable class="bs_form_input"
                  v-model="form.amount"/>
       </u-form-item>
-      <u-form-item label="排序">
+      <u-form-item label="预算排序">
         <u-input placeholder="排序，越大越靠前" border :maxlength="10" type="number" clearable class="bs_form_input"
                  v-model="form.sort"/>
       </u-form-item>
@@ -38,6 +47,31 @@
       <u-button class="action-btn" type="primary" @click="submit">保存</u-button>
 
     </view>
+    <view class="tips">
+      <view class="title">类型说明：</view>
+      <u-table>
+        <u-tr>
+          <u-th>类型</u-th>
+          <u-th>关联说明</u-th>
+        </u-tr>
+        <u-tr>
+          <u-td>支出预算</u-td>
+          <u-td>支出</u-td>
+        </u-tr>
+        <u-tr>
+          <u-td>收入预算</u-td>
+          <u-td>收入</u-td>
+        </u-tr>
+        <u-tr>
+          <u-td>综合预算</u-td>
+          <u-td>收入、支出</u-td>
+        </u-tr>
+      </u-table>
+      <view class="title">预算额度说明：</view>
+      <view class="tips_item">
+        收入和支出类型的预算额度，就是关联对应的收入和支出。综合类型的预算额度只填写预算的支出部分，收入不用设置，预算列表会根据类型显示不同的统计内容。
+      </view>
+    </view>
     <u-picker mode="time" v-model="show_time" :params="params"
                   @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
   </view>
@@ -59,7 +93,8 @@ export default {
         start_time: null,
         end_time: null,
         remark: '',
-        sort: null
+        sort: null,
+        type: 20
       },
       show_time: false,
       time_index: 0,
@@ -196,7 +231,12 @@ export default {
   height: 100%;
   padding: 10px;
 
-
+.tips{
+  .title{
+    margin-top: 20rpx;
+    font-weight: bold;
+  }
+}
   .buttons {
     display: flex;
     justify-content: space-evenly;

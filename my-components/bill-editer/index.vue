@@ -79,7 +79,7 @@
 
         <u-button class="save_btn" type="success" size="medium" @click="submit()">保存</u-button>
       </view>
-      <view class="line" v-if="formData.type===20">
+      <view class="line" >
         <text class="popup_type">关联预算：</text>
         <u-tag :closeable="true"
                v-if="formData.budget_id>0"
@@ -261,6 +261,7 @@ export default {
       this.type = index
       this.formData.type = index === 0 ? 20 : 10;
       this.formData.category_id = null
+      this.get_budget()
     },
     toggleShowAll(type) {
       let status = type === 10 ? this.showInAll : this.showOutAll
@@ -323,7 +324,8 @@ export default {
     },
     get_budget() {
       budget.budget_list({
-        data_type: 'option'
+        data_type: 'option',
+        type: this.type===0?20:10
       }).then(res => {
         if (res.code == 0) {
           this.budget_list = res.data.list

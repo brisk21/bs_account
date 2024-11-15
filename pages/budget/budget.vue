@@ -23,26 +23,37 @@
           <view class="title">
             {{ item.title }}
           </view>
-          <view class="amount">
-            预算金额：￥{{ item.amount }}
+          <view class="amount bs-item">
+            预算额度：￥{{ item.amount }} 元
+            <template v-if="item.in_amount>0 || item.out_amount>0">
+              <text  class="view-list" @click.stop="to_detail(item.budget_id)">查看账单</text>
+              <u-icon   name="arrow-right" size="30" color="#19a6de" @click.native.stop="to_detail(item.budget_id)"></u-icon>
+            </template>
           </view>
-          <view class="amount-real">
-            实际金额：￥ <text :class="item.real_amount>item.amount?'bs_red':'bs_green'">{{ item.real_amount }}</text>
-          <template v-if="item.real_amount>0">
-            <text  class="view-list" @click.stop="to_detail(item.budget_id)">查看账单</text>
-            <u-icon   name="arrow-right" size="30" color="#19a6de" @click.native.stop="to_detail(item.budget_id)"></u-icon>
-          </template>
+          <view class="leave_amount bs-item">
+            预算余额：￥ <text :class="item.leave_amount<0?'bs_red':'bs_green'">{{ item.leave_amount }} 元</text>
+            <text class="bs_red"> （{{ item.percent }}）</text>
+          </view>
+          <view class=" bs-item" v-if="item.type===20 || item.type===0">
+            支出金额：￥ <text :class="item.out_amount>item.amount?'bs_red':'bs_green'">{{ item.out_amount }} 元</text>
+          </view>
+          <view class=" bs-item" v-if="item.type===10 || item.type===0">
+            收入金额：￥ <text :class="item.in_amount>item.amount?'bs_red':'bs_green'">{{ item.in_amount }} 元</text>
+          </view>
+          <view class=" bs-item" v-if="item.ext_amount && item.type===10">
+            额外收入：￥ <text class="bs_red">{{ item.ext_amount }} 元</text>
+          </view>
+          <view class=" bs-item" v-if="item.ext_amount && item.type===20">
+            额外支出：￥ <text class="bs_red">{{ item.ext_amount }} 元</text>
+          </view>
 
-
+          <view class="profit  bs-item" v-if="item.type===0">
+            收支差额：<text :class="item.profit>=0?'bs_red':'bs_green'">{{item.profit>=0?'+':'-'}} ￥{{ item.profit }} 元</text>
           </view>
-          <view class="leave_amount">
-            剩余预算：￥ <text :class="item.leave_amount<0?'bs_red':'bs_green'">{{ item.leave_amount }}</text>
-            <text v-if="item.leave_amount<0" class="bs_red">(超)</text>
-          </view>
-          <view class="time">
+          <view class="time  bs-item">
             时间：{{ item.time_set }}
           </view>
-          <view class="remark time">
+          <view class="remark  bs-item ">
            备注：{{ item.remark || '无'}}
           </view>
         </view>
@@ -261,7 +272,7 @@ export default {
   border-bottom: 1px solid #eaeaea;
 }
 
-  .title,.amount,.amount-real,.leave_amount,.leave_amount,.time,.remark{
+  .title,.bs-item{
     margin-bottom: 17rpx;
   }
 /* 预算名称样式 */
@@ -275,20 +286,21 @@ export default {
 /* 预算金额样式 */
 .amount {
   font-size: 14px;
-  color: #0658ee;
-}
-
-/* 实际金额样式 */
-.amount-real {
-  font-size: 14px;
+  color: #20b4bc;
   .view-list{
     margin-left: 30rpx;
     color: #19a6de;
   }
 }
 
+/* 实际金额样式 */
+.amount-real {
+  font-size: 14px;
+
+}
+
 /* 时间样式 */
-.time {
+.time,.remark {
   font-size: 14px;
   color: #999;
 }
