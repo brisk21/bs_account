@@ -76,8 +76,7 @@ export default {
   }
   .content{
     min-height: 600rpx;
-    padding: 10px;
-    padding-top: 80rpx;
+    padding: 80rpx 10px 10px;
   }
 
   .feedback{
