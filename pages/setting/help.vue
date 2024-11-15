@@ -4,13 +4,17 @@
       <u-empty text="暂无数据" mode="message"></u-empty>
     </view>
     <view>
-      <u-collapse>
-        <u-collapse-item :title="item.title" v-for="(item, index) in list" :key="index">
-          <rich-text :nodes="item.content"></rich-text>
-        </u-collapse-item>
-      </u-collapse>
+      <u-cell-group>
+        <u-cell-item icon="question-circle" :title="item.title"  v-for="(item, index) in list" :key="index" @click="open(index,item)"></u-cell-item>
+      </u-cell-group>
 
 
+
+      <u-popup v-model="show" mode="bottom" border-radius="15" length="60%" safe-area-inset-bottom closeable	>
+        <view class="content">
+          <u-parse :html="content" :selectable="true"></u-parse>
+        </view>
+      </u-popup>
 
       <view class="u-p-t-30 u-p-b-30">
          没有找到帮助，去提交反馈？<text class="u-m-l-10 feedback" @click="to_feedback">去反馈</text>
@@ -26,6 +30,8 @@ import api from "@/common/help";
 export default {
   data() {
     return {
+      content: '',
+      show: false,
       list: [],
     };
   },
@@ -36,6 +42,12 @@ export default {
     // this.getData()
   },
   methods: {
+    open(index,item){
+
+      console.log(item)
+      this.content = item.content
+      this.show = true
+    },
     getData() {
       uni.showLoading()
       api.get_list().then(res => {
@@ -62,29 +74,12 @@ export default {
   .empty {
     padding: 100rpx 0;
   }
-
-  .u-collapse {
-    background-color: #fff;
-    border-radius: 10rpx;
-    margin-bottom: 30rpx;
-    margin-top: 20rpx;
+  .content{
+    min-height: 600rpx;
+    padding: 10px;
+    padding-top: 80rpx;
   }
 
-  .u-collapse-item {
-    background-color: #fff;
-  }
-
-  .u-collapse-item__title {
-    padding: 30rpx 30rpx 30rpx 30rpx;
-  }
-
-  .u-collapse-item__body {
-    padding: 30rpx;
-  }
-
-  .u-collapse-item__body-text {
-    color: #999;
-  }
   .feedback{
     color: dodgerblue;
   }
