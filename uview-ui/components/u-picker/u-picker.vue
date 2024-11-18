@@ -363,7 +363,9 @@ export default {
 		initTimeValue() {
 			// 格式化时间，在IE浏览器(uni不存在此情况)，无法识别日期间的"-"间隔符号
 			let fdate = this.defaultTime.replace(/\-/g, '/');
+			console.log('fdate',fdate)
 			fdate = fdate && fdate.indexOf('/') == -1 ? `2020/01/01 ${fdate}` : fdate;
+			console.log('fdate',fdate)
 			let time = null;
 			if (fdate) time = new Date(fdate);
 			else time = new Date();

@@ -167,15 +167,19 @@ export default {
     pickerConfirm(e) {
       this.show_box = true
       if (this.pickerParams.year) this.datePicker.year = e.year;
-      if (this.pickerParams.month) this.datePicker.month = e.month;
-      this.datePicker.picker_time = this.datePicker.year + "-" + this.datePicker.month;
+      if (this.pickerParams.month) {
+        this.datePicker.month = e.month
+        this.datePicker.picker_time = this.datePicker.year + "-" + this.datePicker.month + '-01';
+      } else {
+        this.datePicker.picker_time = this.datePicker.year + "-01-01";
+      }
       this.getStatisticData()
     },
     dateReset() {
       let d = dayjs()
       this.datePicker = {
         picker_show: false,
-        picker_time: d.format('YYYY-MM'),
+        picker_time: d.format('YYYY-MM-01'),
         year: d.format('YYYY'),
         month: d.format('MM'),
       }

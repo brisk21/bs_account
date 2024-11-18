@@ -73,7 +73,7 @@
       </view>
     </view>
     <u-picker mode="time" v-model="show_time" :params="params"
-                  @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
+                  @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false" :default-time="params.picker_time"></u-picker>
   </view>
 
 </template>
@@ -101,7 +101,8 @@ export default {
       params: {
         year: true, // 是否显示年
         month: true, // 是否显示月
-        day: true
+        day: true,
+        picker_time: null
       },
       startYear: 2000, // 起始年份
       endYear: new Date().getFullYear(), // 结束年份，设置为当前年份
@@ -129,6 +130,11 @@ export default {
       console.log(index)
       this.show_time=true;
       this.time_index=index
+      if (index==1){
+        this.params.picker_time = this.form.start_time || null
+      }else{
+        this.params.picker_time = this.form.end_time || null
+      }
     },
     cancelTime() {
     },

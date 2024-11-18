@@ -221,7 +221,7 @@ export default {
       }
 
       // 构造 picker_time 字段
-       this.picker_time = `${this.year}-${this.month}`
+       this.picker_time = `${this.year}-${this.month}-01`
        console.log(this.picker_time)
         this.getList()
     },
@@ -241,7 +241,7 @@ export default {
       if (this.picker_params.year) this.year = e.year;
       if (this.picker_params.month) this.month = e.month;
 
-      this.picker_time = this.year + "-" + this.month;
+      this.picker_time = this.year + "-" + this.month + '-01' ;
       this.getList()
     },
 
