@@ -3,7 +3,7 @@
 </style>
 
 <script>
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || MP-WEIXIN
 	import checkappupdate from 'js_sdk/wonyes-checkappupdate/wonyes/checkappupdate.js'
 	// #endif
   import constConfig from '@/const.js'
@@ -23,6 +23,11 @@
 				barbackgroundactive:"rgba(32,165,58,1)"//进度条前景色色，默认绿色，可自定义rgba形式色值
 			})
 		// #endif
+		
+		// #ifdef MP-WEIXIN
+				checkappupdate.wx_check_update()
+		// #endif	
+		
 		},
 		onShow: function() {
 			let token = uni.getStorageSync('UserToken')

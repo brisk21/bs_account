@@ -41,7 +41,7 @@
 </template>
 
 <script>
-	// #ifdef APP-PLUS
+	// #ifdef APP-PLUS || MP-WEIXIN
 	import checkappupdate from 'js_sdk/wonyes-checkappupdate/wonyes/checkappupdate.js'
 	// #endif
 	import constConfig from '@/const.js'
@@ -108,6 +108,10 @@
 					this.$u.toast('请在APP端更新')
 					return
 				}
+				// #ifdef MP-WEIXIN
+						checkappupdate.wx_check_update()
+				// #endif	
+				
 				// #ifdef APP-PLUS
 				checkappupdate.check({
 					title: "检测到有新版本！",
