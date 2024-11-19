@@ -20,7 +20,7 @@
     "showAlways": false
   },
   "styles": {
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#c5c5c5",
     "borderRadius":"5px",
     "title": {
       "color": "#0055ff"
@@ -29,10 +29,10 @@
       "color": "#00aa00"
     },
     "buttonRefuse": {
-      "color": "#ff4235"
+      "color": "#ff007f"
     },
     "buttonVisitor": {
-      "color": "#00ffff"
+      "color": "#00aa00"
     }
   }
 }

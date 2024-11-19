@@ -2,12 +2,12 @@
 
 function wx_check_update(){
 	const updateManager = wx.getUpdateManager()
-	
+
 	updateManager.onCheckForUpdate(function (res) {
 	  // 请求完新版本信息的回调
 	  console.log('hasUpdate',res.hasUpdate)
 	})
-	
+
 	updateManager.onUpdateReady(function () {
 	  wx.showModal({
 	    title: '更新提示',
@@ -20,7 +20,7 @@ function wx_check_update(){
 	    }
 	  })
 	})
-	
+
 	updateManager.onUpdateFailed(function () {
 	  // 新版本下载失败
 	  console.log('mp-新版本下载失败')
@@ -31,7 +31,7 @@ function wx_check_update(){
 
 
 function check(param = {}) {
-	
+
 	// 合并默认参数
 	param = Object.assign({
 		title: "检测到有新版本！",
@@ -44,9 +44,9 @@ function check(param = {}) {
 	if (!param.api) {
 		return false;
 	}
-	
+
 	plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {
-		
+
 		let platform = plus.os.name.toLowerCase()
 		uni.request({
 			url: param['api'],
@@ -55,13 +55,14 @@ function check(param = {}) {
 				version: widgetInfo.version
 			},
 			header: {
-				'content-type': 'application/x-www-form-urlencoded'
+				'content-type': 'application/x-www-form-urlencoded',
+				'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || ''),
 			},
 			method: 'GET',
 			dataType: 'json',
 			success: (result) => {
-				let res = result.data	
-				console.log('check update res',res)
+				let res = result.data
+				console.log('check update res'+widgetInfo.version,res)
 				let data = res.data
 				if (data && res.code === 0 && data.url) {
 					if(/\.wgt$/i.test(data.url) || (platform == 'android' &&  /\.apk$/i.test(data.url))){
@@ -72,12 +73,12 @@ function check(param = {}) {
 					if (platform == 'ios') {
 						// 如果是ios,则跳转到appstore
 						plus.runtime.openURL(result.data.data.url)
-						
+
 					}
 				}
 			},
 			fail: (res) => {
-				
+
 			}
 		})
 	});
@@ -125,9 +126,9 @@ function startdownload(param,data){
 							plus.nativeUI.alert("下载升级包失败，请手动去站点下载安装，错误码: " + status);
 							plus.downloader.clear();
 						}
-						plus.nativeUI.closeWaiting();  
+						plus.nativeUI.closeWaiting();
 				});
-				
+
 				let wrapwidth=parseInt(plus.screen.resolutionWidth / 2);
 				let view = new plus.nativeObj.View("maskView", {
 					backgroundColor: param.barbackground,
@@ -136,7 +137,7 @@ function startdownload(param,data){
 					width: wrapwidth+"px",
 					height: "10px"
 				});
-				
+
 				view.show()
 				let viewinner = new plus.nativeObj.View("maskViewinner", {
 					backgroundColor: param.barbackgroundactive,
@@ -162,6 +163,6 @@ export default {
 	//  #ifdef MP-WEIXIN
 	 wx_check_update,
 	// #endif
-	
+
 	check
 }

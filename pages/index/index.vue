@@ -203,6 +203,7 @@ export default {
     getNotice(){
       this.$u.api.getNotice().then((res)=>{
         if (res.code === 0){
+			console.log('notices',res)
           this.notice_source_list = res.data.list
           this.notice_list = res.data.title_list
         }
@@ -444,10 +445,7 @@ export default {
 
   .data-list {
     position: relative;
-    top: 176rpx;
-    // #ifdef H5
     top: 160rpx;
-    // #endif
     width: 100%;
     padding-bottom: 80px;
     .notice-list{
