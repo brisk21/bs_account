@@ -48,9 +48,20 @@
       </u-empty>
     </view>
     <template v-else>
+
       <view v-if="cashflow.list.length > 0" class="scroll data-list">
         <scroll-view :refresher-enabled="false"  :scroll-y="true" class="scroll-view"
        scroll-into-view="top"  >
+          <view class="notice-list">
+            <u-notice-bar mode="horizontal"
+                          :list="notice_list" type="warning"
+                          :is-circular="false"
+                          :speed="70"
+                          @click="toNoticeDetail"
+                          @close="closeNotice"
+                          :disable-touch="false"
+                          volume-icon close-icon></u-notice-bar>
+          </view>
           <view>
             <view v-for="(item, index) in cashflow.list" :key="index">
               <view class="u-flex list-box">
@@ -95,6 +106,12 @@
     <u-picker mode="time" v-model="picker_show" :params="picker_params" :default-time="picker_time"
               @confirm="pickerConfirm"></u-picker>
 
+    <u-popup v-model="notice_show" mode="bottom" border-radius="15" length="35%" safe-area-inset-bottom closeable	>
+      <view class="notice_content">
+        <u-parse :html="notice_content" :selectable="true"></u-parse>
+      </view>
+    </u-popup>
+
   </view>
 
 </template>
@@ -108,6 +125,10 @@ export default {
   },
   data() {
     return {
+      notice_show: false,
+      notice_content: '',
+      notice_list: [],
+      notice_source_list: [],
       bg: {
          backgroundColor: '#42b479',
          color:"white"
@@ -170,6 +191,7 @@ export default {
   onLoad(options) {
     console.log('onLoad')
     this.init_data()
+    this.getNotice()
   },
   created() {
     console.log('created')
@@ -178,6 +200,22 @@ export default {
   },
 
   methods: {
+    getNotice(){
+      this.$u.api.getNotice().then((res)=>{
+        if (res.code === 0){
+          this.notice_source_list = res.data.list
+          this.notice_list = res.data.title_list
+        }
+      })
+    },
+    toNoticeDetail(index) {
+      console.log(this.notice_list[index])
+      this.notice_content = this.notice_source_list[index].content || this.notice_list[index]
+      this.notice_show = true
+    },
+    closeNotice(){
+      this.notice_list = []
+    },
     toSearch(){
       uni.navigateTo({
         url: '/pages/index/list'
@@ -284,6 +322,7 @@ export default {
         }, 1000)
       })
     },
+
     toDetail(id) {
       uni.navigateTo({
         url: `/pages/index/detail?id=${id}`
@@ -319,10 +358,12 @@ export default {
     text-align: center;
     height: 100%;
   }
-
   // 自适应结束
 
-
+  .notice_content{
+    min-height: 600rpx;
+    padding: 80rpx 10px 10px;
+  }
   .header-icon {
     padding: 15rpx;
   }
@@ -404,8 +445,14 @@ export default {
   .data-list {
     position: relative;
     top: 176rpx;
+    // #ifdef H5
+    top: 160rpx;
+    // #endif
     width: 100%;
     padding-bottom: 80px;
+    .notice-list{
+      max-height: 70rpx;
+    }
   }
   .empty {
     margin-top: 200px;
@@ -429,6 +476,7 @@ export default {
   margin: 0 auto;
   width: 100%;
   height: 176rpx;
+
 
   .line {
     display: flex;

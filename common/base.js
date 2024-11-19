@@ -203,6 +203,11 @@ const install = (Vue, vm) => {
         return vm.$u.post('regret-cancel', encrypt(params));
     }
 
+    //公告列表
+    const getNotice = (params) => {
+        return vm.$u.get('notice-list', params);
+    }
+
     vm.$u.api = {
         code2token,
         me,
@@ -248,7 +253,8 @@ const install = (Vue, vm) => {
         statistic_get,
         statistic_set,
         cancelAccount,
-        regretCancelAccount
+        regretCancelAccount,
+        getNotice
     };
 }
 
