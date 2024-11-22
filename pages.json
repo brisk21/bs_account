@@ -283,6 +283,34 @@
         "navigationBarTitleText": "扩展中心",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/extend/detail",
+      "style": {
+        "navigationBarTitleText": "扩展详情",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pages/packageA",
+      "pages": [
+        {
+          "path": "task/project",
+          "style": {
+            "navigationBarTitleText": "项目管理",
+            "enablePullDownRefresh": true
+          }
+        },
+        {
+          "path": "task/task_list",
+          "style": {
+            "navigationBarTitleText": "任务列表",
+            "enablePullDownRefresh": true
+          }
+        }
+      ]
     }
   ],
   "globalStyle": {

@@ -56,12 +56,20 @@
 					</u-cell-item>
           <u-cell-item @click="goto('/pages/setting/help',false)" title="帮助中心" icon="question-circle">
 					</u-cell-item>
-          <!-- #ifndef MP-->
+
           <u-cell-item @click="goto('/pages/extend/index',false)" title="扩展插件" icon="grid">
 					</u-cell-item>
-          <!-- #endif -->
+
 				</u-cell-group>
 			</view>
+      <view class="extend-list" v-if="plugins_list.length>0">
+        <u-grid :col="3" >
+          <u-grid-item v-for="(item, index) in plugins_list" :key="index" @click="goto(item.path)">
+            <u-icon :name="item.icon" :size="46"></u-icon>
+            <view class="grid-text">{{ item.name }}</view>
+          </u-grid-item>
+        </u-grid>
+      </view>
 		</view>
 
 
@@ -77,6 +85,7 @@
 
 <script>
 	import fab from '@/my-components/fab/index.vue'
+  import extend from "@/common/extend";
 	export default {
 		components: {
 			fab
@@ -95,7 +104,8 @@
 					label: '默认账单',
 					extra: '0'
 				}]
-
+        ,
+        plugins_list: []
 			}
 		},
 		computed: {
@@ -108,6 +118,14 @@
 
 		},
 		methods: {
+      my_plugins(){
+        extend.my_list().then(res => {
+          if (res.code == 0) {
+            this.plugins_list = res.data.list
+          }
+        })
+      },
+
 			goto(path, auth = true) {
 				if (auth && !this.hasLogin) {
 					this.$u.toast('请登录后查看');
@@ -122,10 +140,13 @@
 				})
 			}
 		},
-		onLoad(options) {},
+		onLoad(options) {
+
+    },
 		onShow() {
 			if (this.hasLogin) {
 				this.$store.dispatch('getUserInfo')
+        this.my_plugins()
 			}
 		}
 	}
@@ -206,6 +227,10 @@
 		background-color: #f5f5f5;
 		position: relative;
 		padding-bottom: 20rpx;
+    .extend-list{
+      padding: 8rpx;
+      margin-top: 20rpx;
+    }
 	}
 
 	.tj-sction {

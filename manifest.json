@@ -84,7 +84,10 @@
             "es6" : true,
             "postcss" : true
         },
-        "permission" : {}
+        "permission" : {},
+        "optimization": {
+            "subPackages": true
+        }
     },
     "mp-qq" : {
         "appid" : "1110183429",
