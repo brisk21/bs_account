@@ -152,10 +152,7 @@ export default {
       data.captcha_key = this.captcha.key
       this.$store.dispatch('login', data).then(res => {
         //console.log(res);return;
-        if (res.code == 1) {
-          this.$u.toast(res.msg);
-          this.getCaptcha()
-        } else {
+        if (res.code === 0) {
           this.$u.toast('登录成功');
 
           this.$store.dispatch('getUserInfo').then(res => {
@@ -163,7 +160,9 @@ export default {
               url: '/pages/index/index'
             })
           })
-
+        } else {
+          this.$u.toast(res.msg);
+          this.getCaptcha()
         }
       })
     },

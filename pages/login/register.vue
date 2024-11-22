@@ -95,7 +95,7 @@ export default {
       }
       data.captcha_key = this.captcha.key
       this.$u.api.register(data).then(res => {
-        if (res.code == 1) {
+        if (res.code !== 0) {
           this.$u.toast(res.msg);
           this.getCaptcha()
         } else {
