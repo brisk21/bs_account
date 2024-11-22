@@ -102,7 +102,7 @@ export default {
         year: true, // 是否显示年
         month: true, // 是否显示月
         day: true,
-        picker_time: null
+        picker_time: ''
       },
       startYear: 2000, // 起始年份
       endYear: new Date().getFullYear(), // 结束年份，设置为当前年份
@@ -126,14 +126,28 @@ export default {
   }
   ,
   methods: {
+    default_date(){
+      let now = new Date();
+      let year = now.getFullYear(); // 获取年份
+      let month = now.getMonth() + 1; // 获取月份，月份从0开始，所以需要+1
+      let day = now.getDate(); // 获取日
+      // 将月和日格式化为两位数
+      month = month < 10 ? '0' + month : month;
+      day = day < 10 ? '0' + day : day;
+      return  `${year}-${month}-${day}`;
+    },
+
     chooseTime(index) {
       console.log(index)
       this.show_time=true;
       this.time_index=index
+     let defaultDate = this.default_date()
+      console.log(defaultDate)
+
       if (index==1){
-        this.params.picker_time = this.form.start_time || null
+        this.params.picker_time = this.form.start_time || defaultDate
       }else{
-        this.params.picker_time = this.form.end_time || null
+        this.params.picker_time = this.form.end_time || defaultDate
       }
     },
     cancelTime() {
