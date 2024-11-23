@@ -94,11 +94,12 @@
                   v-if="budget_list.length<=0">添加预算
         </u-button>
       </view>
-      <view class="line">
-        <text class="popup_type">备注：</text>
-        <input type="textarea" v-model="formData.remark" @input="onRemarkInput" placeholder="添加备注"
-               style="font-size: 28rpx;width: 70%;" clearable border border-color="gray" auto-height/>
-      </view>
+
+      <u-form-item   class="form-item" label="备注：">
+        <u-input v-model="formData.remark" type="textarea"
+                  placeholder="添加备注"
+                 clearable border  auto-height/>
+      </u-form-item>
 
       <view class="line">
         <text class="popup_type">附件图片：</text>
@@ -369,9 +370,7 @@ export default {
     onInput(e) {
       return e.detail.value;
     },
-    onRemarkInput(e) {
-      this.formData.remark = e.detail.value;
-    },
+
     goto(path, auth = true) {
       if (auth && !this.hasLogin) {
         this.$u.toast('请登录后查看');
@@ -501,6 +500,12 @@ export default {
     height: 100rpx;
     width: 100%;
   }
+}
+.form-item{
+  padding: 26rpx 32rpx;
+  font-size: 28rpx;
+  color: #606266;
+  background-color: #fff;
 }
 
 

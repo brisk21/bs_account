@@ -2,8 +2,8 @@
     "name" : "极简随手记",
     "appid" : "__UNI__3CF9076",
     "description" : "记账，不只是记录",
-    "versionName" : "1.0.33",
-    "versionCode" : 133,
+    "versionName" : "1.0.34",
+    "versionCode" : 134,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -85,8 +85,8 @@
             "postcss" : true
         },
         "permission" : {},
-        "optimization": {
-            "subPackages": true
+        "optimization" : {
+            "subPackages" : true
         }
     },
     "mp-qq" : {
