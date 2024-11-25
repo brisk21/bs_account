@@ -42,6 +42,10 @@
 				<text>总记账笔数</text>
 			</view>
 		</view>
+    <view class="alert-tip">
+      <u-alert-tips type="error" :show="hasLogin && !userInfo.email" title="安全提示"
+                    :description="'为了方便找回密码、导出数据等相关操作，建议您绑定邮箱！'" :close-able="false" @click="goto('/pages/setting/safe/email',true)"></u-alert-tips>
+    </view>
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
@@ -92,6 +96,7 @@
 		},
 		data() {
 			return {
+        show_tips:true,
         ad_show: false,
 				phone_height: "0",
 				scroll_view_height: "100",

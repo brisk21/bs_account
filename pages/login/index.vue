@@ -40,15 +40,15 @@
         <text @click="wxlogin">微信登录</text>
       </view>
 
-      <!-- 			<view class="forget-section">
-        忘记密码?
-      </view> -->
+
 
 
     </view>
     <view class="register-section">
-      还没有账号?
-      <text @click="toRegist">马上注册</text>
+      <text @click="toRegist">注册账号</text>
+       <text class="forget-section" @click="toForget">
+        忘记密码?
+      </text>
     </view>
   </view>
 </template>
@@ -101,6 +101,11 @@ export default {
     toRegist() {
       uni.navigateTo({
         url: '/pages/login/register'
+      })
+    },
+    toForget() {
+      uni.navigateTo({
+        url: '/pages/login/forget_pwd'
       })
     },
     // #ifdef MP
@@ -270,12 +275,7 @@ export default {
   }
 }
 
-.forget-section {
-  font-size: $font-sm+2upx;
-  color: $uni-theme-color;
-  text-align: center;
-  margin-top: 40upx;
-}
+
 
 .register-section {
   position: absolute;
@@ -289,6 +289,12 @@ export default {
   text {
     color: $uni-theme-color;
     margin-left: 10upx;
+  }
+  .forget-section {
+    font-size: $font-sm+2upx;
+    color: blue;
+    text-align: center;
+    margin-left: 20rpx;
   }
 }
 

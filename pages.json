@@ -290,6 +290,13 @@
         "navigationBarTitleText": "扩展详情",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/login/forget_pwd",
+      "style": {
+        "navigationBarTitleText": "找回密码",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "subPackages": [

@@ -141,6 +141,14 @@ const install = (Vue, vm) => {
         return vm.$u.get('code/send', params);
     }
 
+    const send_forget_code = (params) => {
+        return vm.$u.get('code/find_pwd', encrypt(params));
+    }
+
+    const forget_pwd = (params) => {
+        return vm.$u.post('user/forget_pwd', encrypt(params));
+    }
+
     //保存邮箱
     const updateEmail = (params) => {
         return vm.$u.put('update-email', params);
@@ -241,6 +249,8 @@ const install = (Vue, vm) => {
         setPush,
         getPush,
         send_code,
+        send_forget_code,
+        forget_pwd,
         updateEmail,
         getAccountList,
         bindAccount,
