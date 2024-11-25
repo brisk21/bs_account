@@ -1,6 +1,11 @@
 <template>
   <view class="container">
-    <view class="extend">
+    <view v-if="!hasLogin" class="empty need_login">
+        <u-empty text="未登录" mode="permission">
+          <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">请先登录</button>
+        </u-empty>
+      </view>
+    <view class="extend" v-else>
       <view class="u-search-box">
         <u-search :shape="'round'" clearable :show-action="true" :placeholder="'搜索'"
                   :shape-radius="'30rpx'" :background-color="'#f5f5f5'" :action-text="'搜索'"
@@ -14,8 +19,8 @@
       <view class="data-list">
         <view class="data-item" v-for="(item, index) in list" :key="index" @click="toDetail(item)">
           <view class="data-item-title">
-            <u-icon :name="item.icon" :size="38"></u-icon>
-            <text>{{ item.name }}</text>
+            <u-icon :name="item.icon" :size="36"></u-icon>
+            <text class="name">{{ item.name }}</text>
           </view>
           <view class="data-item-content remark">
             {{ item.remark }}
@@ -32,7 +37,7 @@
             </u-button>
             <u-button v-if="item.added" size="mini" shape="circle" type="default" @click.stop="action(item, 'top')"
                       >
-              {{ item.buttons.top ? '取消置顶' : '置顶' }}
+              {{ item.buttons.top ? '置顶' : '取消置顶' }}
             </u-button>
 
           </view>
@@ -173,6 +178,10 @@ export default {
           color: #999;
           margin-right: 10rpx;
 
+        }
+        .name{
+          margin-left: 10rpx;
+          line-height: 38rpx;
         }
       }
 

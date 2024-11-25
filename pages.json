@@ -309,6 +309,20 @@
             "navigationBarTitleText": "任务列表",
             "enablePullDownRefresh": true
           }
+        },
+        {
+          "path": "idea/index",
+          "style": {
+            "navigationBarTitleText": "数据列表",
+            "enablePullDownRefresh": true
+          }
+        },
+        {
+          "path": "idea/detail",
+          "style": {
+            "navigationBarTitleText": "详情",
+            "enablePullDownRefresh": true
+          }
         }
       ]
     }
