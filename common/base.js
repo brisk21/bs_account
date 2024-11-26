@@ -142,7 +142,7 @@ const install = (Vue, vm) => {
     }
 
     const send_forget_code = (params) => {
-        return vm.$u.get('code/find_pwd', encrypt(params));
+        return vm.$u.post('code/find_pwd', encrypt(params));
     }
 
     const forget_pwd = (params) => {
