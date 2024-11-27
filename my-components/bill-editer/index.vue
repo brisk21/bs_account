@@ -95,9 +95,9 @@
         </u-button>
       </view>
 
-      <u-form-item   class="form-item" label="备注：">
+      <u-form-item   class="form-item" label="备注：" label-width="120">
         <u-input v-model="formData.remark" type="textarea"
-                  placeholder="添加备注"
+                  placeholder="添加备注" maxlength="500"
                  clearable border  auto-height/>
       </u-form-item>
 
@@ -506,6 +506,8 @@ export default {
   font-size: 28rpx;
   color: #606266;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 
