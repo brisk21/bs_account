@@ -67,13 +67,13 @@ export default {
   data() {
     return {
       info: {
-        amount: "200.00",
+        amount: "0.00",
         category: {
           name: "教育"
         },
         id: null,
         name: "教育",
-        date: "2021-05-12",
+        date: "2024-10-12",
         image: null,
         remark: null,
       },

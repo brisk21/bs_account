@@ -12,7 +12,7 @@
           <u-dropdown-item v-model="form.amount_type" title="收支方式" :options="amount_type"
                            @change="set_amount_type"></u-dropdown-item>
           <u-dropdown-item v-model="form.time_type"
-                           :title="form.time_type==''?'时间':(form.time_type=='year'?form.year:form.year+form.month)"
+                           :title="time_type_title"
                            :options="time_type" @change="set_time_type"></u-dropdown-item>
           <u-dropdown-item v-model="form.budget_id" title="预算" :options="budget_list"
                            @change="set_budget_type"></u-dropdown-item>
@@ -29,6 +29,7 @@
         </view>
       </view>
       <view v-if="list.length > 0" class="scroll data-list">
+
         <u-table>
           <u-tr>
             <u-th>笔数</u-th>
@@ -74,6 +75,9 @@
       </view>
       <u-picker mode="time" v-model="show_date" :params="params"
                 @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false"></u-picker>
+
+      <u-calendar toolTip="选择时间范围" v-model="show_calendar" :mode="calendar_mode"
+                  @change="calendarChange"></u-calendar>
     </template>
     <u-back-top :scroll-top="scrollTop"></u-back-top>
 
@@ -111,12 +115,16 @@ export default {
       ],
       time_type: [
         {label: '全部', value: '',},
-        {label: '年份', value: 'year',},
-        {label: '月份', value: 'month',},
+        {label: '按日历范围', value: 'calendar',},
+        {label: '按年份筛选', value: 'year',},
+        {label: '按月份筛选', value: 'month',},
       ],
       budget_list: [
         {label: '全部', value: ''}
       ],
+      time_type_title: '时间',
+      show_calendar: false,
+      calendar_mode: 'range',
       form: {
         keywords: '',
         type: 0,
@@ -152,6 +160,12 @@ export default {
       startYear: 2000, // 起始年份
       endYear: new Date().getFullYear(), // 结束年份，设置为当前年份
     }
+  },
+  watch: {
+    'form.time_type'(val) {
+      console.log(val, 'time_type')
+
+    },
   },
   onReady() {
     uni.pageScrollTo({
@@ -218,6 +232,7 @@ export default {
       this.form.year = ''
       this.form.month = ''
       this.form.time_type = ''
+      this.time_type_title = '时间'
       this.getList(true)
     },
     confirmTime(e) {
@@ -225,14 +240,25 @@ export default {
       if (this.form.time_type == 'month') {
         this.form.year = e.year
         this.form.month = e.month
+        this.time_type_title = e.year + e.month
       } else if (this.form.time_type == 'year') {
         this.form.year = e.year
         this.form.month = ''
+        this.time_type_title = e.year
       } else {
-        return ''
+        this.form.year = ''
+        this.form.month = ''
+        this.time_type_title = '时间'
       }
       this.getList(true)
     },
+    calendarChange(e) {
+      this.form.time_type = 'range'
+      this.form.start_time = e.startDate
+      this.form.end_time = e.endDate
+      this.getList(true)
+    },
+
     set_type(value) {
       this.form.type = value
       this.getList(true)
@@ -255,24 +281,33 @@ export default {
         this.form.year = ''
         this.form.month = ''
         this.form.time_type = ''
+        this.time_type_title = '时间'
         this.getList(true);
         return
       }
+      this.show_date = false
+      this.show_calendar = false
       if (value === 'month') {
         this.params = {year: true, month: true}
-      } else {
+        this.form.time_type = value
+        this.show_date = true
+      } else if (value === 'year') {
         this.params = {year: true, month: false}
+        this.form.time_type = value
+        this.show_date = true
+      } else {
+        this.show_calendar = true
+        this.time_type_title = '日历'
       }
-      this.form.time_type = value
-      this.show_date = true
+
     },
     get_budget() {
       budget.budget_list({
-        data_type: 'option'
+        data_type: 'option',
+        is_all: 1
       }).then(res => {
         if (res.code == 0 && res.data.list.length > 0) {
           this.budget_list = this.budget_list.concat(res.data.list)
-
         }
       })
     },

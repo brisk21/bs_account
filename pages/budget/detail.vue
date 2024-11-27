@@ -71,6 +71,11 @@
       <view class="tips_item">
         收入和支出类型的预算额度，就是关联对应的收入和支出。综合类型的预算额度只填写预算的支出部分，收入不用设置，预算列表会根据类型显示不同的统计内容。
       </view>
+      <view class="title">时间限制说明：</view>
+      <view class="tips_item">
+        开启后，预算在设置的时间范围内可以被选择，否则无法在记账页面显示。
+      </view>
+
     </view>
     <u-picker mode="time" v-model="show_time" :params="params"
                   @confirm="confirmTime" @cancel="cancelTime" :mask-close-able="false" :default-time="params.picker_time"></u-picker>
