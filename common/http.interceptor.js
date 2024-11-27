@@ -26,6 +26,7 @@ const install = (Vue, vm) => {
 			config.header.Authorization = 'Bearer ' + (uni.getStorageSync('UserToken') || '');
 			// 可以对某个url进行特别处理，此url参数为this.$u.get(url)中的url值
 			if (config.url == 'code2token') config.header.noToken = true;
+			config.header.bsfrom =  'app';
 			// #ifdef MP-WEIXIN
 			config.header.bsfrom =  'xcx';
 			// #endif
