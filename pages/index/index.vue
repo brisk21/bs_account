@@ -99,7 +99,7 @@
         </scroll-view>
       </view>
       <view v-else class="empty">
-        <u-empty text="暂无明细" mode="list"></u-empty>
+        <u-empty text="本月暂无明细" mode="list"></u-empty>
       </view>
     </template>
     <fab></fab>

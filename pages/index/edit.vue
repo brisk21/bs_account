@@ -13,6 +13,9 @@
 				id: null
 			}
 		},
+    onShow() {
+      uni.$emit('onPageShow', 1);
+    },
 		methods: {
 			submit(data) {
         uni.showModal({

@@ -51,7 +51,7 @@
 
     <view class="input_box">
       <view class="line">
-       <text class="must">*</text>
+        <text class="must">*</text>
         <input type="digit" min="0" max="999999999" v-model="formData.amount" class="amount_input" placeholder="0.00"
                @confirm="submit()"/>
       </view>
@@ -64,13 +64,17 @@
             :closeable="true"
             :text="formData.amount_type"
             @close="unsetAmountType()"
+            @click="unsetAmountType"
         ></u-tag>
         <u-button v-else @click="show_amount_type_list = true" size="mini">选择方式</u-button>
       </view>
 
       <view class="line">
         <view class="date">
-          <text class="popup_type"><text class="must">*</text>日期：</text>
+          <text class="popup_type">
+            <text class="must">*</text>
+            日期：
+          </text>
           <view style="font-size: 28rpx;font-weight: 600;" @click="picker_show = true">
             {{ formData.date }}
             <u-icon name="arrow-right" class="u-icon-wrap u-cell__right-icon-wrap"></u-icon>
@@ -79,7 +83,7 @@
 
         <u-button class="save_btn" type="success" size="medium" @click="submit()">保存</u-button>
       </view>
-      <view class="line" >
+      <view class="line">
         <text class="popup_type">关联预算：</text>
         <u-tag :closeable="true"
                v-if="formData.budget_id>0"
@@ -88,17 +92,17 @@
         ></u-tag>
 
         <u-button @click="show_budget_list = true" size="mini"
-                  v-if="budget_list.length>0 && !formData.budget_title">选择预算
+                  v-if="budget_list.length>1 && !formData.budget_title">选择预算
         </u-button>
         <u-button @click="goto('/pages/budget/detail',true)" size="mini"
-                  v-if="budget_list.length<=0">添加预算
+                  v-if="budget_list.length<=1">添加预算
         </u-button>
       </view>
 
-      <u-form-item   class="form-item" label="备注：" label-width="120">
+      <u-form-item class="form-item" label="备注：" label-width="120">
         <u-input v-model="formData.remark" type="textarea"
-                  placeholder="添加备注" maxlength="500"
-                 clearable border  auto-height/>
+                 placeholder="添加备注" maxlength="500"
+                 clearable border auto-height/>
       </u-form-item>
 
       <view class="line">
@@ -210,17 +214,24 @@ export default {
     }
   },
 
-  onShow() {
-
+  mounted() {
+    uni.$on('onPageShow', this.updateComponent);
   },
   created() {
-    if (this.value === 0){
+    if (this.value === 0) {
       this.get_budget()
     }
     this.getCategory()
     this.formData.date = dayjs().format('YYYY-MM-DD')
   },
+  beforeDestroy() {
+    uni.$off('onPageShow', this.updateComponent); // 组件销毁前移除监听
+  },
   methods: {
+    updateComponent() {
+      this.get_budget()
+     // this.$forceUpdate(); // 强制子组件更新
+    },
     unsetBudget() {
       this.formData.budget_id = 0
       this.formData.budget_title = ''
@@ -237,6 +248,28 @@ export default {
       this.formData.amount_type = item[0].label
     },
     confirmBudget(item) {
+      if (item[0].value === 0) {
+        this.formData.budget_id = 0
+        this.formData.budget_title = ''
+        uni.showModal({
+          title: '',
+          content: '确定跳到管理预算页面吗？',
+          success: (res) => {
+            if (res.confirm) {
+              uni.navigateTo({
+                url: '/pages/budget/budget',
+                success: (res) => {
+                  console.log('成功', res)
+                },
+                fail: (res) => {
+                  console.log('失败', res)
+                }
+              })
+            }
+          }
+        })
+        return
+      }
       console.log('选中预算', item[0].label)
       this.formData.budget_id = item[0].value
       this.formData.budget_title = item[0].label
@@ -313,10 +346,10 @@ export default {
             this.showOutList = this.out_list.slice(0, 10);
             this.showInList = this.in_list.slice(0, 10);
           }
-          if (res.data.accountTypes){
+          if (res.data.accountTypes) {
             this.amount_type_list = res.data.accountTypes
           }
-          if (!this.formData.id && res.data.default_amount_type){
+          if (!this.formData.id && res.data.default_amount_type) {
             this.formData.amount_type = res.data.default_amount_type
           }
 
@@ -329,10 +362,17 @@ export default {
     get_budget() {
       budget.budget_list({
         data_type: 'option',
-        type: this.type===0?20:10
+        type: this.type === 0 ? 20 : 10
       }).then(res => {
         if (res.code == 0) {
           this.budget_list = res.data.list
+          this.budget_list = this.budget_list.concat([{
+            value: 0,
+            title: '管理预算',
+            amount: 0,
+            type: this.type === 0 ? 20 : 10,
+            label: '管理预算？',
+          }])
         }
       })
     },
@@ -432,9 +472,11 @@ export default {
       width: 80%;
     }
   }
-.must{
-  color: $uni-color-error;
-}
+
+  .must {
+    color: $uni-color-error;
+  }
+
   .show_btn {
     margin-top: 25rpx;
     text-align: center;
@@ -501,7 +543,8 @@ export default {
     width: 100%;
   }
 }
-.form-item{
+
+.form-item {
   padding: 26rpx 32rpx;
   font-size: 28rpx;
   color: #606266;

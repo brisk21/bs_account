@@ -43,8 +43,11 @@
 			</view>
 		</view>
     <view class="alert-tip">
-      <u-alert-tips type="error" :show="hasLogin && !userInfo.email" title="安全提示"
-                    :description="'为了方便找回密码、导出数据等相关操作，建议您绑定邮箱！'" :close-able="false" @click="goto('/pages/setting/safe/email',true)"></u-alert-tips>
+      <u-alert-tips type="error" :show=" show_tips && hasLogin && !userInfo.email" title="安全提示"
+                    :description="'为了方便找回密码、导出数据等相关操作，建议您绑定邮箱！'"
+                    :close-able="true" @click="goto('/pages/setting/safe/email',true)"
+                    @close="show_tips=false"
+      ></u-alert-tips>
     </view>
 		<view class="menu-container">
 			<view class="menu-list">

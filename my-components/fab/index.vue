@@ -64,7 +64,7 @@ export default {
   height: 100rpx;
   border-radius: 50rpx;
   background-color: #18B566;
-  z-index: 100;
+  z-index: 500;
   display: flex;
   transform: translate(0, 0); /* 添加这个属性以允许后续的位置更新 */
   .icon {
