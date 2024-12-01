@@ -102,7 +102,7 @@
         <u-empty text="本月暂无明细" mode="list"></u-empty>
       </view>
     </template>
-    <fab></fab>
+    <fab url="/pages/bill/form"></fab>
     <u-picker mode="time" v-model="picker_show" :params="picker_params" :default-time="picker_time"
               @confirm="pickerConfirm"></u-picker>
 

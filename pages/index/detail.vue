@@ -95,7 +95,7 @@ export default {
     toEdit() {
       let id = this.info.id
       uni.navigateTo({
-        url: `/pages/index/edit?id=${id}`
+        url: `/pages/bill/form?id=${id}`+'&type='+this.info.type
       });
     },
     delCashflow() {

@@ -12,7 +12,7 @@ export default {
   props : {
     url: {
       type: String,
-      default: '/pages/bill/add'
+      default: '/pages/bill/form'
     },
     icon_name: {
       type: String,

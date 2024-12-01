@@ -6,7 +6,7 @@
       </u-subsection>
     </view>
     <view class="category-list">
-      <view class="out-list" v-show="formData.type == 20">
+      <view class="out-list" v-show="type === 0">
         <template v-if="out_list.length > 0">
           <u-grid :col="5" :border="true">
             <!-- 显示前10个项目 -->
@@ -26,7 +26,7 @@
           </view>
         </template>
       </view>
-      <view class="in-list" v-show="formData.type == 10">
+      <view class="in-list" v-show="type === 1">
 
         <template v-if="in_list.length > 0">
           <u-grid :col="5" :border="true">
@@ -132,17 +132,10 @@
 import dayjs from '@/dayjs.min.js'
 import constConfig from '@/const.js'
 import uploadFile from "@/components/UploadFile.vue";
-import budget from "@/common/budget";
 
 export default {
   components: {
     uploadFile
-  },
-  props: {
-    value: {
-      type: [String, Number],
-      default: 0
-    }
   },
   data() {
     return {
@@ -205,33 +198,28 @@ export default {
       limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
     }
   },
-  watch: {
-    value(id) {
-      if (id !== null) {
-        this.getCashflowInfo(id)
-      }
-      console.log(id)
-    }
-  },
-
   mounted() {
-    uni.$on('onPageShow', this.updateComponent);
+
   },
-  created() {
-    if (this.value === 0) {
-      this.get_budget()
+  onLoad(option) {
+    if (option.id) {
+      this.formData.id = option.id
     }
-    this.getCategory()
+    if (option.type) {
+      this.formData.type = option.type
+      this.type = option.type == 20 ? 0 : 1
+    }
+    //this.get_ready()
     this.formData.date = dayjs().format('YYYY-MM-DD')
   },
-  beforeDestroy() {
-    uni.$off('onPageShow', this.updateComponent); // 组件销毁前移除监听
+  onShow() {
+    this.get_ready()
   },
+  created() {
+
+  },
+
   methods: {
-    updateComponent() {
-      this.get_budget()
-     // this.$forceUpdate(); // 强制子组件更新
-    },
     unsetBudget() {
       this.formData.budget_id = 0
       this.formData.budget_title = ''
@@ -244,6 +232,21 @@ export default {
       this.formData.amount_type = item
     },
     confirmAmountType(item) {
+      if (item[0].value === null) {
+        this.formData.amount_type = ''
+        uni.showModal({
+          title: '',
+          content: '确定跳到管理收支页面吗？',
+          success: (res) => {
+            if (res.confirm) {
+              uni.navigateTo({
+                url: '/pages/packageA/amount_type/index',
+              })
+            }
+          }
+        })
+        return
+      }
       console.log('选中方式', item[0].label)
       this.formData.amount_type = item[0].label
     },
@@ -258,12 +261,6 @@ export default {
             if (res.confirm) {
               uni.navigateTo({
                 url: '/pages/budget/budget',
-                success: (res) => {
-                  console.log('成功', res)
-                },
-                fail: (res) => {
-                  console.log('失败', res)
-                }
               })
             }
           }
@@ -298,7 +295,7 @@ export default {
       this.type = index
       this.formData.type = index === 0 ? 20 : 10;
       this.formData.category_id = null
-      this.get_budget()
+      this.get_ready()
     },
     toggleShowAll(type) {
       let status = type === 10 ? this.showInAll : this.showOutAll
@@ -328,8 +325,15 @@ export default {
 
 
     },
-    getCategory() {
-      this.$u.api.getCategory(0).then(res => {
+    get_ready() {
+      this.in_list = []
+      this.out_list = []
+
+
+      this.$u.api.cashflowPre({
+        type: this.type,
+        id: this.formData.id
+      }).then(res => {
         //type10=收入，type20=支出
         if (res.code == 0) {
           let category = res.data.category
@@ -346,9 +350,34 @@ export default {
             this.showOutList = this.out_list.slice(0, 10);
             this.showInList = this.in_list.slice(0, 10);
           }
-          if (res.data.accountTypes) {
+          this.amount_type_list = []
+          if (res.data.accountTypes.length > 0) {
             this.amount_type_list = res.data.accountTypes
+            this.amount_type_list = this.amount_type_list.concat([{
+              value: null,
+              label: '去管理收支方式',
+            }])
           }
+          this.budget_list = []
+          if (res.data.budget_list.length > 0) {
+            this.budget_list = res.data.budget_list
+            this.budget_list = this.budget_list.concat([{
+              value: 0,
+              title: '管理预算',
+              amount: 0,
+              type: this.type === 0 ? 20 : 10,
+              label: '管理预算？',
+            }])
+          }
+
+          if (res.data.info) {
+            this.formData = res.data.info
+            this.formData.type = this.type === 0 ? 20 : 10
+            if (this.formData.image) {
+              this.initialFiles = [{url: this.formData.image}]
+            }
+          }
+
           if (!this.formData.id && res.data.default_amount_type) {
             this.formData.amount_type = res.data.default_amount_type
           }
@@ -359,31 +388,13 @@ export default {
       })
 
     },
-    get_budget() {
-      budget.budget_list({
-        data_type: 'option',
-        type: this.type === 0 ? 20 : 10
-      }).then(res => {
-        if (res.code == 0) {
-          this.budget_list = res.data.list
-          this.budget_list = this.budget_list.concat([{
-            value: 0,
-            title: '管理预算',
-            amount: 0,
-            type: this.type === 0 ? 20 : 10,
-            label: '管理预算？',
-          }])
-        }
-      })
-    },
-
-
     setCurCategory(item) {
       console.log(item, 'click')
       if (item.is_set) {
         return this.openSet()
       }
       this.formData.category_id = item.id
+      this.formData.type = item.type
     },
     openSet() {
       console.log('打开设置页面')
@@ -435,23 +446,61 @@ export default {
         return
       }
 
+      uni.showModal({
+        title: '',
+        content: '确定保存吗？',
+        success: (res) => {
+          if (res.confirm) {
+            if (this.formData.id) {
+              this.$u.api.updateCashflow(this.formData).then(res => {
+                if (res.code == 0) {
+                  uni.navigateBack()
+                } else {
+                  this.$u.toast(res.msg);
+                }
+              })
+            } else {
+              this.$u.api.createCashFlow(this.formData).then(res => {
+                console.log(res)
+                if (res.code == 0) {
+                  uni.showModal({
+                    title: '',
+                    content: '添加成功,是否继续添加？',
+                    success: (res) => {
+                      if (res.confirm) {
+                        this.formData = {
+                          id: 0,
+                          budge_id: 0,
+                          type: this.formData.type,
+                          amount: '',
+                          category_id: 0,
+                          budget_title: '',
+                          date: this.formData.date,
+                          remark: '',
+                          amount_type: '',
+                          image: null
+                        }
+                      } else {
+                        uni.switchTab({
+                          url: '/pages/index/index'
+                        })
+                      }
+                    }
+                  })
 
-      this.$emit('submit', this.formData)
-    },
-
-    getCashflowInfo(id) {
-      this.$u.api.getCashflowInfo(id).then(res => {
-        let data = res.data
-        this.formData = data
-        this.type = data.type === 20 ? 0 : 1
-        this.$nextTick(() => {
-          this.get_budget()
-        })
-        if (data.image) {
-          this.initialFiles = [{url: data.image}]
+                } else {
+                  this.$u.toast(res.msg);
+                }
+              })
+            }
+          } else if (res.cancel) {
+            //this.$u.toast('已取消');
+          }
         }
       })
     },
+
+
   }
 
 }

@@ -53,24 +53,6 @@
       }
     },
     {
-      "path": "pages/bill/add",
-      "style": {
-        "navigationBarTitleText": "记账",
-        "app-plus": {
-          "bounce": "none"
-        }
-      }
-    },
-    {
-      "path": "pages/index/edit",
-      "style": {
-        "navigationBarTitleText": "编辑账单",
-        "app-plus": {
-          "bounce": "none"
-        }
-      }
-    },
-    {
       "path": "pages/statistics/index",
       "style": {
         "navigationBarTitleText": "统计",
@@ -297,6 +279,13 @@
         "navigationBarTitleText": "找回密码",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/bill/form",
+      "style": {
+        "navigationBarTitleText": "操作账单",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "subPackages": [
@@ -329,6 +318,20 @@
           "style": {
             "navigationBarTitleText": "详情",
             "enablePullDownRefresh": true
+          }
+        },
+        {
+          "path": "amount_type/index",
+          "style": {
+            "navigationBarTitleText": "收支方式管理",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "amount_type/form",
+          "style": {
+            "navigationBarTitleText": "操作",
+            "enablePullDownRefresh": false
           }
         }
       ]

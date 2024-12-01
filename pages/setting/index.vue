@@ -6,6 +6,7 @@
 					<u-cell-item @click="goto('/pages/setting/safe/index',true)" title="安全中心" icon="lock"></u-cell-item>
           <u-cell-item @click="goto('/pages/setting/safe/change_account',true)" title="切换账号" icon="man-add">
 					</u-cell-item>
+          <u-cell-item @click="goto('/pages/packageA/amount_type/index',true)" title="收支方式管理" icon="grid"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/feedback',true)" title="反馈&建议"
 						icon="volume"></u-cell-item>
 					<u-cell-item @click="goto('/pages/setting/xieyi',true)" title="协议相关" icon="order"></u-cell-item>
@@ -110,8 +111,8 @@
 				}
 				// #ifdef MP-WEIXIN
 						checkappupdate.wx_check_update()
-				// #endif	
-				
+				// #endif
+
 				// #ifdef APP-PLUS
 				checkappupdate.check({
 					title: "检测到有新版本！",

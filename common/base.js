@@ -23,6 +23,11 @@ const install = (Vue, vm) => {
             type
         });
     }
+
+    const cashflowPre = (data) => {
+        return vm.$u.get('cashflow-pre', data);
+    }
+
     const getCategoryInfo = (type) => {
         return vm.$u.get('category/info/' + type);
     }
@@ -222,6 +227,7 @@ const install = (Vue, vm) => {
         updateAccount,
         updatePwd,
         getCategory,
+        cashflowPre,
         createCashFlow,
         bill_list,
         getCashflowList,
