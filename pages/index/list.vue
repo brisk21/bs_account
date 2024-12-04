@@ -101,17 +101,9 @@ export default {
       ],
       type: [
         {label: '全部', value: 0,},
-        {label: '收入', value: 10,},
-        {label: '支出', value: 20,}
       ],
       amount_type: [
-        {label: '全部', value: '',},
-        {label: '支付宝', value: '支付宝',},
-        {label: '微信', value: '微信',},
-        {label: '银行卡', value: '银行卡',},
-        {label: '信用卡', value: '信用卡',},
-        {label: '现金', value: '现金',},
-        {label: '其他', value: '其他',}
+        {label: '全部', value: ''}
       ],
       time_type: [
         {label: '全部', value: '',},
@@ -216,7 +208,7 @@ export default {
     if (options.budget_id) {
       this.form.budget_id = options.budget_id
     }
-    this.get_budget()
+    this.get_search_config()
     this.getList()
   },
   created() {
@@ -227,6 +219,31 @@ export default {
     this.scrollTop = e.scrollTop;
   },
   methods: {
+    get_search_config() {
+      let that = this
+      this.$u.api.bill_list_search().then(res => {
+        console.log(res)
+        let data = res.data
+        if (res.code == 0) {
+          if (data.budget_list.length > 0) {
+            that.budget_list = that.budget_list.concat(data.budget_list)
+          }
+          if (data.amount_type.length>0) {
+            that.amount_type = that.amount_type.concat(data.amount_type)
+          }
+          if (data.type.length > 0) {
+            that.type = data.type
+          }
+          if (data.time_type.length > 0){
+            that.time_type = data.time_type
+          }
+          if (data.sort_list.length > 0){
+            that.sort_list = data.sort_list
+          }
+        }
+
+      })
+    },
 
     cancelTime() {
       this.form.year = ''
@@ -301,16 +318,7 @@ export default {
       }
 
     },
-    get_budget() {
-      budget.budget_list({
-        data_type: 'option',
-        is_all: 1
-      }).then(res => {
-        if (res.code == 0 && res.data.list.length > 0) {
-          this.budget_list = this.budget_list.concat(res.data.list)
-        }
-      })
-    },
+
     toSearch() {
       this.getList(true)
     },

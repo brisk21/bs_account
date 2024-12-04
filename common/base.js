@@ -47,6 +47,10 @@ const install = (Vue, vm) => {
         return vm.$u.get('cashflow-list-all', data);
     }
 
+    const bill_list_search = (data) => {
+        return vm.$u.get('cashflow-list-search', data);
+    }
+
     const getCashflowInfo = (id) => {
         return vm.$u.get(`cashflow/${id}`);
     }
@@ -230,6 +234,7 @@ const install = (Vue, vm) => {
         cashflowPre,
         createCashFlow,
         bill_list,
+        bill_list_search,
         getCashflowList,
         getCashflowInfo,
         updateProfile,
