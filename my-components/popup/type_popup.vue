@@ -67,7 +67,7 @@ export default {
         }
       })
     },
-    async togglePopup() {
+     togglePopup() {
       if (!this.showPopup) {
         this.showPopup = true;
       } else {

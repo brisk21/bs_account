@@ -2,8 +2,8 @@
     "name" : "极简随手记",
     "appid" : "__UNI__3CF9076",
     "description" : "记账，不只是记录，更是一种生活态度",
-    "versionName" : "1.0.37",
-    "versionCode" : 137,
+    "versionName" : "1.0.38",
+    "versionCode" : 138,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -109,5 +109,12 @@
     },
     "vueVersion" : "2",
     "locale" : "zh-Hans",
-    "fallbackLocale" : "zh-Hans"
+    "fallbackLocale" : "zh-Hans",
+    "h5" : {
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        }
+    }
 }

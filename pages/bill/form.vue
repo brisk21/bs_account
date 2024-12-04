@@ -13,7 +13,7 @@
             <u-grid-item
                 v-for="(item, index) in showOutList"
                 :key="item.id"
-                :bg-color="item.id && formData.category_id == item.id ? '#71d5a1' : ''"
+                :bg-color="item.id && formData.category_id === item.id ? '#71d5a1' : ''"
                 @click="setCurCategory(item)"
             >
               <u-icon :name="item.icon" :size="46"></u-icon>
@@ -34,7 +34,7 @@
             <u-grid-item
                 v-for="(item, index) in showInList"
                 :key="item.id"
-                :bg-color="item.id && formData.category_id == item.id ? '#71d5a1' : ''"
+                :bg-color="item.id && formData.category_id === item.id ? '#19a6de' : ''"
                 @click="setCurCategory(item)"
             >
               <u-icon :name="item.icon" :size="46"></u-icon>
@@ -60,13 +60,13 @@
       <view class="line">
         <text class="popup_type">{{ formData.type === 10 ? '收入' : '支出' }}方式：</text>
         <u-tag
-            v-if="formData.amount_type"
+            v-show="formData.amount_type"
             :closeable="true"
             :text="formData.amount_type"
             @close="unsetAmountType()"
-            @click="unsetAmountType"
+            @click="openPopup('amount_type')"
         ></u-tag>
-        <u-button v-else @click="openPopup('amount_type')" size="mini">选择方式</u-button>
+        <u-button v-show="!formData.amount_type" @click="openPopup('amount_type')" size="mini">选择方式</u-button>
       </view>
 
       <view class="line">
@@ -86,12 +86,13 @@
       <view class="line">
         <text class="popup_type">关联预算：</text>
         <u-tag :closeable="true"
-               v-if="formData.budget_id>0"
+               v-show="!!formData.budget_id"
                :text="formData.budget_title"
+               @click="openPopup('budget_list')"
                @close="unsetBudget()"
         ></u-tag>
 
-        <u-button v-else @click="openPopup('budget_list')" size="mini">选择预算</u-button>
+        <u-button v-show="!formData.budget_id" @click="openPopup('budget_list')" size="mini">选择预算</u-button>
       </view>
 
       <u-form-item class="form-item" label="备注：" label-width="120">
@@ -183,11 +184,7 @@ export default {
 
       img: '',
 
-      iconclear: {
-        color: "red",
-        size: '20',
-        type: 'clear'
-      },
+
       budget_list: [],
 
       initialFiles: [],
@@ -237,19 +234,25 @@ export default {
       this.$refs.type_popup.togglePopup();
     },
     handleTypeSelected(item) {
-      //console.log('父组件接收到了:', item);
-      if (this.popup_current === 'amount_type') {
-        this.formData.amount_type = item.value
-      } else {
-        //this.formData.budge_id = item.id
-        this.formData.budget_id = item.value
-        this.formData.budget_title = item.label
+      console.log(this.popup_current + '父组件接收到了:', item);
+      try {
+        if (this.popup_current === 'amount_type') {
+          this.formData.amount_type = item.value
+        } else {
+          this.formData.budget_id = item.value
+          this.formData.budget_title = item.label || 'xxx'
+          console.log(this.formData.budget_title)
+        }
+      } catch (e) {
+        console.log('err', e)
       }
+
 
     },
     unsetBudget() {
       this.formData.budget_id = 0
       this.formData.budget_title = ''
+      console.log('111111')
     },
     unsetAmountType() {
       this.formData.amount_type = ''
@@ -313,7 +316,10 @@ export default {
 
     },
     get_ready() {
-      this.$refs.type_popup.closePopup();
+
+      // if (this.$refs.type_popup && this.$refs.type_popup.showPopup) {
+      //this.$refs.type_popup.closePopup();
+      // }
       this.showInAll = false
       this.showOutAll = false
       this.show_out_txt = '展开全部'
