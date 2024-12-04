@@ -69,12 +69,7 @@ export default {
     },
     async togglePopup() {
       if (!this.showPopup) {
-        try {
-          this.showPopup = true;
-        } catch (error) {
-          console.error('数据加载失败:', error);
-          this.showPopup = false; // 如果加载失败则关闭弹出层
-        }
+        this.showPopup = true;
       } else {
         this.showPopup = true;
       }
