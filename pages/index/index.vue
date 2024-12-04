@@ -191,7 +191,10 @@ export default {
   onLoad(options) {
     console.log('onLoad')
     this.init_data()
-    this.getNotice()
+    if (this.hasLogin){
+      this.getNotice()
+    }
+
   },
   created() {
     console.log('created')

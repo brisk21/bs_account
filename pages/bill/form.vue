@@ -66,7 +66,7 @@
             @close="unsetAmountType()"
             @click="unsetAmountType"
         ></u-tag>
-        <u-button v-else @click="show_amount_type_list = true" size="mini">选择方式</u-button>
+        <u-button v-else @click="openPopup('amount_type')" size="mini">选择方式</u-button>
       </view>
 
       <view class="line">
@@ -120,11 +120,15 @@
       </view>
 
     </view>
-
+    <type_popup
+        ref="type_popup"
+        @selected="handleTypeSelected"
+        :filtered-list="type_list"
+        :path="type_manager_path"
+    ></type_popup>
     <u-picker mode="time" v-model="picker_show" :params="pickerOption" :default-time="formData.date"
               @confirm="pickerConfirm"></u-picker>
     <u-select v-model="show_budget_list" :list="budget_list" @confirm="confirmBudget"></u-select>
-    <u-select v-model="show_amount_type_list" :list="amount_type_list" @confirm="confirmAmountType"></u-select>
   </view>
 </template>
 
@@ -132,13 +136,15 @@
 import dayjs from '@/dayjs.min.js'
 import constConfig from '@/const.js'
 import uploadFile from "@/components/UploadFile.vue";
-
+import type_popup from "@/my-components/popup/type_popup.vue";
 export default {
   components: {
-    uploadFile
+    uploadFile,type_popup
   },
   data() {
     return {
+      type_manager_path:'',
+      type_list:[],
       showOutList: [],
       showInList: [],
       showInAll: false,
@@ -147,8 +153,6 @@ export default {
       show_in_txt: '展开全部',
       type: 0,
       show_budget_list: false,
-      show_amount_type_list: false,
-      //资金途径（来源、去向）：支付宝、微信、银行卡、现金、其他
       amount_type_list: [],
       list: ['支出', '收入'],
       formData: {
@@ -220,36 +224,30 @@ export default {
   },
 
   methods: {
+    openPopup(type) {
+      if (type==='amount_type'){
+        this.type_list = this.amount_type_list
+        this.type_manager_path = '/pages/packageA/amount_type/index'
+      }
+      this.$refs.type_popup.togglePopup();
+    },
+    handleTypeSelected(item) {
+      console.log('父组件接收到了:', item);
+      this.formData.amount_type = item.value
+    },
     unsetBudget() {
       this.formData.budget_id = 0
       this.formData.budget_title = ''
     },
     unsetAmountType() {
       this.formData.amount_type = ''
+      this.openPopup('amount_type')
     },
     setAmountType(item) {
       console.log('t', item)
       this.formData.amount_type = item
     },
-    confirmAmountType(item) {
-      if (item[0].value === null) {
-        this.formData.amount_type = ''
-        uni.showModal({
-          title: '',
-          content: '确定跳到管理收支页面吗？',
-          success: (res) => {
-            if (res.confirm) {
-              uni.navigateTo({
-                url: '/pages/packageA/amount_type/index',
-              })
-            }
-          }
-        })
-        return
-      }
-      console.log('选中方式', item[0].label)
-      this.formData.amount_type = item[0].label
-    },
+
     confirmBudget(item) {
       if (item[0].value === 0) {
         this.formData.budget_id = 0
@@ -335,7 +333,7 @@ export default {
         id: this.formData.id
       }).then(res => {
         //type10=收入，type20=支出
-        if (res.code == 0) {
+        if (res.code === 0) {
           let category = res.data.category
           if (category.length > 0) {
             for (let i = 0; i < category.length; i++) {
@@ -353,10 +351,6 @@ export default {
           this.amount_type_list = []
           if (res.data.accountTypes.length > 0) {
             this.amount_type_list = res.data.accountTypes
-            this.amount_type_list = this.amount_type_list.concat([{
-              value: null,
-              label: '去管理收支方式',
-            }])
           }
           this.budget_list = []
           if (res.data.budget_list.length > 0) {
