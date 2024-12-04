@@ -91,7 +91,7 @@
                @close="unsetBudget()"
         ></u-tag>
 
-        <u-button @click="show_budget_list = true" size="mini"
+        <u-button @click="openPopup('budget_list')" size="mini"
                   v-if="budget_list.length>1 && !formData.budget_title">选择预算
         </u-button>
         <u-button @click="goto('/pages/budget/detail',true)" size="mini"
@@ -123,12 +123,13 @@
     <type_popup
         ref="type_popup"
         @selected="handleTypeSelected"
-        :filtered-list="type_list"
-        :path="type_manager_path"
+        :filtered-list="popup_data_list"
+        :path="popup_manager_path"
+        :show_type="popup_show_type"
+
     ></type_popup>
     <u-picker mode="time" v-model="picker_show" :params="pickerOption" :default-time="formData.date"
               @confirm="pickerConfirm"></u-picker>
-    <u-select v-model="show_budget_list" :list="budget_list" @confirm="confirmBudget"></u-select>
   </view>
 </template>
 
@@ -137,14 +138,17 @@ import dayjs from '@/dayjs.min.js'
 import constConfig from '@/const.js'
 import uploadFile from "@/components/UploadFile.vue";
 import type_popup from "@/my-components/popup/type_popup.vue";
+
 export default {
   components: {
-    uploadFile,type_popup
+    uploadFile, type_popup
   },
   data() {
     return {
-      type_manager_path:'',
-      type_list:[],
+      popup_manager_path: '',
+      popup_data_list: [],
+      popup_show_type: 'grid',
+      popup_current: '',
       showOutList: [],
       showInList: [],
       showInAll: false,
@@ -152,7 +156,6 @@ export default {
       show_out_txt: '展开全部',
       show_in_txt: '展开全部',
       type: 0,
-      show_budget_list: false,
       amount_type_list: [],
       list: ['支出', '收入'],
       formData: {
@@ -225,15 +228,29 @@ export default {
 
   methods: {
     openPopup(type) {
-      if (type==='amount_type'){
-        this.type_list = this.amount_type_list
-        this.type_manager_path = '/pages/packageA/amount_type/index'
+      this.popup_current = type
+      if (type === 'amount_type') {
+        this.popup_manager_path = '/pages/packageA/amount_type/index'
+        this.popup_data_list = this.amount_type_list
+        this.popup_show_type = 'list'
+      } else if (type === 'budget_list') {
+        this.popup_manager_path = '/pages/budget/budget'
+        this.popup_data_list = this.budget_list
+        this.popup_show_type = 'list'
       }
+
       this.$refs.type_popup.togglePopup();
     },
     handleTypeSelected(item) {
-      console.log('父组件接收到了:', item);
-      this.formData.amount_type = item.value
+      //console.log('父组件接收到了:', item);
+      if (this.popup_current === 'amount_type') {
+        this.formData.amount_type = item.value
+      } else {
+        //this.formData.budge_id = item.id
+        this.formData.budget_id = item.value
+        this.formData.budget_title = item.label
+      }
+
     },
     unsetBudget() {
       this.formData.budget_id = 0
@@ -247,29 +264,6 @@ export default {
       console.log('t', item)
       this.formData.amount_type = item
     },
-
-    confirmBudget(item) {
-      if (item[0].value === 0) {
-        this.formData.budget_id = 0
-        this.formData.budget_title = ''
-        uni.showModal({
-          title: '',
-          content: '确定跳到管理预算页面吗？',
-          success: (res) => {
-            if (res.confirm) {
-              uni.navigateTo({
-                url: '/pages/budget/budget',
-              })
-            }
-          }
-        })
-        return
-      }
-      console.log('选中预算', item[0].label)
-      this.formData.budget_id = item[0].value
-      this.formData.budget_title = item[0].label
-    },
-
     handleFileUploadSuccess({url, index, fileList, res}) {
       console.log('文件上传成功:', url);
       if (res.code == 0) {
@@ -324,10 +318,12 @@ export default {
 
     },
     get_ready() {
+      this.showInAll = false
+      this.showOutAll = false
+      this.show_out_txt = '展开全部'
+      this.show_in_txt = '展开全部'
       this.in_list = []
       this.out_list = []
-
-
       this.$u.api.cashflowPre({
         type: this.type,
         id: this.formData.id
@@ -355,13 +351,6 @@ export default {
           this.budget_list = []
           if (res.data.budget_list.length > 0) {
             this.budget_list = res.data.budget_list
-            this.budget_list = this.budget_list.concat([{
-              value: 0,
-              title: '管理预算',
-              amount: 0,
-              type: this.type === 0 ? 20 : 10,
-              label: '管理预算？',
-            }])
           }
 
           if (res.data.info) {
@@ -383,7 +372,7 @@ export default {
 
     },
     setCurCategory(item) {
-      console.log(item, 'click')
+      //console.log(item, 'click')
       if (item.is_set) {
         return this.openSet()
       }
@@ -391,7 +380,7 @@ export default {
       this.formData.type = item.type
     },
     openSet() {
-      console.log('打开设置页面')
+      //console.log('打开设置页面')
       uni.navigateTo({
         url: "/pages/setting/category"
       })
