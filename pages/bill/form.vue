@@ -91,12 +91,12 @@
                @close="unsetBudget()"
         ></u-tag>
 
-        <u-button @click="openPopup('budget_list')" size="mini"
-                  v-if="budget_list.length>1 && !formData.budget_title">选择预算
+        <u-button v-else @click="openPopup('budget_list')" size="mini"
+                  >选择预算
         </u-button>
-        <u-button @click="goto('/pages/budget/detail',true)" size="mini"
-                  v-if="budget_list.length<=1">添加预算
-        </u-button>
+<!--        <u-button @click="goto('/pages/budget/detail',true)" size="mini"
+                  v-if="budget_list.length<=0">添加预算
+        </u-button>-->
       </view>
 
       <u-form-item class="form-item" label="备注：" label-width="120">

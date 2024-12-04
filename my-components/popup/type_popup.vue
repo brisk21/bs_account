@@ -3,14 +3,28 @@
     <u-popup v-model="showPopup" mode="center" :closeable="true" @close="closePopup" @maskClick="closePopup">
       <view class="popup-content">
         <view class="result-list" ref="resultList">
-          <u-grid :col="2" v-if="show_type === 'grid'">
-            <u-grid-item v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)">
-              <view class="grid-text">{{ item.label }}</view>
-            </u-grid-item>
-          </u-grid>
+          <view v-if="show_type === 'grid'">
+            <view v-if="filteredList.length>0">
+              <u-grid :col="2">
+                <u-grid-item v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)">
+                  <view class="grid-text">{{ item.label }}</view>
+                </u-grid-item>
+              </u-grid>
+            </view>
+            <view v-else>
+              <view class="no-result" >
+                <u-empty text="暂无数据" mode="list"></u-empty>
+              </view>
+            </view>
+          </view>
           <view v-else class="list-view">
-            <view v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)" class="result-item">
-              <view class="list-text">{{ item.label }}</view>
+            <view v-if="filteredList.length > 0">
+              <view v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)" class="result-item">
+                <view class="list-text">{{ item.label }}</view>
+              </view>
+            </view>
+            <view v-else class="no-result">
+              <u-empty text="暂无数据" mode="list"></u-empty>
             </view>
           </view>
         </view>
@@ -57,7 +71,6 @@ export default {
       if (!this.showPopup) {
         try {
           this.showPopup = true;
-          this.disableBodyScroll(); // 禁止背景滚动
         } catch (error) {
           console.error('数据加载失败:', error);
           this.showPopup = false; // 如果加载失败则关闭弹出层
@@ -73,15 +86,8 @@ export default {
 
     closePopup() {
       this.showPopup = false;
-      //this.cleanupData(); // 关闭时清理数据
-      this.enableBodyScroll(); // 恢复背景滚动
     },
-    disableBodyScroll() {
-      document.body.classList.add('no-scroll');
-    },
-    enableBodyScroll() {
-      document.body.classList.remove('no-scroll');
-    },
+
     selectItem(item) {
       // 用户选择了某个项目后的操作
       //console.log('选择了:', item);
@@ -99,7 +105,7 @@ export default {
   padding: 20px;
   border-radius: 10px;
   min-width: 300px;
-  min-height: 200px;
+  min-height: 150px;
   max-width: 500px; /* 最大宽度限制 */
   overflow: hidden; /* 确保内部元素不会溢出 */
 }
