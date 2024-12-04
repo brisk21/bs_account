@@ -91,12 +91,7 @@
                @close="unsetBudget()"
         ></u-tag>
 
-        <u-button v-else @click="openPopup('budget_list')" size="mini"
-                  >选择预算
-        </u-button>
-<!--        <u-button @click="goto('/pages/budget/detail',true)" size="mini"
-                  v-if="budget_list.length<=0">添加预算
-        </u-button>-->
+        <u-button v-else @click="openPopup('budget_list')" size="mini">选择预算</u-button>
       </view>
 
       <u-form-item class="form-item" label="备注：" label-width="120">
@@ -318,6 +313,7 @@ export default {
 
     },
     get_ready() {
+      this.$refs.type_popup.closePopup();
       this.showInAll = false
       this.showOutAll = false
       this.show_out_txt = '展开全部'

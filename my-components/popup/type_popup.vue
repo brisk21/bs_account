@@ -79,11 +79,6 @@ export default {
         this.showPopup = true;
       }
     },
-
-    cleanupData() {
-      this.filteredList = []; // 清空过滤后的列表
-    },
-
     closePopup() {
       this.showPopup = false;
     },
