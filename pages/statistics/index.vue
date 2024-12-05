@@ -101,7 +101,7 @@ export default {
         year: '',
         time_type: '',
         amount_type: '',
-        force: false,
+        force: 0,
       },
       bg: {
         backgroundColor: '#42b479',
@@ -286,7 +286,7 @@ export default {
       }).finally(() => {
         uni.stopPullDownRefresh()
         setTimeout(function () {
-          that.form.force = false
+          that.form.force = 0
           that.is_fresh = false;
           that.is_pulling = false
           uni.hideLoading()

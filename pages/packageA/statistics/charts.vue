@@ -11,7 +11,7 @@
       </u-subsection>
       <view class="setting">
         <view class="setting-item" @click="gotoPath('/pages/packageA/statistics/set',true)">
-          <u-icon name="grid" size="50"></u-icon>
+          <u-icon name="setting" size="50"></u-icon>
         </view>
       </view>
 
