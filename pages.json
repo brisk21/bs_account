@@ -11,8 +11,6 @@
         "app-plus": {
           "bounce": "none"
         }
-        //"navigationStyle": "custom" ,// 隐藏系统导航栏
-        // "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
       }
     },
     {
@@ -56,6 +54,7 @@
       "path": "pages/statistics/index",
       "style": {
         "navigationBarTitleText": "统计",
+        "enablePullDownRefresh": true,
         "app-plus": {
           "bounce": "none"
         }
@@ -239,13 +238,6 @@
       }
     },
     {
-      "path": "pages/statistics/set",
-      "style": {
-        "navigationBarTitleText": "统计配置",
-        "enablePullDownRefresh": true
-      }
-    },
-    {
       "path": "pages/setting/help",
       "style": {
         "navigationBarTitleText": "帮助中心",
@@ -331,6 +323,20 @@
           "path": "amount_type/form",
           "style": {
             "navigationBarTitleText": "操作",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "statistics/charts",
+          "style": {
+            "navigationBarTitleText": "图表统计",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "statistics/set",
+          "style": {
+            "navigationBarTitleText": "图表配置",
             "enablePullDownRefresh": false
           }
         }

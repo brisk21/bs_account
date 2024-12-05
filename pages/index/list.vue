@@ -86,7 +86,6 @@
 </template>
 
 <script>
-import budget from "@/common/budget";
 
 export default {
   components: {},

@@ -11,8 +11,8 @@ Vue.use(uView);
 //let mpShare = require('uview-ui/libs/mixin/mpShare.js');
 //Vue.mixin(mpShare);
 // 判断是否登录
-let hasLogin = require('@/mixins/hasLogin.js');
-Vue.mixin(hasLogin);
+let common = require('@/mixins/common.js');
+Vue.mixin(common);
 
 Vue.config.productionTip = false
 Vue.prototype.$store = store

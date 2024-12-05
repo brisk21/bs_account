@@ -114,10 +114,6 @@ const install = (Vue, vm) => {
         return vm.$u.post('category', params);
     }
 
-    // 按类型统计饼图
-    const getStatisticData = (params) => {
-        return vm.$u.get('statistic/type', params);
-    }
 
     //检查更新
     const checkAppVersion = (params) => {
@@ -201,14 +197,7 @@ const install = (Vue, vm) => {
         return vm.$u.get('update-log', params);
     }
 
-    //统计设置
-    const statistic_get = (params) => {
-        return vm.$u.get('statistic/setting', params);
-    }
 
-    const statistic_set = (params) => {
-        return vm.$u.put('statistic/setting', params);
-    }
 
     //注销
     const cancelAccount = (params) => {
@@ -251,7 +240,6 @@ const install = (Vue, vm) => {
         delCategory,
         updateCategory,
         icon_list,
-        getStatisticData,
         getCategoryInfo,
         checkAppVersion,
         feedback,
@@ -271,8 +259,6 @@ const install = (Vue, vm) => {
         import_data,
         import_tpl,
         updateLog,
-        statistic_get,
-        statistic_set,
         cancelAccount,
         regretCancelAccount,
         getNotice

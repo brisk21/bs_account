@@ -17,6 +17,8 @@
 </template>
 
 <script>
+
+import api from "@/common/statistics";
 export default {
   data() {
     return {
@@ -45,7 +47,7 @@ export default {
         })
         return;
       }
-      this.$u.api.statistic_get().then(res => {
+      api.statistic_get().then(res => {
         if (res.code == 0) {
           this.list = res.data.list
         }
@@ -54,7 +56,7 @@ export default {
 
     submit() {
       console.log(this.list)
-      this.$u.api.statistic_set({list:this.list}).then(res => {
+      api.statistic_set({list:this.list}).then(res => {
         this.$u.toast(res.msg);
       })
     }
@@ -82,3 +84,4 @@ export default {
 }
 
 </style>
+
