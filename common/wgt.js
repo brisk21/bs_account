@@ -35,6 +35,10 @@ const start = (data) => {
 						uni.setStorageSync('app_current_wgt_versions',
 						app_current_wgt_version); // 设置一个缓存
 						console.log('更新成功，下次重启生效', uni.getStorageSync('app_current_wgt_versions'));
+						uni.showToast({
+							title: '资源更新成功，下次重启生效',
+							icon: 'none'
+						})
 					}, function(e) {
 						console.log('安装升级包失败:' + JSON.stringify(e));
 						plus.downloader.clear();

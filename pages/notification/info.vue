@@ -19,7 +19,7 @@
 
 <script>
 import mpHtml from 'mp-html/dist/uni-app/components/mp-html/mp-html'
-
+import api from "@/common/msg";
 export default {
   components: {
     mpHtml
@@ -52,7 +52,7 @@ export default {
       }
     },
     getData() {
-      this.$u.api.getNotificationInfo(this.id).then(res => {
+      api.get_detail(this.id).then(res => {
         if (res.code == 1) {
           this.$u.toast(res.msg);
           return

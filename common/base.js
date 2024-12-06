@@ -83,14 +83,6 @@ const install = (Vue, vm) => {
         return vm.$u.post('register', encrypt(data));
     }
 
-    const getNotificationList = (params) => {
-        return vm.$u.get('notifications', params);
-    }
-
-    const getNotificationInfo = (id) => {
-        return vm.$u.get(`notification/${id}`);
-    }
-
     const readNotification = (id) => {
         return vm.$u.put(`notification/${id}`);
     }
@@ -232,8 +224,6 @@ const install = (Vue, vm) => {
         getCaptcha,
         login,
         register,
-        getNotificationList,
-        getNotificationInfo,
         readNotification,
         delNotification,
         createCategory,
