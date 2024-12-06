@@ -1,7 +1,8 @@
 <template>
   <view class="container">
     <u-tabs :list="list" :is-scroll="false" :current="current" @change="change"></u-tabs>
-    <u-form v-if="current==0" :model="form" label-width="100rpx" label-position="top" :label-style="{fontWeight:'bold',color:'black'}">
+    <u-form v-show="current===0" :model="form" label-width="100rpx" label-position="top"
+            :label-style="{fontWeight:'bold',color:'black'}">
       <u-form-item label="反馈类型">
         <u-radio-group v-model="form.type">
           <u-radio v-for="(item, index) in radioList" :key="index" :name="item.name" :disabled="item.disabled">
@@ -13,21 +14,16 @@
         <u-input v-model="form.content" type="textarea"/>
       </u-form-item>
       <u-form-item label="附件图片">
-        <u-upload
+        <upload-file
             ref="upload"
             :action="action"
-            :auto-upload="true"
-            :file-list="fileList"
-            :max-size="2 * 1024 * 1024"
-            :max-count="3"
-            :before-upload="beforeUpload"
-            :header="header"
-            :limit-type="['png', 'jpg', 'jpeg']"
-            :preview-full-image="true"
-            @on-error="handleError"
-            @on-success="uploadSuccess"
-            @on-remove="handleRemove"
-        ></u-upload>
+            :max-size="maxSize"
+            :max-count="maxCount"
+            :limit-type="limitType"
+            @success="handleFileUploadSuccess"
+            @remove="handleFileUploadRemove"
+            @error="handleError"
+        />
       </u-form-item>
       <u-form-item label="操作">
         <u-button type="primary" @click="submit">提交</u-button>
@@ -36,24 +32,25 @@
     </u-form>
 
 
-    <view class="history-list" v-else>
+    <view class="history-list" v-show="current!==0">
 
       <view v-if="historyList.length <= 0" class="empty">
-      <u-empty text="暂无数据" mode="message"></u-empty>
+        <u-empty text="暂无数据" mode="message"></u-empty>
       </view>
       <view v-else>
         <u-cell-group>
-          <u-cell-item icon="map" :title="item.title"  v-for="(item, index) in historyList" :key="index" @click="open(index,item)"
-                    :value="item.status_text"
+          <u-cell-item icon="map" :title="item.title" v-for="(item, index) in historyList" :key="index"
+                       @click="open(index,item)"
+                       :value="item.status_text"
           ></u-cell-item>
         </u-cell-group>
 
-        <u-popup v-model="show" mode="bottom" border-radius="15" length="60%" safe-area-inset-bottom closeable	>
+        <u-popup v-model="show" mode="bottom" border-radius="15" length="60%" safe-area-inset-bottom closeable>
           <view class="content">
             <u-parse :html="content" :selectable="true"></u-parse>
           </view>
         </u-popup>
-        </view>
+      </view>
 
 
     </view>
@@ -63,8 +60,12 @@
 
 <script>
 import constConfig from '@/const.js'
+import uploadFile from "@/components/UploadFile.vue";
 
 export default {
+  components: {
+    uploadFile
+  },
   data() {
     return {
       show: false,
@@ -80,9 +81,7 @@ export default {
         content: '',
         image: []
       },
-      historyList: [
-
-      ],
+      historyList: [],
 
       radioList: [
         {
@@ -100,10 +99,9 @@ export default {
       ],
 
       action: constConfig.baseUrl + '/upload/image',
-      header: {
-        'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || '')
-      },
-      fileList: []
+      maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
+      maxCount: 3, // 可以设置不同的数量限制
+      limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
     };
 
   },
@@ -111,7 +109,7 @@ export default {
     this.getFeedbackList()
   },
   methods: {
-    open(index,item){
+    open(index, item) {
       this.content = item.content
       this.show = true
     },
@@ -141,6 +139,9 @@ export default {
         return
       }
 
+      uni.showLoading({
+        title: '提交中...'
+      })
 
       this.$u.api.feedback(data).then(res => {
         if (res.code == 0) {
@@ -151,31 +152,35 @@ export default {
         } else {
           that.$u.toast(res.msg)
         }
+        uni.hideLoading()
+      }).catch(() => {
+        uni.hideLoading()
       })
     },
 
-
-    handleRemove(index, lists, name) {
-      this.$refs.upload.remove(index)
-      this.form.image.splice(index, 1)
+    handleError(data, index, lists, name) {
+      this.$u.toast('文件上传失败')
+      this.handleRemove(index, lists, name)
     },
-    uploadSuccess(res, index, lists, name) {
-      //console.log('uploadSuccess', lists);
+
+    handleFileUploadSuccess({url, index, fileList, res}) {
+      console.log('文件上传成功:', fileList);
       if (res.code == 0) {
-        //this.formData.image = res.data.full_url
         this.form.image.push(res.data.full_url)
-        console.log(this.fileList)
+        console.log(this.form.image)
       } else {
         this.$u.toast(res.msg)
         //移除文件
         this.$refs.upload.remove(index)
+        // this.$refs.upload.fileList = this.form.image
       }
     },
-    handleError(data, index, lists, name) {
-      console.log('handleError', index);
-      //移除文件
-      this.$refs.upload.remove(index)
-
+    handleFileUploadRemove({index, fileList}) {
+      // 更新状态或者做其他处理
+      console.log('文件已被移除:', index);
+      this.form.image.splice(index, 1)
+      //this.$refs.upload.fileList = this.form.image
+      return true
     },
     beforeUpload(index, list) {
       return true;
@@ -191,7 +196,8 @@ export default {
 .container {
 
   padding: 30rpx;
-  .content{
+
+  .content {
     min-height: 600rpx;
     padding: 80rpx 10px 10px;
   }
