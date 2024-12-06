@@ -137,8 +137,9 @@ export default {
 
 .to-manager {
   position: absolute;
-  right: 15px;
+  right: 5px;
   color: dodgerblue;
-  bottom: 22px;
+  bottom: 7px;
+  z-index: 10076;
 }
 </style>
