@@ -170,7 +170,7 @@ export default {
     get_search_config() {
       let that = this
       this.$u.api.bill_list_search({from: 'statistics'}).then(res => {
-        console.log(res)
+        //console.log(res)
         let data = res.data
         if (res.code == 0) {
           if (data.budget_list.length > 0) {

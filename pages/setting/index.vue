@@ -56,17 +56,6 @@
         beian_no:'桂ICP备16004757号-5A',
 				app_version: null,
 				show_version: false,
-				phone_height: "0",
-				scroll_view_height: "100",
-				bill_title: "默认账单",
-
-				select_bill_show: false,
-				default_bill_index: [0],
-				bill_list: [{
-					value: '0',
-					label: '默认账单',
-					extra: '0'
-				}],
 			}
 		},
 		computed: {

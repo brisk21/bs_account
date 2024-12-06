@@ -68,7 +68,6 @@
 
           <u-cell-item @click="gotoPath('/pages/extend/index',false)" title="扩展插件" icon="grid">
           </u-cell-item>
-
         </u-cell-group>
       </view>
       <view class="extend-list" v-if="plugins_list.length>0">
@@ -86,6 +85,7 @@
     <ad-custom v-if="userInfo && userInfo.position.user_center" unit-id="adunit-2ce0331ff2925c38" bindload="adLoad"
                binderror="adError" bindclose="adClose"></ad-custom>
     <!-- #endif -->
+	
 
 
   </view>
@@ -106,18 +106,6 @@ export default {
     return {
       show_tips: true,
       ad_show: false,
-      phone_height: "0",
-      scroll_view_height: "100",
-      bill_title: "默认账单",
-
-      select_bill_show: false,
-      default_bill_index: [0],
-      bill_list: [{
-        value: '0',
-        label: '默认账单',
-        extra: '0'
-      }]
-      ,
       plugins_list: []
     }
   },
@@ -140,39 +128,40 @@ export default {
     },
     wgt_check() {
       let info = uni.getSystemInfoSync();
-      console.log(info)
-      // #ifdef APP-PLUS
-      info.bsfrom = 'app';
-      // #endif
-      // #ifdef H5
-      info.bsfrom = 'h5';
-      // #endif
-      // #ifdef MP-WEIXIN
-      info.bsfrom = 'xcx';
-      // #endif
-      wgt.check({
-        platform: info.platform || '',
-        bsfrom: info.bsfrom || '',
-        version: info.version || '',
-        appVersion: info.appVersion || '',
-        appVersionCode: info.appVersionCode || '',
-        appWgtVersion: info.appWgtVersion || '',
-        uniRuntimeVersion: info.uniRuntimeVersion || '',
-        osVersion: info.osVersion || '',
-        system: info.system || '',
-        SDKVersion: info.SDKVersion || '',
-        language: info.language || '',
-      }).then(res => {
-        if (res.code == 0) {
-          console.log(res)
-          wgt.start(res.data)
-        }
+      plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {
+        //console.log(widgetInfo)
+        info.appVersion = widgetInfo.version
+        info.appVersionCode = widgetInfo.versionCode
+        info.app_current_wgt_version = uni.getStorageSync('app_current_wgt_versions') || []
+        console.log(info)
+        info.bsfrom = 'app';
+        wgt.check({
+          platform: info.platform || '',
+          bsfrom: info.bsfrom || '',
+          app_current_wgt_version: info.app_current_wgt_version,
+          appVersion: info.appVersion || '',
+          appVersionCode: info.appVersionCode || '',
+          appWgtVersion: info.appWgtVersion || '',
+          osVersion: info.osVersion || '',
+          system: info.system || '',
+        }).then(res => {
+          console.log('wgt-get', res)
+          if (res.code === 0 && res.data.info_list.length > 0) {
+            for (let i = 0; i < res.data.info_list.length; i++) {
+              wgt.start(res.data.info_list[i])
+            }
+          }
+        }).cath(err => {
+          console.log(err)
+        })
       })
     }
 
   },
   onLoad(options) {
+    // #ifdef APP-PLUS
     this.wgt_check()
+    // #endif
   },
   onShow() {
     if (this.hasLogin) {

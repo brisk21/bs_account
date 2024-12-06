@@ -206,7 +206,7 @@ export default {
     getNotice(){
       this.$u.api.getNotice().then((res)=>{
         if (res.code === 0){
-			console.log('notices',res)
+		//console.log('notices',res)
           this.notice_source_list = res.data.list
           this.notice_list = res.data.title_list
         }
