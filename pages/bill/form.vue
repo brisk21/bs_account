@@ -81,7 +81,7 @@
           </view>
         </view>
 
-        <u-button class="save_btn" type="success" size="medium" @click="submit()">保存</u-button>
+        <u-button class="save_btn" type="success" :disabled="disabled" size="medium" @click="submit()">保存</u-button>
       </view>
       <view class="line">
         <text class="popup_type">关联预算：</text>
@@ -105,7 +105,6 @@
         <text class="popup_type">附件图片：</text>
         <upload-file
             :action="action"
-            :header="header"
             :max-size="maxSize"
             :max-count="maxCount"
             :limit-type="limitType"
@@ -141,6 +140,7 @@ export default {
   },
   data() {
     return {
+      disabled: false,
       popup_manager_path: '',
       popup_data_list: [],
       popup_show_type: 'grid',
@@ -189,9 +189,7 @@ export default {
 
       initialFiles: [],
       action: constConfig.baseUrl + '/upload/image',
-      header: {
-        'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || ''),
-      },
+
       maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
       maxCount: 1, // 可以设置不同的数量限制
       limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
@@ -234,7 +232,7 @@ export default {
       this.$refs.type_popup.togglePopup();
     },
     handleTypeSelected(item) {
-      console.log(this.popup_current + '父组件接收到了:', item);
+      //console.log(this.popup_current + '父组件接收到了:', item);
       try {
         if (this.popup_current === 'amount_type') {
           this.formData.amount_type = item.value
@@ -252,11 +250,9 @@ export default {
     unsetBudget() {
       this.formData.budget_id = 0
       this.formData.budget_title = ''
-      console.log('111111')
     },
     unsetAmountType() {
       this.formData.amount_type = ''
-      this.openPopup('amount_type')
     },
     setAmountType(item) {
       console.log('t', item)
@@ -436,6 +432,10 @@ export default {
         content: '确定保存吗？',
         success: (res) => {
           if (res.confirm) {
+            this.disabled = true
+            uni.showLoading({
+              title: '保存中...'
+            })
             if (this.formData.id) {
               this.$u.api.updateCashflow(this.formData).then(res => {
                 if (res.code == 0) {
@@ -443,10 +443,14 @@ export default {
                 } else {
                   this.$u.toast(res.msg);
                 }
+                uni.hideLoading()
+                this.disabled = false
+              }).catch(()=>{
+                uni.hideLoading()
+                this.disabled = false
               })
             } else {
               this.$u.api.createCashFlow(this.formData).then(res => {
-                console.log(res)
                 if (res.code == 0) {
                   uni.showModal({
                     title: '',
@@ -476,6 +480,11 @@ export default {
                 } else {
                   this.$u.toast(res.msg);
                 }
+                uni.hideLoading()
+                this.disabled = false
+              }).catch(() => {
+                uni.hideLoading()
+                this.disabled = false
               })
             }
           } else if (res.cancel) {
