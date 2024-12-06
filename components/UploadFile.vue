@@ -30,7 +30,24 @@ export default {
     header: {
       type: Object,
       default() {
-        return {};
+        return {
+          'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || ''),
+          'platform': uni.getSystemInfoSync().platform || '',
+          'version': uni.getSystemInfoSync().version || '',
+          'appVersion': uni.getSystemInfoSync().appVersion || '',
+          'appVersionCode': uni.getSystemInfoSync().appVersionCode || '',
+          'uniRuntimeVersion': uni.getSystemInfoSync().uniRuntimeVersion || '',
+          'appWgtVersion': uni.getSystemInfoSync().appWgtVersion || '',
+          // #ifdef APP-PLUS
+          'bsfrom': 'app',
+          // #endif
+          // #ifdef H5
+          'bsfrom': 'h5',
+          // #endif
+          // #ifdef MP-WEIXIN
+          'bsfrom': 'xcx',
+          // #endif
+        };
       },
     },
     maxSize: {
