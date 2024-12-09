@@ -85,7 +85,7 @@
     <ad-custom v-if="userInfo && userInfo.position.user_center" unit-id="adunit-2ce0331ff2925c38" bindload="adLoad"
                binderror="adError" bindclose="adClose"></ad-custom>
     <!-- #endif -->
-	
+
 
 
   </view>
@@ -161,6 +161,9 @@ export default {
   onLoad(options) {
     // #ifdef APP-PLUS
     this.wgt_check()
+    // #endif
+    // #ifdef MP-WEIXIN
+    this.show_tips = false
     // #endif
   },
   onShow() {
