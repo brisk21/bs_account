@@ -48,7 +48,6 @@
               </u-td>
             </u-tr>
           </u-table>
-
         </view>
         <view class="tips">
           {{ readme }}
@@ -166,13 +165,12 @@ export default {
   },
   computed: {},
   methods: {
-
     get_search_config() {
       let that = this
       this.$u.api.bill_list_search({from: 'statistics'}).then(res => {
         //console.log(res)
         let data = res.data
-        if (res.code == 0) {
+        if (res.code === 0) {
           if (data.budget_list.length > 0) {
             that.budget_list = that.budget_list.concat(data.budget_list)
           }
@@ -341,17 +339,20 @@ export default {
         }
       }
 
-      .bs-red {
-        color: red !important;
+      .u-tr {
+        .bs-red {
+          color: red !important;
+        }
+
+        .bs-green {
+          color: #089c08 !important;
+        }
+
+        .bs-gray {
+          color: #999 !important;
+        }
       }
 
-      .bs-green {
-        color: #089c08 !important;
-      }
-
-      .bs-gray {
-        color: #999 !important;
-      }
     }
   }
 }

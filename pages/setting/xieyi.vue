@@ -4,11 +4,11 @@
 			<view class="menu-list">
 				<u-cell-group>
 
-					<u-cell-item title="协议阅读" icon="order">
+					<u-cell-item title="注册协议" icon="order">
 						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/register'"
 							:under-line="false">注册协议</u-link>
 					</u-cell-item>
-					<u-cell-item title="协议阅读" icon="order">
+					<u-cell-item title="隐私政策" icon="order">
 						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/privacy'"
 							:under-line="false">隐私政策</u-link>
 					</u-cell-item>

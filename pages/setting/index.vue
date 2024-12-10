@@ -3,20 +3,25 @@
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
-					<u-cell-item @click="goto('/pages/setting/safe/index',true)" title="安全中心" icon="lock"></u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/change_account',true)" title="切换账号" icon="man-add">
+					<u-cell-item @click="gotoPath('/pages/setting/safe/index',true)" title="安全中心" icon="lock">
+          </u-cell-item>
+          <u-cell-item @click="gotoPath('/pages/setting/safe/change_account',true)" title="切换账号" icon="man-add">
+            <u-badge  count="荐" :absolute="false" slot="right-icon"></u-badge>
 					</u-cell-item>
-          <u-cell-item @click="goto('/pages/packageA/amount_type/index',true)" title="收支方式管理" icon="grid"></u-cell-item>
-					<u-cell-item @click="goto('/pages/setting/feedback',true)" title="反馈&建议"
+          <u-cell-item @click="gotoPath('/pages/packageA/amount_type/index',true)" title="收支方式管理" icon="grid"></u-cell-item>
+					<u-cell-item @click="gotoPath('/pages/setting/feedback',true)" title="反馈&建议"
 						icon="volume"></u-cell-item>
-					<u-cell-item @click="goto('/pages/setting/xieyi',true)" title="协议相关" icon="order"></u-cell-item>
-
-					<u-cell-item @click="goto('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
-					<u-cell-item @click="goto('/pages/setting/beian',true)" title="应用备案号" icon="fingerprint">
+          <u-cell-item @click="gotoPath('/pages/packageA/user_setting/gexing',true)" title="个性化配置" icon="fingerprint">
+            自定义操作习惯	<u-badge  count="新" :absolute="false" slot="right-icon"></u-badge>
+          </u-cell-item>
+          <u-cell-item @click="gotoPath('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
+					<u-cell-item @click="gotoPath('/pages/setting/xieyi',true)" title="协议与隐私政策" icon="order"></u-cell-item>
+					<u-cell-item @click="gotoPath('/pages/setting/beian',true)" title="应用备案号" icon="bookmark">
             {{beian_no}}
           </u-cell-item>
 
-					<u-cell-item @click="goto('/pages/setting/update_log',true)" title="更新日志"
+
+					<u-cell-item @click="gotoPath('/pages/setting/update_log',true)" title="更新日志"
 						icon="file-text"></u-cell-item>
 
 					<u-cell-item @click="check_update()" title="当前版本" icon="reload">
@@ -75,8 +80,9 @@
        console.log(info)
 
 				this.app_version = info.appVersion;
-
+        // #ifdef APP-PLUS
 				this.check_app(info);
+        // #endif
 			},
 
 			check_app(info) {
@@ -138,15 +144,6 @@
 			categorySet() {
 				uni.navigateTo({
 					url: "/pages/setting/category"
-				})
-			},
-			goto(path, auth = true) {
-				if (auth && !this.hasLogin) {
-					this.$u.toast('请先登录');
-					return
-				}
-				uni.navigateTo({
-					url: path
 				})
 			}
 		},

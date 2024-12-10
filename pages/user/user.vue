@@ -96,7 +96,6 @@
 <script>
 import fab from '@/my-components/fab/index.vue'
 import extend from "@/common/extend";
-import wgt from "@/common/wgt";
 
 export default {
   components: {
@@ -125,43 +124,10 @@ export default {
           this.plugins_list = res.data.list
         }
       })
-    },
-    wgt_check() {
-      let info = uni.getSystemInfoSync();
-      plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {
-        //console.log(widgetInfo)
-        info.appVersion = widgetInfo.version
-        info.appVersionCode = widgetInfo.versionCode
-        info.app_current_wgt_version = uni.getStorageSync('app_current_wgt_versions') || []
-        console.log(info)
-        info.bsfrom = 'app';
-        wgt.check({
-          platform: info.platform || '',
-          bsfrom: info.bsfrom || '',
-          app_current_wgt_version: info.app_current_wgt_version,
-          appVersion: info.appVersion || '',
-          appVersionCode: info.appVersionCode || '',
-          appWgtVersion: info.appWgtVersion || '',
-          osVersion: info.osVersion || '',
-          system: info.system || '',
-        }).then(res => {
-          console.log('wgt-get', res)
-          if (res.code === 0 && res.data.info_list.length > 0) {
-            for (let i = 0; i < res.data.info_list.length; i++) {
-              wgt.start(res.data.info_list[i])
-            }
-          }
-        }).cath(err => {
-          console.log(err)
-        })
-      })
     }
 
   },
   onLoad(options) {
-    // #ifdef APP-PLUS
-    this.wgt_check()
-    // #endif
     // #ifdef MP-WEIXIN
     this.show_tips = false
     // #endif

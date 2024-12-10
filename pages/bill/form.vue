@@ -114,6 +114,12 @@
         />
       </view>
 
+      <view class="line">
+        <view >
+          自定义操作：可以在【我的】》【设置】》【<text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>】中自定义是否连续添加账单功能，开启后添加新账单记录后会清理输入框并保留在当前页面，否则添加后自动返回上一页。
+        </view>
+      </view>
+
     </view>
     <type_popup
         ref="type_popup"
@@ -177,8 +183,8 @@ export default {
       picker_show: false,
 
       desc: "",
-      cur_cotegry_name: "",
 
+      diy_action: null,
       out_list: [],
       in_list: [],
 
@@ -358,6 +364,9 @@ export default {
               this.initialFiles = [{url: this.formData.image}]
             }
           }
+          if (res.data.diy_action) {
+            this.diy_action = res.data.diy_action
+          }
 
           if (!this.formData.id && res.data.default_amount_type) {
             this.formData.amount_type = res.data.default_amount_type
@@ -438,44 +447,44 @@ export default {
             })
             if (this.formData.id) {
               this.$u.api.updateCashflow(this.formData).then(res => {
+                this.$u.toast(res.msg, 1000);
                 if (res.code == 0) {
-                  uni.navigateBack()
-                } else {
-                  this.$u.toast(res.msg);
+                  setTimeout(() => {
+                    uni.navigateBack()
+                  }, 1000)
                 }
                 uni.hideLoading()
                 this.disabled = false
-              }).catch(()=>{
+              }).catch(() => {
                 uni.hideLoading()
                 this.disabled = false
               })
             } else {
               this.$u.api.createCashFlow(this.formData).then(res => {
                 if (res.code == 0) {
-                  uni.showModal({
-                    title: '',
-                    content: '添加成功,是否继续添加？',
-                    success: (res) => {
-                      if (res.confirm) {
-                        this.formData = {
-                          id: 0,
-                          budge_id: 0,
-                          type: this.formData.type,
-                          amount: '',
-                          category_id: 0,
-                          budget_title: '',
-                          date: this.formData.date,
-                          remark: '',
-                          amount_type: '',
-                          image: null
-                        }
-                      } else {
-                        uni.switchTab({
-                          url: '/pages/index/index'
-                        })
-                      }
+                  //开启了连续添加模式
+                  if (this.diy_action && this.diy_action.bill_action_continue.value) {
+                    this.$u.toast('添加成功，您可以继续添加新记录', 3000)
+                    this.formData = {
+                      id: 0,
+                      budge_id: 0,
+                      type: this.formData.type,
+                      amount: '',
+                      category_id: 0,
+                      budget_title: '',
+                      date: this.formData.date,
+                      remark: '',
+                      amount_type: '',
+                      image: null
                     }
-                  })
+                  } else {
+                    this.$u.toast(res.msg)
+                    setTimeout(function () {
+                      uni.switchTab({
+                        url: '/pages/index/index'
+                      })
+                    }, 1000)
+                  }
 
                 } else {
                   this.$u.toast(res.msg);
@@ -504,6 +513,10 @@ export default {
 .container {
   background-color: #ffffff;
 
+  .topath{
+    color: #2b85e4;
+    text-underline: #2b85e4;
+  }
   .type_selector {
     width: 100%;
     background-color: $uni-theme-color;

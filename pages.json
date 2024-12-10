@@ -339,6 +339,13 @@
             "navigationBarTitleText": "图表配置",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "user_setting/gexing",
+          "style": {
+            "navigationBarTitleText": "自定义设置",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }

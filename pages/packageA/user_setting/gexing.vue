@@ -3,7 +3,7 @@
 
     <u-form label-width="300">
       <template v-if="list.length>0">
-        <u-form-item v-for="(item,index) in list" :key="index" :label="item.label"  label-position="left">
+        <u-form-item v-for="(item,index) in list" :key="index" :label="item.label" label-position="left">
           <u-switch slot="right" v-model="list[index].value" @change="submit"></u-switch>
         </u-form-item>
       </template>
@@ -18,7 +18,8 @@
 
 <script>
 
-import api from "@/common/statistics";
+import api from "@/common/setting";
+
 export default {
   data() {
     return {
@@ -41,7 +42,7 @@ export default {
         })
         return;
       }
-      api.statistic_get().then(res => {
+      api.detail('diy_action').then(res => {
         if (res.code == 0) {
           this.list = res.data.list
         }
@@ -50,7 +51,7 @@ export default {
 
     submit() {
       console.log(this.list)
-      api.statistic_set({list:this.list}).then(res => {
+      api.update({list: this.list, key: 'diy_action'}).then(res => {
         this.$u.toast(res.msg);
       })
     }
