@@ -14,11 +14,6 @@ export default {
     ...mapState('network', ['isConnected']),
   },
   onLaunch: function () {
-    // 应用启动时检查网络状态
-    //this.checkNetwork();
-    // 监听网络状态变化
-    //uni.onNetworkStatusChange(this.handleNetworkChange);
-
     // #ifdef APP-PLUS
     console.log('update')
     checkappupdate.check({

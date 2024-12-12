@@ -23,7 +23,7 @@
       <view class="xieyi">
         <u-checkbox class="xiey-checkbox" v-model="form.agree"></u-checkbox>
         <text>登录即代表同意</text>
-        <text class="xiey-link" @click="gotoPathPath('/pages/packageA/h5/article?key=register',false)">《注册协议》
+        <text class="xiey-link" @click="gotoPath('/pages/packageA/h5/article?key=register',false)">《注册协议》
         </text>
         <text class="xiey-link" @click="gotoPath('/pages/packageA/h5/article?key=privacy',false)">《隐私政策》
         </text>
