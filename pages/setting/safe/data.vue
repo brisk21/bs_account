@@ -4,10 +4,10 @@
       <view class="menu-list">
         <u-cell-group>
 
-          <u-cell-item @click="goto('/pages/setting/safe/export_data')" title="导出账单" icon="download">
+          <u-cell-item @click="gotoPath('/pages/setting/safe/export_data')" title="导出账单" icon="download">
             <text >导出已有账单数据</text>
           </u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/import_data')" :icon-style="{transform: 'rotate(180deg)'}" title="导入账单" icon="download">
+          <u-cell-item @click="gotoPath('/pages/setting/safe/import_data')" :icon-style="{transform: 'rotate(180deg)'}" title="导入账单" icon="download">
             导入微信、支付宝等账单
           </u-cell-item>
 
@@ -30,19 +30,7 @@ export default {
   },
 
   methods: {
-    goto(path, auth = true) {
-      if (auth && !this.hasLogin) {
-        this.$u.toast('请登录后查看');
-        return
-      }
-      if (!path){
-        this.$u.toast('暂未开放')
-        return
-      }
-      uni.navigateTo({
-        url: path
-      })
-    }
+
   },
   onShow() {
 

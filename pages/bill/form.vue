@@ -412,19 +412,7 @@ export default {
       return e.detail.value;
     },
 
-    goto(path, auth = true) {
-      if (auth && !this.hasLogin) {
-        this.$u.toast('请登录后查看');
-        return
-      }
-      if (!path) {
-        this.$u.toast('暂未开放')
-        return
-      }
-      uni.navigateTo({
-        url: path
-      })
-    },
+
     submit() {
       console.log(this.$store.getters, 'getters')
       if (!this.formData.category_id) {

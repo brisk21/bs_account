@@ -84,7 +84,7 @@ export default {
         this.$u.toast('请输入账号');
         return
       }
-      if (this.form.password != this.form.password1) {
+      if (this.form.password !== this.form.password1) {
         this.$u.toast('两次密码不一致');
         return
       }

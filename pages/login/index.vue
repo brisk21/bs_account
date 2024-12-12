@@ -23,7 +23,7 @@
       <view class="xieyi">
         <u-checkbox class="xiey-checkbox" v-model="form.agree"></u-checkbox>
         <text>登录即代表同意</text>
-        <text class="xiey-link" @click="gotoPath('/pages/packageA/h5/article?key=register',false)">《注册协议》
+        <text class="xiey-link" @click="gotoPathPath('/pages/packageA/h5/article?key=register',false)">《注册协议》
         </text>
         <text class="xiey-link" @click="gotoPath('/pages/packageA/h5/article?key=privacy',false)">《隐私政策》
         </text>
@@ -36,13 +36,10 @@
         <text @click="wxlogin">微信登录</text>
       </view>
 
-
-
-
     </view>
     <view class="register-section">
-      <text @click="toRegist">注册账号</text>
-       <text class="forget-section" @click="toForget">
+      <text @click="gotoPath('/pages/login/register',false)">注册账号</text>
+       <text class="forget-section" @click="gotoPath('/pages/login/forget_pwd',false)">
         忘记密码?
       </text>
     </view>
@@ -93,16 +90,6 @@ export default {
       })
       // #endif
 
-    },
-    toRegist() {
-      uni.navigateTo({
-        url: '/pages/login/register'
-      })
-    },
-    toForget() {
-      uni.navigateTo({
-        url: '/pages/login/forget_pwd'
-      })
     },
     // #ifdef MP
     wxlogin() {

@@ -19,7 +19,7 @@
       <view class="u-p-t-30 u-p-b-30">
          没有找到帮助，去提交反馈？<text class="u-m-l-10 feedback" @click="gotoPath('/pages/setting/feedback',true)">去反馈</text>
         <view class="u-p-t-30 u-p-b-30">
-          版本问题？<text class="u-m-l-10 feedback" @click="gotoPath('/pages/packageA/h5/index',true)">去下载新版</text>
+          版本问题？<text class="u-m-l-10 feedback" @click="gotoPath('/pages/packageA/h5/index',false)">去下载新版</text>
         </view>
 
       </view>

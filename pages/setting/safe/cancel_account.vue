@@ -20,7 +20,7 @@
       </view>
       <view class="item">注销账号后，将清空所有数据（账单、账号、分类、消息等），请谨慎操作！</view>
       <view class="item">注销账号后，无法恢复，请谨慎操作！</view>
-      <view class="item">如需要导出账单，请先导出账单，再注销账号。 <text class="link" @click="goto('/pages/setting/safe/export_data')">去导出账单</text></view>
+      <view class="item">如需要导出账单，请先导出账单，再注销账号。 <text class="link" @click="gotoPath('/pages/setting/safe/export_data')">去导出账单</text></view>
       <view class="item">注销后本账号将被系统彻底清除，可以用于新账号注册！</view>
       <view class="item">申请后有7天冷静期，可以随时进来取消注销申请！</view>
       <view class="item" v-if="user && user.cancel_expire" >您的账号将于{{user.cancel_expire}}进行彻底注销，届时您的账单数据将被彻底删除。如需要取消，请点击上面的按钮进行取消注销申请。</view>
@@ -61,19 +61,7 @@ export default {
         this.form.account = user.account
       })
     },
-    goto(path, auth = true) {
-      if (auth && !this.hasLogin) {
-        this.$u.toast('请登录后查看');
-        return
-      }
-      if (!path) {
-        this.$u.toast('暂未开放')
-        return
-      }
-      uni.navigateTo({
-        url: path
-      })
-    },
+
 
     regret(){
       if (!this.form.password) {

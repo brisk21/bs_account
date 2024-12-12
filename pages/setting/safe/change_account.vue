@@ -23,7 +23,7 @@
 
           </u-cell-item>
         </u-cell-group><u-cell-group>
-        <u-cell-item @click="goto('/pages/setting/safe/bind_account')" title="添加关联" icon="plus-people-fill">
+        <u-cell-item @click="gotoPath('/pages/setting/safe/bind_account')" title="添加关联" icon="plus-people-fill">
           关联后可以快速切换
         </u-cell-item>
       </u-cell-group>
@@ -132,19 +132,6 @@
 					}
 				})
 			},
-			goto(path, auth = true) {
-				if (auth && !this.hasLogin) {
-					this.$u.toast('请先登录');
-					return
-				}
-				if (!path) {
-					this.$u.toast('暂未开放')
-					return
-				}
-				uni.navigateTo({
-					url: path
-				})
-			}
 		},
 
 	}

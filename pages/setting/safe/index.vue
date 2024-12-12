@@ -3,23 +3,23 @@
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
-            <u-cell-item @click="goto('/pages/setting/safe/avatar')" title="修改头像和昵称" :icon="userInfo.avatar || '/static/missing-face.png'" >
+            <u-cell-item @click="gotoPath('/pages/setting/safe/avatar')" title="修改头像和昵称" :icon="userInfo.avatar || '/static/missing-face.png'" >
               {{userInfo.nick_name}}
             </u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/account')" title="修改账号" icon="account" >
+          <u-cell-item @click="gotoPath('/pages/setting/safe/account')" title="修改账号" icon="account" >
               登录账号每个月只能修改一次
             </u-cell-item>
-					<u-cell-item @click="goto('/pages/setting/safe/edit_pwd')" title="修改密码" icon="lock-open">
+					<u-cell-item @click="gotoPath('/pages/setting/safe/edit_pwd')" title="修改密码" icon="lock-open">
             建议定期修改，更安全
           </u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/email')" title="邮箱" icon="email">
+          <u-cell-item @click="gotoPath('/pages/setting/safe/email')" title="邮箱" icon="email">
             <text v-if="userInfo.email" style="color: #999;">{{ userInfo.email }}</text>
             <text v-else style="color: #e90808;">未绑定</text>
           </u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/data')" title="数据管理" icon="order">
+          <u-cell-item @click="gotoPath('/pages/setting/safe/data')" title="数据管理" icon="order">
             导入和导出账单数据
           </u-cell-item>
-          <u-cell-item @click="goto('/pages/setting/safe/cancel_account')" title="注销账号" icon="warning">
+          <u-cell-item @click="gotoPath('/pages/setting/safe/cancel_account')" title="注销账号" icon="warning">
             <text v-if="userInfo.cancel_expire">{{userInfo.cancel_expire}}将彻底注销</text>
             <text v-else>注销账号，数据将清空</text>
           </u-cell-item>
@@ -47,19 +47,7 @@
 			},
 		},
 		methods: {
-      goto(path, auth = true) {
-				if (auth && !this.hasLogin) {
-					this.$u.toast('请登录后查看');
-					return
-				}
-        if (!path){
-          this.$u.toast('暂未开放')
-          return
-        }
-				uni.navigateTo({
-					url: path
-				})
-			}
+
 		},
 		onShow() {
 
