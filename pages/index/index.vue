@@ -137,7 +137,6 @@ export default {
         in:true,
         out:true
       },
-      is_fresh: false,
       is_pulling: false,
       picker_params: {
         year: true,
@@ -166,13 +165,11 @@ export default {
   },
   //下拉
   onPullDownRefresh() {
-    console.log("下拉刷新")
-    if (this.hasLogin && !this.is_fresh){
-      this.is_fresh = true;
+    console.log("下拉刷新",[this.hasLogin,this.is_pulling])
+    if (this.hasLogin && !this.is_pulling){
       let that = this;
-      that.getList();
+      that.init_data();
       setTimeout(function () {
-        that.is_fresh = false;
         uni.stopPullDownRefresh()
       },1000)
 
@@ -295,9 +292,11 @@ export default {
         out: "0.00"
       }
       if (!this.hasLogin) {
+        console.log('未登录')
         return
       }
       if (this.is_pulling){
+        console.log('正在刷新')
         return;
       }
       let that = this;
@@ -316,11 +315,11 @@ export default {
           this.eye = res.data.show_set
         }
 
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err)
       }).finally(() => {
         uni.stopPullDownRefresh()
         setTimeout(function () {
-          that.is_fresh = false;
           that.is_pulling = false
           uni.hideLoading()
         }, 1000)
