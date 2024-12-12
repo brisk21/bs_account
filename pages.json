@@ -353,6 +353,13 @@
             "navigationBarTitleText": "极简随手记",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "h5/article",
+          "style": {
+            "navigationBarTitleText": "详情",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }

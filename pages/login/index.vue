@@ -22,15 +22,11 @@
 
       <view class="xieyi">
         <u-checkbox class="xiey-checkbox" v-model="form.agree"></u-checkbox>
-        <text>注册即代表同意</text>
-        <u-link @click="copy('https://jz.api.alipay168.cn/api/agreement/register')"
-                :href="'https://jz.api.alipay168.cn/api/agreement/register'"
-                :under-line="false">《注册协议》
-        </u-link>
-        <u-link @click="copy('https://jz.api.alipay168.cn/api/agreement/privacy')"
-                :href="'https://jz.api.alipay168.cn/api/agreement/privacy'"
-                :under-line="false">《隐私政策》
-        </u-link>
+        <text>登录即代表同意</text>
+        <text class="xiey-link" @click="gotoPath('/pages/packageA/h5/article?key=register',false)">《注册协议》
+        </text>
+        <text class="xiey-link" @click="gotoPath('/pages/packageA/h5/article?key=privacy',false)">《隐私政策》
+        </text>
       </view>
 
       <view class="wx" v-if="is_wx">
@@ -197,7 +193,9 @@ export default {
   background: #fff;
   padding-bottom: 40upx;
 }
-
+.xiey-link{
+  color: #2b85e4;
+}
 .xieyi {
   margin-top: 30rpx;
   margin-left: 30rpx;

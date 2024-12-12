@@ -4,19 +4,16 @@
 			<view class="menu-list">
 				<u-cell-group>
 
-					<u-cell-item title="注册协议" icon="order">
-						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/register'"
-							:under-line="false">注册协议</u-link>
+					<u-cell-item title="注册协议" icon="order"  @click="gotoPath('/pages/packageA/h5/article?key=register')">
 					</u-cell-item>
-					<u-cell-item title="隐私政策" icon="order">
-						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/privacy'"
-							:under-line="false">隐私政策</u-link>
+					<u-cell-item title="隐私政策" icon="order" @click="gotoPath('/pages/packageA/h5/article?key=privacy')">
+
 					</u-cell-item>
 
-					<u-cell-item title="关于我们" icon="info-circle">
-						<u-link :href="'https://jz.api.alipay168.cn/api/agreement/about'"
-							:under-line="false">关于我们</u-link>
+					<u-cell-item title="关于我们" icon="info-circle" @click="gotoPath('/pages/packageA/h5/article?key=about')">
+
 					</u-cell-item>
+
 				</u-cell-group>
 			</view>
 		</view>
