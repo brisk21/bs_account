@@ -8,9 +8,17 @@ import checkappupdate from 'js_sdk/wonyes-checkappupdate/wonyes/checkappupdate.j
 // #endif
 import constConfig from '@/const.js'
 import wgt from "@/common/wgt";
-
+import { mapState, mapActions } from 'vuex';
 export default {
+  computed: {
+    ...mapState('network', ['isConnected']),
+  },
   onLaunch: function () {
+    // 应用启动时检查网络状态
+    //this.checkNetwork();
+    // 监听网络状态变化
+    //uni.onNetworkStatusChange(this.handleNetworkChange);
+
     // #ifdef APP-PLUS
     console.log('update')
     checkappupdate.check({
@@ -31,15 +39,22 @@ export default {
 
   },
   onShow: function () {
+    // 如果需要，在应用每次显示时检查网络状态
+    this.checkNetwork();
+    uni.onNetworkStatusChange(this.handleNetworkChange);
     let token = uni.getStorageSync('UserToken')
     if (token) {
       this.$store.dispatch('getUserInfo')
     }
   },
   onHide: function () {
-    //console.log('App Hide');
+    uni.offNetworkStatusChange(this.handleNetworkChange);
+  },
+  beforeDestroy() {
+    uni.offNetworkStatusChange(this.handleNetworkChange);
   },
   methods: {
+     ...mapActions('network', ['checkNetwork', 'handleNetworkChange']),
     wgt_check() {
       let info = uni.getSystemInfoSync();
       plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {
