@@ -346,6 +346,13 @@
             "navigationBarTitleText": "自定义设置",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "h5/index",
+          "style": {
+            "navigationBarTitleText": "极简随手记",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }
