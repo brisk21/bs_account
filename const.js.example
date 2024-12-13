@@ -1,4 +1,6 @@
 export default {
+    beian_no: '',//app备案号
+    beian_no_xcx: '',//小程序备案号
     key: '12563456132465789465132465789465',//敏感数据加密秘钥，和后端保持一致
     baseUrl: 'http://jz.test.top/api',//接口请求地址
 }

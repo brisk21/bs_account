@@ -30,7 +30,7 @@
       </view>
 
       <view class="wx" v-if="is_wx">
-        <u-icon @click="wxlogin" class="icon" name="https://jz.api.alipay168.cn/static/image/wx-login.png" size="100"
+        <u-icon @click="wxlogin" class="icon" name="/static/images/wx-login.png" size="100"
                 color="#09bb07"></u-icon>
         <br>
         <text @click="wxlogin">微信登录</text>

@@ -6,7 +6,7 @@
           <u-cell-item title="随手记备案号" :arrow="false">
             {{ beian_no }}
           </u-cell-item>
-          <u-cell-item title="查询链接" >
+          <u-cell-item title="查询链接">
             <u-link :href="'https://beian.miit.gov.cn/'"
                     :under-line="false">https://beian.miit.gov.cn
             </u-link>
@@ -20,20 +20,21 @@
 </template>
 
 <script>
+import constConfig from "const"
 
 export default {
   components: {},
   data() {
     return {
-      beian_no:'桂ICP备16004757号-5A'
+      beian_no: constConfig.beian_no
     }
   },
 
   methods: {},
   onLoad(options) {
-      // #ifdef MP-WEIXIN
-      this.beian_no = '桂ICP备16004757号-4X';
-      // #endif
+    // #ifdef MP-WEIXIN
+    this.beian_no = constConfig.beian_no_xcx;
+    // #endif
   },
   onShow() {
 
