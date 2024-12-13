@@ -24,7 +24,7 @@
           </view>
         </view>
         <view class="setting">
-          <view class="setting-item" @click="gotoPath('/pages/setting/index',true)">
+          <view class="setting-item" @click="gotoPath('/pages/setting/index',false)">
             <u-icon name="setting" size="50"></u-icon>
           </view>
         </view>

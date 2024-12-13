@@ -4,13 +4,13 @@
 			<view class="menu-list">
 				<u-cell-group>
 
-					<u-cell-item title="注册协议" icon="order"  @click="gotoPath('/pages/packageA/h5/article?key=register')">
+					<u-cell-item title="注册协议" icon="order"  @click="gotoPath('/pages/packageA/h5/article?key=register',false)">
 					</u-cell-item>
-					<u-cell-item title="隐私政策" icon="order" @click="gotoPath('/pages/packageA/h5/article?key=privacy')">
+					<u-cell-item title="隐私政策" icon="order" @click="gotoPath('/pages/packageA/h5/article?key=privacy',false)">
 
 					</u-cell-item>
 
-					<u-cell-item title="关于我们" icon="info-circle" @click="gotoPath('/pages/packageA/h5/article?key=about')">
+					<u-cell-item title="关于我们" icon="info-circle" @click="gotoPath('/pages/packageA/h5/article?key=about',false)">
 
 					</u-cell-item>
 
