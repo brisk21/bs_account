@@ -8,3 +8,4 @@ npm-debug.log
 .DS_Store
 /uview-ui/package-lock.json
 jizhang.keystore
+const.js

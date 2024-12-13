@@ -1,0 +1,4 @@
+export default {
+    key: '12563456132465789465132465789465',//敏感数据加密秘钥，和后端保持一致
+    baseUrl: 'https://jz.api.alipay168.cn/api',//接口请求地址
+}
