@@ -47,6 +47,12 @@
 3.  在网页使用浏览器打开：https://jz.alipay168.cn
 
 
+### 联系方式
+微信：woyekeyiha
+
+如果想自己开发私有化部署，可以自己开发后台（线上用的是php8，可以自己用java、go、python等开发），如果想用线上的api接口后台系统私有化部署，请联系我。
+
+
 ### 赞助
 <img alt="赞助" src="./unpackage/demo-image/微信收款码.jpg" width="200" title="赞助"/>
 
