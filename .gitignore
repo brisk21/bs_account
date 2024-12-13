@@ -1,4 +1,9 @@
-/unpackage/
+/unpackage/cache/
+/unpackage/debug/
+/unpackage/dist/
+/unpackage/release/
+/unpackage/res/
+
 /.idea/
 /.hbuilderx/
 /node_modules/
