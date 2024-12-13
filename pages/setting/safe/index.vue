@@ -23,9 +23,7 @@
             <text v-if="userInfo.cancel_expire">{{userInfo.cancel_expire}}将彻底注销</text>
             <text v-else>注销账号，数据将清空</text>
           </u-cell-item>
-          <u-cell-item @click="gotoPath('/pages/packageA/service/service',false)" title="私有化部署" icon="wifi">
-            <text  style="color: #e90808;">配置私有化部署信息</text>
-          </u-cell-item>
+
 
 				</u-cell-group>
 			</view>
