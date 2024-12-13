@@ -15,6 +15,7 @@
 - const.js 里面配置你的后端接口和加密秘钥（具体看const.js.example文件）
 
 ### 系统展示
+<img src="./unpackage/demo-image/gh_8d928c988fe5_258.jpg" width="200" title="微信小程序" />
 
 <img alt="首页" src="./unpackage/demo-image/首页.png" width="150" title="首页"/>
 
@@ -42,6 +43,7 @@
 #### 2.使用线上系统
 1. 下载最新版APP(https://jz.alipay168.cn/#/pages/packageA/h5/index)，注册账号，登录
 2.  使用微信小程序，搜索“极简随手记”即可使用最新版
+ <img src="./unpackage/demo-image/gh_8d928c988fe5_258.jpg" width="200" title="微信小程序" />
 3.  在网页使用浏览器打开：https://jz.alipay168.cn
 
 
