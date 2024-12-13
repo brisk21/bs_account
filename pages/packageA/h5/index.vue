@@ -6,7 +6,7 @@
     <view class="download">
       <u-button v-if="version" type="success" size="medium" @click="download()">立即下载{{ version }}</u-button>
       <view v-else>
-		<!--#ifdef MP-WEIXIN -->
+		<!--#ifndef MP-WEIXIN -->
         <u-button type="primary" size="medium" disabled>仅支持安卓设备</u-button>
 		<!--#endif-->
       </view>
