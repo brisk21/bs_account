@@ -1,8 +1,8 @@
 {
     "id": "bs_acount",
-    "name": "随手记",
+    "name": "极简随手记",
     "version": "1.0.0",
-    "description": "thinkphp6+uniapp 开发的记账APP",
+    "description": "thinkphp8+uniapp 开发的记账APP",
     "keywords": [
         "thinkphp",
         "记账"
@@ -10,7 +10,8 @@
     "dcloudext": {
         "category": [
             "uni-app前端模板",
-            "uni-app前端项目模板"
+            "uni-app前端项目模板",
+            "记账"
         ]
     },
     "dependencies": {

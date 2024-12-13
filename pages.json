@@ -360,13 +360,6 @@
             "navigationBarTitleText": "详情",
             "enablePullDownRefresh": false
           }
-        },
-        {
-          "path": "service/service",
-          "style": {
-            "navigationBarTitleText": "私有化配置",
-            "enablePullDownRefresh": false
-          }
         }
       ]
     }
