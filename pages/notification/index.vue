@@ -37,8 +37,8 @@ export default {
       unread_count: 0,
       queryParams: {
         page: 1,
-        unread: null,
-        keyword: null,
+        unread: 0,
+        keyword: '',
         page_size: 20
       },
       tableData: [],
@@ -51,8 +51,8 @@ export default {
   onPullDownRefresh() {
     this.queryParams.page = 1
     this.hasMore = true
-    this.queryParams.unread = null
-    this.queryParams.keyword = null
+    this.queryParams.unread = 0
+    this.queryParams.keyword = ''
     this.tableData = []
     this.getData()
   },
@@ -89,7 +89,7 @@ export default {
             if (res.code == 0) {
               this.unread_count = 0
               this.queryParams.page = 1
-              this.queryParams.unread = null
+              this.queryParams.unread = 0
               this.tableData = []
               this.getData()
             }
