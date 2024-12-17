@@ -33,10 +33,8 @@ export default {
         return {
           'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || ''),
           'platform': uni.getSystemInfoSync().platform || '',
-          'version': uni.getSystemInfoSync().version || '',
-          'appVersion': uni.getSystemInfoSync().appVersion || '',
-          'appVersionCode': uni.getSystemInfoSync().appVersionCode || '',
-          'uniRuntimeVersion': uni.getSystemInfoSync().uniRuntimeVersion || '',
+          'version': uni.getSystemInfoSync().appVersion || '',
+          'versionCode': uni.getSystemInfoSync().appVersionCode || '',
           'appWgtVersion': uni.getSystemInfoSync().appWgtVersion || '',
           // #ifdef APP-PLUS
           'bsfrom': 'app',
