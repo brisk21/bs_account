@@ -7,7 +7,6 @@
     <u-form-item label="头像">
       <upload-file
           :action="action"
-          :header="header"
           :max-size="maxSize"
           :max-count="maxCount"
           :limit-type="limitType"
@@ -44,9 +43,6 @@ export default {
         /*{ url: 'http://example.com/image1.jpg' },*/
       ],
       action: constConfig.baseUrl + '/upload/image',
-      header: {
-        'Authorization': 'Bearer ' + (uni.getStorageSync('UserToken') || ''),
-      },
       maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
       maxCount: 1, // 可以设置不同的数量限制
       limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
