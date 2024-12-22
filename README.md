@@ -3,6 +3,8 @@
 ### 简介
 记账APP后台，uniapp（vue2）+ thinkphp6开发,管理后台用element ui
 
+后端开源仓库：[https://gitee.com/brisklan/bs_account_backend](https://gitee.com/brisklan/bs_account_backend)
+
 系统是之前开发自用的，本着够用就行，难免有bug，如有疑问，或者需要定制开发欢迎交流，微信号：woyekeyiha。
 
 本项目是基于[https://ext.dcloud.net.cn/plugin?id=6553](https://ext.dcloud.net.cn/plugin?id=6553)魔改的，调整了样式，移除了一些不需要的功能。
@@ -50,7 +52,7 @@
 ### 联系方式
 微信：woyekeyiha
 
-如果想自己开发私有化部署，可以自己开发后台（线上用的是thinkphp8，可以自己用java、go、python等开发），如果想用线上的api接口后台系统私有化部署，请联系我。
+遇到问题可以加微信交流。请备注：bs记账
 
 
 ### 赞助
