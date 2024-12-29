@@ -2,7 +2,7 @@
   <view class="container bs_form">
 
 
-    <u-form label-width="150">
+    <u-form label-width="160">
       <u-form-item label="加入账簿">
         <u-switch v-model="is_join"></u-switch>
       </u-form-item>
@@ -21,6 +21,9 @@
       <u-form-item label="排序">
         <u-input placeholder="排序，越大越靠前" border :maxlength="10" type="number" class="bs_form_input"
                  v-model="form.sort"/>
+      </u-form-item>
+      <u-form-item label="是否默认">
+        <u-switch v-model="form.is_default"></u-switch>
       </u-form-item>
       <u-form-item label="备注">
         <text v-if="is_join || !form.is_owner">{{ form.remark }}</text>
@@ -53,6 +56,7 @@ export default {
       has_joined: false,
       form: {
         is_owner: true,
+        is_default: false,
         cashbook_id: 0,
         name: '',
         remark: '',
