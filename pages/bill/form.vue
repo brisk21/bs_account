@@ -94,6 +94,17 @@
 
         <u-button v-show="!formData.budget_id" @click="openPopup('budget_list')" size="mini">选择预算</u-button>
       </view>
+      <view class="line" v-if="diy_action && diy_action.enable_cashbook && diy_action.enable_cashbook.value">
+        <text class="popup_type">关联账簿：</text>
+        <u-tag :closeable="true"
+               v-show="!!formData.cashbook_id"
+               :text="formData.cashbook_title"
+               @click="openPopup('cashbook')"
+               @close="unsetCashbook()"
+        ></u-tag>
+
+        <u-button v-show="!formData.cashbook_id" @click="openPopup('cashbook')" size="mini">选择账簿</u-button>
+      </view>
 
       <u-form-item class="form-item" label="备注：" label-width="120">
         <u-input v-model="formData.remark" type="textarea"
@@ -116,7 +127,7 @@
 
       <view class="line">
         <view >
-          自定义操作：可以在【我的】》【设置】》【<text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>】中自定义是否连续添加账单功能，开启后添加新账单记录后会清理输入框并保留在当前页面，否则添加后自动返回上一页。
+          自定义操作：可以在【我的】》【设置】》【<text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>】中自定义是否连续添加账单功能、启用账簿功能，开启后添加新账单记录后会清理输入框并保留在当前页面，否则添加后自动返回上一页。
         </view>
       </view>
 
@@ -163,6 +174,7 @@ export default {
       formData: {
         id: 0,
         budge_id: 0,
+        cashbook_id: 0,
         type: 20,
         amount: '',
         category_id: 0,
@@ -192,6 +204,7 @@ export default {
 
 
       budget_list: [],
+      cashbook_list: [],
 
       initialFiles: [],
       action: constConfig.baseUrl + '/upload/image',
@@ -233,6 +246,10 @@ export default {
         this.popup_manager_path = '/pages/budget/budget'
         this.popup_data_list = this.budget_list
         this.popup_show_type = 'list'
+      }else if (type === 'cashbook'){
+        this.popup_manager_path = '/pages/packageA/cashbook/index'
+        this.popup_data_list = this.cashbook_list
+        this.popup_show_type = 'list'
       }
 
       this.$refs.type_popup.togglePopup();
@@ -242,10 +259,13 @@ export default {
       try {
         if (this.popup_current === 'amount_type') {
           this.formData.amount_type = item.value
-        } else {
+        }else if(this.popup_current === 'budget_list') {
           this.formData.budget_id = item.value
           this.formData.budget_title = item.label || 'xxx'
           console.log(this.formData.budget_title)
+        }else if(this.popup_current === 'cashbook') {
+          this.formData.cashbook_id = item.value
+          this.formData.cashbook_title = item.label || 'xxx'
         }
       } catch (e) {
         console.log('err', e)
@@ -257,11 +277,14 @@ export default {
       this.formData.budget_id = 0
       this.formData.budget_title = ''
     },
+    unsetCashbook() {
+      this.formData.cashbook_id = 0
+      this.formData.cashbook_title = ''
+    },
     unsetAmountType() {
       this.formData.amount_type = ''
     },
     setAmountType(item) {
-      console.log('t', item)
       this.formData.amount_type = item
     },
     handleFileUploadSuccess({url, index, fileList, res}) {
@@ -357,6 +380,11 @@ export default {
             this.budget_list = res.data.budget_list
           }
 
+          this.cashbook_list = []
+          if (res.data.cashbook_list.length > 0) {
+            this.cashbook_list = res.data.cashbook_list
+          }
+
           if (res.data.info) {
             this.formData = res.data.info
             this.formData.type = this.type === 0 ? 20 : 10
@@ -370,6 +398,10 @@ export default {
 
           if (!this.formData.id && res.data.default_amount_type) {
             this.formData.amount_type = res.data.default_amount_type
+          }
+          if (!this.formData.id && res.data.default_cashbook) {
+            this.formData.cashbook_id = res.data.default_cashbook.cashbook_id
+            this.formData.cashbook_title = res.data.default_cashbook.name
           }
 
         }

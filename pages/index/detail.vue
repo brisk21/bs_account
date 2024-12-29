@@ -37,6 +37,12 @@
           {{ info.budget_title||'无' }}
         </view>
       </view>
+      <view class="line" v-if="info.cashbook_title">
+        <text class="type">所属账簿：</text>
+        <view style="font-size: 25rpx;font-weight: 600;">
+          {{ info.cashbook_title||'无' }}
+        </view>
+      </view>
       <view class="line">
         <text class="type">备注：</text>
         <view style="font-size: 28rpx;width: 70%;text-align: left">
