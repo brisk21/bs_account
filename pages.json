@@ -360,6 +360,20 @@
             "navigationBarTitleText": "详情",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "cashbook/index",
+          "style": {
+            "navigationBarTitleText": "账簿管理",
+            "enablePullDownRefresh": true
+          }
+        },
+        {
+          "path": "cashbook/detail",
+          "style": {
+            "navigationBarTitleText": "详情",
+            "enablePullDownRefresh": true
+          }
         }
       ]
     }
