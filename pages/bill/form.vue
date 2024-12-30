@@ -488,6 +488,7 @@ export default {
                     this.formData = {
                       id: 0,
                       budge_id: 0,
+                      cashbook_id: 0,
                       type: this.formData.type,
                       amount: '',
                       category_id: 0,

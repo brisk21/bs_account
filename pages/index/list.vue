@@ -7,25 +7,28 @@
     </view>
     <template v-else>
       <view class="search">
+
         <u-dropdown>
-          <u-dropdown-item v-model="form.type" title="分类" :options="type" @change="set_type"></u-dropdown-item>
-          <u-dropdown-item v-model="form.amount_type" title="收支方式" :options="amount_type"
-                           @change="set_amount_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.type" title="类型" :options="type" @change="set_type"></u-dropdown-item>
+
           <u-dropdown-item v-model="form.time_type"
                            :title="time_type_title"
                            :options="time_type" @change="set_time_type"></u-dropdown-item>
-          <u-dropdown-item v-model="form.budget_id" title="预算" :options="budget_list"
-                           @change="set_budget_type"></u-dropdown-item>
-          <u-dropdown-item v-model="form.cashbook_id" title="账本" :options="cashbook_list"
-                           @change="set_cashbook_id"></u-dropdown-item>
           <u-dropdown-item v-model="form.sort" title="排序" :options="sort_list" @change="set_sort"></u-dropdown-item>
         </u-dropdown>
+
         <view class="search-box">
-          <u-search :clearable="true" :show-action="true" :show-action-icon="true"
-                    input-align="left" placeholder="分类、收支类型、备注查询"
-                    v-model="form.keywords"
-                    action-text="搜索"
-                    @search="toSearch" @custom="toSearch"></u-search>
+          <view class="search-more">
+            <button size="mini" type="default" @click="show_search_box=true">高级搜索</button>
+          </view>
+          <view class="input">
+            <u-search :clearable="true" :show-action="true" :show-action-icon="true"
+                      input-align="left" placeholder="分类、收支类型、备注查询"
+                      v-model="form.keywords"
+                      action-text="搜索"
+                      @search="toSearch" @custom="toSearch"></u-search>
+          </view>
+
         </view>
       </view>
       <view v-if="list.length > 0" class="scroll data-list">
@@ -78,6 +81,79 @@
 
       <u-calendar toolTip="选择时间范围" v-model="show_calendar" :mode="calendar_mode"
                   @change="calendarChange"></u-calendar>
+
+      <u-popup v-model="show_search_box" mode="center" width="90%" height="300px">
+        <view class="search-popup">
+<!--          <view class="line">
+            <text class="popup_type">类型：</text>
+            <u-tag
+                v-show="form.type"
+                :closeable="true"
+                :text="form.type_name"
+                @close="unsetType()"
+                @click="openPopup('type')"
+            ></u-tag>
+            <u-button v-show="!form.type" @click="openPopup('type')" size="mini">选择类型</u-button>
+          </view>-->
+          <view class="line">
+            <text class="popup_type">具体分类：</text>
+            <u-tag
+                v-show="form.category_id"
+                :closeable="true"
+                :text="form.category_name"
+                @close="unsetCategory()"
+                @click="openPopup('category')"
+            ></u-tag>
+            <u-button v-show="!form.category_id" @click="openPopup('category')" size="mini">选择分类</u-button>
+          </view>
+          <view class="line">
+            <text class="popup_type">收支方式：</text>
+            <u-tag
+                v-show="form.amount_type"
+                :closeable="true"
+                :text="form.amount_type"
+                @close="unsetAmountType()"
+                @click="openPopup('amount_type')"
+            ></u-tag>
+            <u-button v-show="!form.amount_type" @click="openPopup('amount_type')" size="mini">选择方式</u-button>
+          </view>
+          <view class="line">
+            <text class="popup_type">关联预算：</text>
+            <u-tag :closeable="true"
+                   v-show="!!form.budget_id"
+                   :text="form.budget_title"
+                   @click="openPopup('budget_list')"
+                   @close="unsetBudget()"
+            ></u-tag>
+
+            <u-button v-show="!form.budget_id" @click="openPopup('budget_list')" size="mini">选择预算</u-button>
+          </view>
+          <view class="line">
+            <text class="popup_type">关联账本：</text>
+            <u-tag :closeable="true"
+                   v-show="!!form.cashbook_id"
+                   :text="form.cashbook_title"
+                   @click="openPopup('cashbook')"
+                   @close="unsetCashbook()"
+            ></u-tag>
+
+            <u-button v-show="!form.cashbook_id" @click="openPopup('cashbook')" size="mini">选择账本</u-button>
+          </view>
+          <view class="btn-list">
+            <button size="mini" type="warn" class="action-btn u-border" @click="show_search_box = false">取消</button>
+            <button size="mini" type="primary" class="action-btn  u-border" @click="toSearch">开始搜索</button>
+          </view>
+        </view>
+      </u-popup>
+      <type_popup
+          ref="type_popup"
+          @selected="handleTypeSelected"
+          :filtered-list="popup_data_list"
+          :path="popup_manager_path"
+          :show_type="popup_show_type"
+
+      ></type_popup>
+
     </template>
     <u-back-top :scroll-top="scrollTop"></u-back-top>
 
@@ -86,11 +162,19 @@
 </template>
 
 <script>
+import type_popup from "@/my-components/popup/type_popup.vue";
 
 export default {
-  components: {},
+  components: {
+    type_popup,
+  },
   data() {
     return {
+      show_search_box: false,
+      popup_manager_path: '',
+      popup_data_list: [],
+      popup_show_type: 'grid',
+      popup_current: '',
       sort_list: [
         {label: '默认', value: ''},
         {label: '金额降序', value: 'amount_desc'},
@@ -116,13 +200,19 @@ export default {
       cashbook_list: [
         {label: '全部', value: ''}
       ],
+      category_list : [
+        {label: '全部', value: 0,},
+      ],
       time_type_title: '时间',
       show_calendar: false,
       calendar_mode: 'range',
       form: {
         keywords: '',
+        category_id: 0,
         type: 0,
+        type_name: '',
         budget_id: 0,
+        cashbook_id: 0,
         month: '',
         year: '',
         time_type: '',
@@ -209,7 +299,7 @@ export default {
     if (options.budget_id) {
       this.form.budget_id = options.budget_id
     }
-    if (options.cashbook_id){
+    if (options.cashbook_id) {
       this.form.cashbook_id = options.cashbook_id
     }
     this.get_search_config()
@@ -223,6 +313,78 @@ export default {
     this.scrollTop = e.scrollTop;
   },
   methods: {
+    openPopup(type) {
+      this.popup_current = type
+      if (type === 'amount_type') {
+        this.popup_manager_path = '/pages/packageA/amount_type/index'
+        this.popup_data_list = this.amount_type
+        this.popup_show_type = 'list'
+      } else if (type === 'budget_list') {
+        this.popup_manager_path = '/pages/budget/budget'
+        this.popup_data_list = this.budget_list
+        this.popup_show_type = 'list'
+      } else if (type === 'cashbook') {
+        this.popup_manager_path = '/pages/packageA/cashbook/index'
+        this.popup_data_list = this.cashbook_list
+        this.popup_show_type = 'list'
+      } else if (type === 'category') {
+        this.popup_manager_path = '/pages/setting/category'
+        this.popup_data_list = this.category_list
+        this.popup_show_type = 'grid'
+      } else if (type === 'type') {
+        this.popup_data_list = this.type
+        this.popup_show_type = 'list'
+      }
+      this.$refs.type_popup.togglePopup();
+    },
+    handleTypeSelected(item) {
+      //console.log(this.popup_current + '父组件接收到了:', item);
+      try {
+        if (this.popup_current === 'amount_type') {
+          this.form.amount_type = item.value
+        } else if (this.popup_current === 'budget_list') {
+          this.form.budget_id = item.value
+          this.form.budget_title = item.label || 'xxx'
+          console.log(this.form.budget_title)
+        } else if (this.popup_current === 'cashbook') {
+          this.form.cashbook_id = item.value
+          this.form.cashbook_title = item.label || 'xxx'
+        } else if (this.popup_current === 'type') {
+          this.form.type = item.value
+          this.form.type_name = item.label || 'xxx'
+        }else if (this.popup_current === 'category') {
+          this.form.category_id = item.value
+          this.form.category_name = item.label || 'xxx'
+        }
+      } catch (e) {
+        console.log('err', e)
+      }
+
+
+    },
+    unsetBudget() {
+      this.form.budget_id = 0
+      this.form.budget_title = ''
+    },
+    unsetCashbook() {
+      this.form.cashbook_id = 0
+      this.form.cashbook_title = ''
+    },
+    unsetCategory() {
+      this.form.category_id = 0
+      this.form.category_name = ''
+    },
+    unsetType() {
+      this.form.type = ''
+    },
+    unsetAmountType() {
+      this.form.amount_type = ''
+    },
+    setAmountType(item) {
+      this.form.amount_type = item
+    },
+
+
     get_search_config() {
       let that = this
       this.$u.api.bill_list_search().then(res => {
@@ -235,17 +397,20 @@ export default {
           if (data.cashbook_list.length > 0) {
             that.cashbook_list = that.cashbook_list.concat(data.cashbook_list)
           }
-          if (data.amount_type.length>0) {
+          if (data.amount_type.length > 0) {
             that.amount_type = that.amount_type.concat(data.amount_type)
           }
           if (data.type.length > 0) {
             that.type = data.type
           }
-          if (data.time_type.length > 0){
+          if (data.time_type.length > 0) {
             that.time_type = data.time_type
           }
-          if (data.sort_list.length > 0){
+          if (data.sort_list.length > 0) {
             that.sort_list = data.sort_list
+          }
+          if (data.category_list.length > 0){
+            that.category_list = data.category_list
           }
         }
 
@@ -331,6 +496,7 @@ export default {
     },
 
     toSearch() {
+      this.show_search_box = false
       this.getList(true)
     },
     async getList(is_init) {
@@ -407,6 +573,33 @@ export default {
     background: white;
   }
 
+  .search-popup {
+    padding-top: 20px;
+    padding-left: 10px;
+    height: 100%;
+
+    .line {
+      display: flex;
+      flex-direction: row;
+      margin-top: 10px;
+
+    }
+
+    .btn-list {
+      display: flex;
+      justify-content: space-evenly;
+      margin-top: 50rpx;
+      padding-right: 10px;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-content: center;
+      align-items: center;
+      .action-btn {
+        width: 100%;
+        border-radius: unset !important;
+      }
+    }
+  }
 
   // 自适应结束
 

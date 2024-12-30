@@ -7,6 +7,9 @@
             <view v-if="filteredList.length>0">
               <u-grid :col="2">
                 <u-grid-item v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)">
+                  <view class="grid-icon" v-if="item.icon">
+                    <u-icon :name="item.icon" size="40"></u-icon>
+                  </view>
                   <view class="grid-text">{{ item.label }}</view>
                 </u-grid-item>
               </u-grid>

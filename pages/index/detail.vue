@@ -38,7 +38,7 @@
         </view>
       </view>
       <view class="line" v-if="info.cashbook_title">
-        <text class="type">所属账簿：</text>
+        <text class="type">所属账本：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
           {{ info.cashbook_title||'无' }}
         </view>
@@ -49,6 +49,12 @@
           {{ info.remark || '暂无备注' }}
         </view>
       </view>
+      <view class="line" >
+        <text class="type">记录人：</text>
+        <view style="font-size: 25rpx;font-weight: 600;color: red">
+          {{ info.username||'--' }}
+        </view>
+      </view>
       <view class="line" v-if="info.image">
         <text class="type">附件：</text>
         <view style="font-size: 28rpx;width: 70%;">
@@ -56,7 +62,7 @@
         </view>
       </view>
 
-      <view style="display: flex; padding: 20rpx;">
+      <view style="display: flex; padding: 20rpx;" v-if="info.is_owner===1">
         <view style="margin: auto;">
           <u-button type="success" size="medium" @click="toEdit()">编辑</u-button>
         </view>
@@ -95,6 +101,13 @@ export default {
     },
     getCashflowInfo() {
       this.$u.api.getCashflowInfo(this.id).then(res => {
+        if (res.code !==0){
+          this.$u.toast(res.msg)
+          setTimeout(()=>{
+            uni.navigateBack()
+          },1500)
+          return;
+        }
         this.info = res.data
       })
     },
