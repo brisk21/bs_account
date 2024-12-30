@@ -3,11 +3,11 @@
 
 
     <u-form label-width="160">
-      <u-form-item label="加入账簿">
+      <u-form-item label="加入账本">
         <u-switch v-model="is_join"></u-switch>
       </u-form-item>
-      <u-form-item label="账簿编码" v-if="is_join">
-        <u-search placeholder="账簿编码，如：10001" v-model="keyword" @search="fetch" @custom="fetch"></u-search>
+      <u-form-item label="账本编码" v-if="is_join">
+        <u-search placeholder="账本编码，如：10001" v-model="keyword" @search="fetch" @custom="fetch"></u-search>
       </u-form-item>
       <u-form-item label="创建人" v-if="is_join && form.cashbook_id">
         <text class="owner">{{ form.username || '' }}</text>
@@ -27,7 +27,7 @@
       </u-form-item>
       <u-form-item label="备注">
         <text v-if="is_join || !form.is_owner">{{ form.remark }}</text>
-        <u-input v-else placeholder="账簿说明，比如：私房钱" :disabled="is_join" border :maxlength="500" type="textarea"
+        <u-input v-else placeholder="账本说明，比如：私房钱" :disabled="is_join" border :maxlength="500" type="textarea"
                  clearable class="bs_form_input"
                  v-model="form.remark" height="200"/>
       </u-form-item>
@@ -36,7 +36,7 @@
     <view class="buttons">
       <u-button class="action-btn " v-if="is_join && has_joined" type="primary" disabled>您已加入</u-button>
       <u-button class="action-btn " v-if="!has_joined || !is_join" type="primary" @click="submit">
-        {{ is_join ? '添加（保存）该账簿' : '保存账簿' }}
+        {{ is_join ? '添加（保存）该账本' : '保存账本' }}
       </u-button>
     </view>
 
@@ -68,7 +68,7 @@ export default {
     is_join(val) {
       if (val) {
         uni.setNavigationBarTitle({
-          title: '加入账簿'
+          title: '加入账本'
         })
       } else {
         uni.setNavigationBarTitle({
@@ -117,7 +117,7 @@ export default {
 
     async submit() {
       if (!this.form.name) {
-        this.$u.toast('请输入账簿名称');
+        this.$u.toast('请输入账本名称');
         return;
       }
       let that = this;

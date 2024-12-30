@@ -16,10 +16,10 @@
                            :options="time_type" @change="set_time_type"></u-dropdown-item>
           <u-dropdown-item v-model="form.budget_id" title="预算" :options="budget_list"
                            @change="set_budget_type"></u-dropdown-item>
+          <u-dropdown-item v-model="form.cashbook_id" title="账本" :options="cashbook_list"
+                           @change="set_cashbook_id"></u-dropdown-item>
           <u-dropdown-item v-model="form.sort" title="排序" :options="sort_list" @change="set_sort"></u-dropdown-item>
         </u-dropdown>
-
-
         <view class="search-box">
           <u-search :clearable="true" :show-action="true" :show-action-icon="true"
                     input-align="left" placeholder="分类、收支类型、备注查询"
@@ -113,6 +113,9 @@ export default {
       budget_list: [
         {label: '全部', value: ''}
       ],
+      cashbook_list: [
+        {label: '全部', value: ''}
+      ],
       time_type_title: '时间',
       show_calendar: false,
       calendar_mode: 'range',
@@ -203,9 +206,11 @@ export default {
     console.log('onShow')
   },
   onLoad(options) {
-    console.log('onLoad')
     if (options.budget_id) {
       this.form.budget_id = options.budget_id
+    }
+    if (options.cashbook_id){
+      this.form.cashbook_id = options.cashbook_id
     }
     this.get_search_config()
     this.getList()
@@ -226,6 +231,9 @@ export default {
         if (res.code == 0) {
           if (data.budget_list.length > 0) {
             that.budget_list = that.budget_list.concat(data.budget_list)
+          }
+          if (data.cashbook_list.length > 0) {
+            that.cashbook_list = that.cashbook_list.concat(data.cashbook_list)
           }
           if (data.amount_type.length>0) {
             that.amount_type = that.amount_type.concat(data.amount_type)
@@ -290,6 +298,10 @@ export default {
     },
     set_budget_type(value) {
       this.form.budget_id = value
+      this.getList(true)
+    },
+    set_cashbook_id(value) {
+      this.form.cashbook_id = value
       this.getList(true)
     },
     set_time_type(value) {

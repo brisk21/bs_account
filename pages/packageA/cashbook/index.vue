@@ -19,7 +19,10 @@
               {{ item.created_at }}
             </view >
             <view class="c-item">
-              <text>用户数：</text> <text>{{ item.user_count }}</text>  <u-icon @click="toUserList(item)" size="28" color="blue" name="arrow-right"></u-icon>
+              <text>用户数：</text> <text>{{ item.user_count }} 个</text>  <u-icon @click="toUserList(item)" size="28" color="blue" name="arrow-right"></u-icon>
+            </view>
+            <view class="c-item">
+              <text>记账笔数：</text> <text>{{ item.bill_count }} 笔</text>  <u-icon @click="toBillList(item)" size="28" color="blue" name="arrow-right"></u-icon>
             </view>
             <view class="c-item">
               <text>备注：</text>
@@ -87,7 +90,7 @@ export default {
     del(item) {
       if (!item.is_owner) {
         uni.showToast({
-          title: '只能删除自己创建的账簿',
+          title: '只能删除自己创建的账本',
           icon: 'none'
         })
         return
@@ -132,6 +135,15 @@ export default {
     toUserList(item) {
       uni.navigateTo({
         url: '/pages/packageA/cashbook/user_list?cashbook_id=' + item.cashbook_id,
+        fail: (re) => {
+          console.log(' fail', re)
+        }
+      })
+    },
+
+    toBillList(item) {
+      uni.navigateTo({
+        url: '/pages/index/list?cashbook_id=' + item.cashbook_id,
         fail: (re) => {
           console.log(' fail', re)
         }
