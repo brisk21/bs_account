@@ -27,3 +27,11 @@ export const join = (params) => {
 export const fetch = (params) => {
     return Vue.prototype.$u.get('extend/cashbook/fetch', params);
 };
+
+export const user_list = (params) => {
+    return Vue.prototype.$u.get('extend/cashbook/user_list', params);
+};
+
+export const unbind_user = (params) => {
+    return Vue.prototype.$u.delete('extend/cashbook/unbind_user', params);
+};

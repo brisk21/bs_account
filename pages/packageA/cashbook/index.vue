@@ -19,7 +19,7 @@
               {{ item.created_at }}
             </view >
             <view class="c-item">
-              <text>用户数：</text> <text>{{ item.user_count }}</text>  <u-icon size="28" color="blue" name="arrow-right"></u-icon>
+              <text>用户数：</text> <text>{{ item.user_count }}</text>  <u-icon @click="toUserList(item)" size="28" color="blue" name="arrow-right"></u-icon>
             </view>
             <view class="c-item">
               <text>备注：</text>
@@ -95,7 +95,7 @@ export default {
       let that = this
       uni.showModal({
         title: '',
-        content: '确定删除【' + item.name + '】吗？删除后不可恢复',
+        content: '确定删除【' + item.name + '】吗？此操作不可恢复，请谨慎操作！',
         success: (res) => {
           if (res.confirm) {
             remove({
@@ -126,6 +126,14 @@ export default {
       get_list(this.form).then((res) => {
         if (res.code === 0) {
           this.list = this.list.concat(res.data.list)
+        }
+      })
+    },
+    toUserList(item) {
+      uni.navigateTo({
+        url: '/pages/packageA/cashbook/user_list?cashbook_id=' + item.cashbook_id,
+        fail: (re) => {
+          console.log(' fail', re)
         }
       })
     },

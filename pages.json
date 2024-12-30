@@ -374,6 +374,13 @@
             "navigationBarTitleText": "详情",
             "enablePullDownRefresh": true
           }
+        },
+        {
+          "path": "cashbook/user_list",
+          "style": {
+            "navigationBarTitleText": "用户列表",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }
