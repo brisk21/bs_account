@@ -121,7 +121,7 @@
             <text class="popup_type">关联预算：</text>
             <u-tag :closeable="true"
                    v-show="!!form.budget_id"
-                   :text="form.budget_title"
+                   :text="form.budget_title||'?'"
                    @click="openPopup('budget_list')"
                    @close="unsetBudget()"
             ></u-tag>
@@ -132,7 +132,7 @@
             <text class="popup_type">关联账本：</text>
             <u-tag :closeable="true"
                    v-show="!!form.cashbook_id"
-                   :text="form.cashbook_title"
+                   :text="form.cashbook_title||'未知?'"
                    @click="openPopup('cashbook')"
                    @close="unsetCashbook()"
             ></u-tag>
@@ -212,7 +212,9 @@ export default {
         type: 0,
         type_name: '',
         budget_id: 0,
+        budget_title: '',
         cashbook_id: 0,
+        cashbook_title: '',
         month: '',
         year: '',
         time_type: '',

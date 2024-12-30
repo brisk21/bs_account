@@ -19,10 +19,10 @@
               {{ item.created_at }}
             </view >
             <view class="c-item">
-              <text>用户数：</text> <text>{{ item.user_count }} 个</text>  <u-icon @click="toUserList(item)" size="28" color="blue" name="arrow-right"></u-icon>
+              <text>用户数：</text> <text @click="toUserList(item)">{{ item.user_count }} 个</text>  <u-icon @click="toUserList(item)" size="28" color="blue" name="arrow-right"></u-icon>
             </view>
             <view class="c-item">
-              <text>记账笔数：</text> <text>{{ item.bill_count }} 笔</text>  <u-icon @click="toBillList(item)" size="28" color="blue" name="arrow-right"></u-icon>
+              <text>记账笔数：</text> <text @click="toBillList(item)">{{ item.bill_count }} 笔</text>  <u-icon @click="toBillList(item)" size="28" color="blue" name="arrow-right"></u-icon>
             </view>
             <view class="c-item">
               <text>备注：</text>
