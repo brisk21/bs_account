@@ -54,6 +54,9 @@ const install = (Vue, vm) => {
                 vm.$store.dispatch('logout')
                 vm.$u.toast('登录状态已过期，请重新登录')
                 return false;
+            } else if (res.statusCode !== 200) {
+                vm.$u.toast('数据异常，请稍后重试')
+                return false
             } else {
                 if (res.errMsg === "request:fail") {
                     vm.$u.toast('网络异常，请稍后再试')
@@ -63,6 +66,9 @@ const install = (Vue, vm) => {
                     if (res.data.code === 401) {
                         console.log('执行了 401')
                         vm.$store.dispatch('logout')
+                        return false
+                    } else if (res.data.code === 500) {
+                        vm.$u.toast(res.data.msg)
                         return false
                     }
                 } catch (e) {
