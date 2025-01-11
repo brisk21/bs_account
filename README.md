@@ -42,7 +42,14 @@
 
 克隆本项目：git clone https://gitee.com/brisklan/bs_account
 
-1. 用Hbuilder打开运行
+1. 用Hbuilder打开项目
+2. 安装依赖
+```shell
+#安装crypto-js
+npm install crypto-js@^3.3.0
+#安装mp-html
+npm install mp-html@^2.5.0
+```
 2. 选择自己的编译模式生成相关平台文件
 
 #### 2.使用线上系统
