@@ -42,31 +42,29 @@
           </u-tr>
           <u-tr>
             <u-td>{{ total }}</u-td>
-            <u-td>{{ total_income }}</u-td>
-            <u-td>{{ total_outcome }}</u-td>
+            <u-td class="amount-red">{{ total_income }}</u-td>
+            <u-td class="amount-green">{{ total_outcome }}</u-td>
             <u-td>{{ diff_amount }}</u-td>
           </u-tr>
 
         </u-table>
         <view class="list-box-children" v-for="(item, index) in list" :key="index"
               @click="toDetail(item.id)">
-          <view class="u-flex icon">
-            <u-icon :name="item.category.icon" color="#42b479" size="46"></u-icon>
+
+          <view class="u-flex  box-left box-left">
+           <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon> {{ item.category.name }}
           </view>
-          <view class="box-left">
-            {{ item.category.name }}
+          <view class="u-flex-1  box-left box-remark">
+            {{ item.amount_type || '--' }}
           </view>
-          <view class="box-remark">
-            {{ item.amount_type || '' }}
-          </view>
-          <view class="u-flex-1 box-right amount-green" v-if="item.type===20">
+          <view class="u-flex-1  box-right amount-green" v-if="item.type===20">
             -￥{{ item.amount }}
           </view>
-          <view class="u-flex-1 box-right amount-red" v-else>
+          <view class="u-flex-1  box-right amount-red" v-else>
             +￥{{ item.amount }}
           </view>
-          <view class="u-flex-1 box-right item-date">
-            {{ item.date }}
+          <view class="u-flex-2 box-right item-date">
+            {{ item.date }} <text v-if="item.is_cycle">（{{item.cycle_type}}）</text>
           </view>
         </view>
         <view class="no-more" v-if="no_more && list.length>10">
@@ -695,7 +693,7 @@ export default {
     }
 
     .item-date {
-      width: 100px;
+
     }
   }
 

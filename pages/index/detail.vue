@@ -43,6 +43,15 @@
           {{ info.cashbook_title||'无' }}
         </view>
       </view>
+      <view class="line" >
+        <text class="type">周期执行：</text>
+        <view style="font-size: 25rpx;font-weight: 600;">
+          {{info.cycle && info.cycle.cycle_type||'无'}}
+        </view>
+        <view v-if="info.cycle" style="font-size: 25rpx;color: red">
+           (下次：{{info.cycle.next_time || '--'}})
+        </view>
+      </view>
       <view class="line">
         <text class="type">备注：</text>
         <view style="font-size: 28rpx;width: 70%;text-align: left">

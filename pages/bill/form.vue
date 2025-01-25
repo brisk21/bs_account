@@ -106,9 +106,28 @@
         <u-button v-show="!formData.cashbook_id" @click="openPopup('cashbook')" size="mini">选择账簿</u-button>
       </view>
 
+
+
       <u-form-item class="form-item" label="备注：" label-width="120">
         <u-input v-model="formData.remark" type="textarea"
                  placeholder="添加备注" maxlength="500"
+                 clearable border auto-height/>
+      </u-form-item>
+
+      <u-form-item v-if="diy_action && diy_action.enable_bill_cycle && diy_action.enable_bill_cycle.value" class="form-item" label="周期循环：" label-width="150">
+         <u-radio-group v-model="formData.cycle_type" @change="cycleChange">
+            <u-radio name="">不循环</u-radio>
+            <u-radio name="daily">每日</u-radio>
+            <u-radio name="weekly">每周</u-radio>
+            <u-radio name="monthly">每月</u-radio>
+            <u-radio name="quarterly">每季度</u-radio>
+            <u-radio name="yearly">每年</u-radio>
+            <u-radio name="custom">自定义</u-radio>
+          </u-radio-group>
+      </u-form-item>
+      <u-form-item v-if="diy_action && formData.cycle_type && formData.cycle_type === 'custom'" class="form-item" label="循环天数：" label-width="150">
+        <u-input v-model="formData.cycle_days" type="digit"
+                 placeholder="请输入天数" maxlength="500"
                  clearable border auto-height/>
       </u-form-item>
 
@@ -126,8 +145,10 @@
       </view>
 
       <view class="line">
-        <view >
-          自定义操作：可以在【我的】》【设置】》【<text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>】中自定义是否连续添加账单功能、启用账簿功能，开启后添加新账单记录后会清理输入框并保留在当前页面，否则添加后自动返回上一页。
+        <view>
+          自定义操作：可以在【我的】》【设置】》【
+          <text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>
+          】中自定义是否连续添加账单功能、启用账簿、启用循环周期功能，开启后添加新账单记录后会清理输入框并保留在当前页面，否则添加后自动返回上一页。
         </view>
       </view>
 
@@ -182,7 +203,10 @@ export default {
         date: '',
         remark: '',
         amount_type: '',
-        image: null
+        image: null,
+        is_cycle: false,
+        cycle_type: '', // 新增字段
+        cycle_days: '',
       },
       pickerOption: {
         year: true,
@@ -236,6 +260,19 @@ export default {
   },
 
   methods: {
+
+    cycleChange(val){
+      this.formData.is_cycle = true
+      if (!val){
+        this.formData.is_cycle = false
+        this.formData.cycle_type = ''
+        this.formData.cycle_days = ''
+      }
+      if(val !== 'custom'){
+        this.formData.cycle_days = ''
+      }
+    },
+
     openPopup(type) {
       this.popup_current = type
       if (type === 'amount_type') {
@@ -246,7 +283,7 @@ export default {
         this.popup_manager_path = '/pages/budget/budget'
         this.popup_data_list = this.budget_list
         this.popup_show_type = 'list'
-      }else if (type === 'cashbook'){
+      } else if (type === 'cashbook') {
         this.popup_manager_path = '/pages/packageA/cashbook/index'
         this.popup_data_list = this.cashbook_list
         this.popup_show_type = 'list'
@@ -259,11 +296,11 @@ export default {
       try {
         if (this.popup_current === 'amount_type') {
           this.formData.amount_type = item.value
-        }else if(this.popup_current === 'budget_list') {
+        } else if (this.popup_current === 'budget_list') {
           this.formData.budget_id = item.value
           this.formData.budget_title = item.label || 'xxx'
           console.log(this.formData.budget_title)
-        }else if(this.popup_current === 'cashbook') {
+        } else if (this.popup_current === 'cashbook') {
           this.formData.cashbook_id = item.value
           this.formData.cashbook_title = item.label || 'xxx'
         }
@@ -534,10 +571,11 @@ export default {
 .container {
   background-color: #ffffff;
 
-  .topath{
+  .topath {
     color: #2b85e4;
     text-underline: #2b85e4;
   }
+
   .type_selector {
     width: 100%;
     background-color: $uni-theme-color;
