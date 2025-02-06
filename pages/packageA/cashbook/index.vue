@@ -17,12 +17,16 @@
             <view class="c-item">
               <text>创建时间：</text>
               {{ item.created_at }}
-            </view >
-            <view class="c-item">
-              <text>用户数：</text> <text @click="toUserList(item)">{{ item.user_count }} 个</text>  <u-icon @click="toUserList(item)" size="28" color="blue" name="arrow-right"></u-icon>
             </view>
             <view class="c-item">
-              <text>记账笔数：</text> <text @click="toBillList(item)">{{ item.bill_count }} 笔</text>  <u-icon @click="toBillList(item)" size="28" color="blue" name="arrow-right"></u-icon>
+              <text>用户数：</text>
+              <text @click="toUserList(item)">{{ item.user_count }} 个</text>
+              <u-icon @click="toUserList(item)" size="28" color="blue" name="arrow-right"></u-icon>
+            </view>
+            <view class="c-item">
+              <text>记账笔数：</text>
+              <text @click="toBillList(item)">{{ item.bill_count }} 笔</text>
+              <u-icon @click="toBillList(item)" size="28" color="blue" name="arrow-right"></u-icon>
             </view>
             <view class="c-item">
               <text>备注：</text>
@@ -40,7 +44,7 @@
       <view class="empty" v-else>
         <u-empty text="暂无数据" mode="list"></u-empty>
       </view>
-      <fab :is-show="hasLogin" icon_name="plus" :url="'/pages/packageA/cashbook/detail'"></fab>
+    <fab :is-show="hasLogin" icon_name="plus" :url="'/pages/packageA/cashbook/detail'"></fab>
     </view>
 
   </view>
@@ -231,7 +235,8 @@ export default {
     .data-item-content {
       word-break: break-word;
       color: rgba(111, 108, 108, 1);
-      .c-item{
+
+      .c-item {
         padding-top: 10px;
       }
     }

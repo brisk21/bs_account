@@ -47,6 +47,10 @@ const install = (Vue, vm) => {
         return vm.$u.get('cashflow-list-all', data);
     }
 
+    const bill_list_options = (data) => {
+        return vm.$u.get('cashflow-list-options', data);
+    }
+
     const bill_list_search = (data) => {
         return vm.$u.get('cashflow-list-search', data);
     }
@@ -190,7 +194,6 @@ const install = (Vue, vm) => {
     }
 
 
-
     //注销
     const cancelAccount = (params) => {
         return vm.$u.post('cancel-account', encrypt(params));
@@ -251,7 +254,8 @@ const install = (Vue, vm) => {
         updateLog,
         cancelAccount,
         regretCancelAccount,
-        getNotice
+        getNotice,
+        bill_list_options
     };
 }
 

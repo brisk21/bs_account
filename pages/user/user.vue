@@ -67,6 +67,7 @@
           </u-cell-item>
 
           <u-cell-item @click="gotoPath('/pages/extend/index',false)" title="扩展插件" icon="grid">
+            <u-badge count="荐" :absolute="false" slot="right-icon"></u-badge>
           </u-cell-item>
         </u-cell-group>
       </view>

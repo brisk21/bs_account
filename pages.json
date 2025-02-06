@@ -381,6 +381,27 @@
             "navigationBarTitleText": "用户列表",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "baoxiao/index",
+          "style": {
+            "navigationBarTitleText": "报销管理",
+            "enablePullDownRefresh": true
+          }
+        },
+        {
+          "path": "baoxiao/detail",
+          "style": {
+            "navigationBarTitleText": "详情",
+            "enablePullDownRefresh": true
+          }
+        },
+        {
+          "path": "baoxiao/form",
+          "style": {
+            "navigationBarTitleText": "增改",
+            "enablePullDownRefresh": true
+          }
         }
       ]
     }
