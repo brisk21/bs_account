@@ -2,7 +2,7 @@
   <view class="container">
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
-        <button size="mini" slot="bottom" class="go-to-login" @click="toLogin()">立即登录</button>
+        <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">立即登录</button>
       </u-empty>
     </view>
     <template v-else>
@@ -32,24 +32,24 @@
         <view class="data-list" v-if="list.length > 0">
           <view class="data-item" v-for="(item, index) in list" :key="index">
             <view class="data-item-title">
-              <text>{{ item.name }}</text>
+              <text>账本：{{ item.cashbook_name||'无' }}</text>
               <text class="sn">
-                已通过
+                {{ item.status_desc }}
               </text>
             </view>
             <view class="data-item-content">
 
               <view class="c-item">
-                <text>创建时间：</text>
+                <text>提交时间：</text>
                 {{ item.created_at }}
               </view>
               <view class="c-item">
-                <text>用户数：</text>
-                <text @click="toUserList(item)">{{ item.user_count }} 个</text>
-                <u-icon @click="toUserList(item)" size="28" color="blue" name="arrow-right"></u-icon>
+                <text>提交账号：</text>
+                <text>{{ item.user_account || '已注销' }} </text>
+
               </view>
               <view class="c-item">
-                <text>记账笔数：</text>
+                <text>账单笔数：</text>
                 <text @click="toBillList(item)">{{ item.bill_count }} 笔</text>
                 <u-icon @click="toBillList(item)" size="28" color="blue" name="arrow-right"></u-icon>
               </view>
@@ -59,7 +59,6 @@
               </view>
             </view>
             <view class="data-item-footer">
-              <u-icon class="btn" v-if="item.is_owner" @tap="copy(item)" size="46" name="zhuanfa"></u-icon>
               <u-icon class="btn" @tap="toDetail(item)" size="46" name="edit-pen"></u-icon>
               <u-icon class="btn" v-if="item.is_owner" @tap="del(item)" size="46" name="trash"></u-icon>
             </view>
@@ -171,7 +170,7 @@ export default {
     del(item) {
       if (!item.is_owner) {
         uni.showToast({
-          title: '只能删除自己创建的账本',
+          title: '只能删除自己创建的数据',
           icon: 'none'
         })
         return
@@ -179,11 +178,11 @@ export default {
       let that = this
       uni.showModal({
         title: '',
-        content: '确定删除【' + item.name + '】吗？此操作不可恢复，请谨慎操作！',
+        content: '确定删除吗？此操作不可恢复，请谨慎操作！',
         success: (res) => {
           if (res.confirm) {
             remove({
-              cashbook_id: item.cashbook_id
+              id: item.id
             }).then(res => {
               this.$u.toast(res.msg);
               if (res.code == 0) {
@@ -198,13 +197,17 @@ export default {
         }
       })
     },
-    get_list() {
+    get_list(is_init) {
       if (!this.hasLogin) {
         uni.showToast({
           title: '请先登录',
           icon: 'none'
         })
         return
+      }
+      if (is_init){
+        this.form.page = 0
+        this.list = []
       }
       this.form.page += 1
       get_list(this.form).then((res) => {
@@ -213,18 +216,11 @@ export default {
         }
       })
     },
-    toUserList(item) {
-      uni.navigateTo({
-        url: '/pages/packageA/cashbook/user_list?cashbook_id=' + item.cashbook_id,
-        fail: (re) => {
-          console.log(' fail', re)
-        }
-      })
-    },
+
 
     toBillList(item) {
       uni.navigateTo({
-        url: '/pages/index/list?cashbook_id=' + item.cashbook_id,
+        url: '/pages/packageA/baoxiao/form?id=' + item.id,
         fail: (re) => {
           console.log(' fail', re)
         }
@@ -233,7 +229,7 @@ export default {
 
     toDetail(item) {
       uni.navigateTo({
-        url: '/pages/packageA/cashbook/detail?cashbook_id=' + item.cashbook_id,
+      url: '/pages/packageA/baoxiao/form?id=' + item.id,
         fail: (re) => {
           console.log(' fail', re)
 
@@ -258,6 +254,12 @@ export default {
     .selector {
       width: 80%;
     }
+  }
+
+  .search-box{
+    margin-top: 15rpx;
+    margin-bottom: 10rpx;
+    margin-left: 10rpx;
   }
 
   .data-item {

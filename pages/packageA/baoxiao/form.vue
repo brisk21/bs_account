@@ -8,14 +8,14 @@
       <view>
         <view class="search-box">
           <u-dropdown>
-          <u-dropdown-item v-model="form.cashbook_id" title="选择账本"
-                           :value="form.cashbook_id"
-                           :options="cashbook_list"
-                           @change="set_cashbook"
-          ></u-dropdown-item>
-        </u-dropdown>
+            <u-dropdown-item v-model="form.cashbook_id" title="选择账本"
+                             :value="form.cashbook_id"
+                             :options="cashbook_list"
+                             @change="set_cashbook"
+            ></u-dropdown-item>
+          </u-dropdown>
           <view class="search-box-left">
-           <u-search :clearable="true" :show-action="true" :show-action-icon="true"
+            <u-search :clearable="true" :show-action="true" :show-action-icon="true"
                       input-align="left" placeholder="分类、收支类型、备注查询"
                       v-model="form.keywords"
                       action-text="搜索"
@@ -26,7 +26,8 @@
 
           <view class="list-box-children" v-for="(item, index) in list" :key="index">
             <label class="u-flex item-checkbox">
-              <u-checkbox v-model="selectedItems[item.id]" :name="item.id" @change="updateSelected"></u-checkbox>
+              <u-checkbox :disabled="item.disable ||false" v-model="selectedItems[item.id]" :name="item.id"
+                          @change="updateSelected"></u-checkbox>
             </label>
             <view class="u-flex  box-left box-left">
               <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon>
@@ -43,7 +44,7 @@
               {{ item.date }}
             </view>
           </view>
-          <u-loadmore   @loadmore="loadMore"></u-loadmore>
+          <u-loadmore @loadmore="loadMore"></u-loadmore>
 
         </view>
       </view>
@@ -51,11 +52,9 @@
     <view v-else-if="currentStep === 1">
       <view>
         <u-form label-width="150">
-          <u-form-item label="备注" prop="remark">
-            <u-input v-model="form.remark" placeholder="请输入备注"></u-input>
-          </u-form-item>
-          <u-form-item label="附件"  >
-             <upload-file
+
+          <u-form-item label="附件">
+            <upload-file
                 :action="action"
                 :max-size="maxSize"
                 :max-count="maxCount"
@@ -65,7 +64,10 @@
                 @remove="handleFileUploadRemove"
             />
           </u-form-item>
-
+          <u-form-item label="备注">
+            <u-input type="textarea" v-model="formData.remark" placeholder="请输入备注" style="height: 100px"
+                     auto-height></u-input>
+          </u-form-item>
         </u-form>
       </view>
     </view>
@@ -73,9 +75,12 @@
 
     <!-- 按钮操作 -->
     <view class="button-group">
-      <u-button class="buttons" @click="prevStep" size="medium " plain :disabled="currentStep === 0" v-if="currentStep>0">上一步</u-button>
-      <u-button class="buttons" @click="nextStep" size="medium " plain v-if="currentStep === 0" >下一步</u-button>
-      <u-button class="buttons" @click="submit" size="medium " plain type="primary" v-if="currentStep === 1" >提交</u-button>
+      <u-button class="buttons" @click="prevStep" size="medium " plain :disabled="currentStep === 0"
+                v-if="currentStep>0">上一步
+      </u-button>
+      <u-button class="buttons" @click="nextStep" size="medium " plain v-if="currentStep === 0">下一步</u-button>
+      <u-button class="buttons" @click="submit" size="medium " plain type="primary" v-if="currentStep === 1">提交
+      </u-button>
     </view>
   </view>
 </template>
@@ -83,6 +88,8 @@
 
 import constConfig from "@/const";
 import uploadFile from "@/components/UploadFile.vue";
+import {create, update, get_detail, remove} from "@/common/p_reimbursement"
+
 export default {
   components: {
     uploadFile
@@ -102,6 +109,7 @@ export default {
       selectAll: false,
       selectedItems: {}, // 使用对象来存储每个项目的选中状态
       form: {
+        from: 'reimbursement',
         keywords: '',
         category_id: 0,
         type: 0,
@@ -119,6 +127,7 @@ export default {
         limit: 10,
       },
       formData: {
+        id: 0,
         ids: '',
         remark: '',
         images: [],
@@ -132,18 +141,30 @@ export default {
       limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
     }
   },
-  onLoad() {
+  onLoad(options) {
+    if (options.id) {
+      this.info(options.id)
+    }
     this.getList(true)
     this.get_search_config()
   },
   methods: {
+    info(id) {
+      get_detail({id: id}).then(res => {
+        if (res.code == 0) {
+          this.formData = res.data.info
+
+        }
+      })
+    },
+
     loadMore() {
       this.form.page = this.form.page + 1
       this.getList()
     },
     get_search_config() {
       let that = this
-      this.$u.api.bill_list_search({from:'list_option'}).then(res => {
+      this.$u.api.bill_list_search({from: 'list_option'}).then(res => {
         console.log(res)
         let data = res.data
         if (res.code == 0) {
@@ -173,11 +194,12 @@ export default {
       })
     },
     set_cashbook(item) {
-     // this.form.cashbook_id = item.value
+      // this.form.cashbook_id = item.value
       this.form.cashbook_title = item.label
       this.getList(true)
     },
-    toSearch(){},
+    toSearch() {
+    },
     handleFileUploadSuccess({url, index, fileList, res}) {
       console.log('文件上传成功:', url);
       if (res.code == 0) {
@@ -259,7 +281,7 @@ export default {
       }
     },
     submit() {
-      if (!this.selectedItems){
+      if (!this.selectedItems) {
         this.$u.toast('请选择账单')
         return
       }
@@ -270,7 +292,7 @@ export default {
           ids.push(i)
         }
       }
-      if (ids.length <= 0){
+      if (ids.length <= 0) {
         this.$u.toast('请选择账单')
         return
       }
@@ -278,8 +300,36 @@ export default {
         ids: ids.join(','),
         remark: this.formData.remark,
         images: this.formData.images,
+        cashbook_id: this.form.cashbook_id,
       }
+      let that = this
+      uni.showModal({
+        title: '',
+        content: '确定提交保存数据吗',
+        success: (res) => {
+          if (res.confirm) {
+            if (this.formData.id) {
+              update(formData).then(res => {
+                that.$u.toast(res.msg);
+                if (res.code == 0) {
+                  uni.navigateBack()
+                }
+              })
+            } else {
+              create(formData).then(res => {
+                that.$u.toast(res.msg);
+                if (res.code == 0) {
+                  uni.navigateBack()
+                }
+              })
+            }
+          } else if (res.cancel) {
+            this.$u.toast('已取消');
+          }
+        }
+      })
       console.log(formData)
+
     },
   }
 }
