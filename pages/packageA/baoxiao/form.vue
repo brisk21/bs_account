@@ -26,8 +26,7 @@
 
           <view class="list-box-children" v-for="(item, index) in list" :key="index">
             <label class="u-flex item-checkbox">
-              <u-checkbox :disabled="item.disable ||false" v-model="selectedItems[item.id]" :name="item.id"
-                          @change="updateSelected"></u-checkbox>
+              <u-checkbox v-model="selectedItems[item.id]" :name="item.id" @change="updateSelected"></u-checkbox>
             </label>
             <view class="u-flex-1  box-left box-left">
               <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon>
@@ -162,7 +161,8 @@ export default {
           this.form.cashbook_id = res.data.info.cashbook_id
           this.getList(true)
           res.data.cashflows.forEach(item => {
-            this.selectedItems[item.id] = true
+            //this.selectedItems[item.id] = true
+            this.$set(this.selectedItems, item.id, true);
           })
           if (res.data.info.files.length > 0) {
             that.initialFiles = res.data.info.files
@@ -235,7 +235,10 @@ export default {
       return true;
     },
     updateSelected(event) {
+      console.log(event)
       const {name, checked} = event;
+      //this.selectedItems[name] = !checked;
+      console.log(this.selectedItems)
       this.$set(this.selectedItems, name, checked);
     },
     async getList(is_init) {
