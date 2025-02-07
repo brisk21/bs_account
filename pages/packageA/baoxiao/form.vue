@@ -7,7 +7,7 @@
     <view v-show="currentStep === 0">
       <view>
         <view class="search-box">
-          <u-dropdown>
+          <u-dropdown  >
             <u-dropdown-item v-model="form.cashbook_id" title="选择账本"
                              :value="form.cashbook_id"
                              :options="cashbook_list"
@@ -26,7 +26,8 @@
 
           <view class="list-box-children" v-for="(item, index) in list" :key="index">
             <label class="u-flex item-checkbox">
-              <u-checkbox v-model="selectedItems[item.id]" :name="item.id" @change="updateSelected"></u-checkbox>
+              <u-checkbox :disabled="item.disable || false" v-model="selectedItems[item.id]" :name="item.id"
+                          @change="updateSelected"></u-checkbox>
             </label>
             <view class="u-flex-1  box-left box-left">
               <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon>
@@ -43,7 +44,7 @@
               {{ item.date }}
             </view>
           </view>
-          <u-loadmore @loadmore="loadMore"></u-loadmore>
+          <u-loadmore v-if="list.length >= form.limit" @loadmore="loadMore"></u-loadmore>
 
         </view>
       </view>
@@ -74,11 +75,11 @@
 
     <!-- 按钮操作 -->
     <view class="button-group">
-      <u-button class="buttons" @click="prevStep" size="medium " plain :disabled="currentStep === 0"
-                v-if="currentStep>0">上一步
+      <u-button class="buttons" @click="prevStep" size="medium "  :disabled="currentStep === 0"
+                v-show="currentStep>0">上一步
       </u-button>
-      <u-button class="buttons" @click="nextStep" size="medium " plain v-if="currentStep === 0">下一步</u-button>
-      <u-button class="buttons" @click="submit" size="medium " plain type="primary" v-if="currentStep === 1">提交
+      <u-button class="buttons" @click="nextStep" size="medium "  v-show="currentStep === 0">下一步</u-button>
+      <u-button class="buttons" @click="submit" size="medium "  type="primary" v-show="currentStep === 1">提交
       </u-button>
     </view>
   </view>
@@ -214,6 +215,8 @@ export default {
       this.getList(true)
     },
     toSearch() {
+      this.form.page = 0
+      this.getList(true)
     },
     handleFileUploadSuccess({url, index, fileList, res}) {
       console.log('文件上传成功:', url);
@@ -259,6 +262,7 @@ export default {
       uni.showLoading({
         title: '数据加载中...',
       })
+      this.form.reimbursement_id = this.formData.id
       await this.$u.api.bill_list_options(this.form).then(res => {
         if (res.code == 0) {
           this.total_income = res.data.total_income
@@ -325,14 +329,18 @@ export default {
               update(that.formData).then(res => {
                 that.$u.toast(res.msg);
                 if (res.code == 0) {
-                  uni.navigateBack()
+                  setTimeout(function () {
+                    uni.navigateBack()
+                  }, 1000)
                 }
               })
             } else {
               create(that.formData).then(res => {
                 that.$u.toast(res.msg);
                 if (res.code == 0) {
-                  uni.navigateBack()
+                  setTimeout(function () {
+                    uni.navigateBack()
+                  }, 1000)
                 }
               })
             }

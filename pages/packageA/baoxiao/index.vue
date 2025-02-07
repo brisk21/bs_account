@@ -16,6 +16,13 @@
       <view class="search">
 
         <view class="search-box">
+          <u-dropdown>
+            <u-dropdown-item v-model="form.cashbook_id" title="选择账本"
+                             :value="form.cashbook_id"
+                             :options="cashbook_list"
+                             @change="set_cashbook"
+            ></u-dropdown-item>
+          </u-dropdown>
 
           <view class="input">
             <u-search :clearable="true" :show-action="true" :show-action-icon="true"
@@ -32,9 +39,11 @@
         <view class="data-list" v-if="list.length > 0">
           <view class="data-item" v-for="(item, index) in list" :key="index">
             <view class="data-item-title">
-              <text>账本：{{ item.cashbook_name||'无' }}</text>
-              <text class="sn">
-                {{ item.status_desc }}
+              <text>账本：{{ item.cashbook_name || '无' }}</text>
+              <text class="sn"  @click="toInfo(item)">
+                <u-tag v-if="item.status==1" type="success" :text="item.status_desc"/>
+                <u-tag v-if="item.status==-1" type="error" :text="item.status_desc"/>
+                <u-tag v-if="item.status==0" type="primary" :text="item.status_desc"/>
               </text>
             </view>
             <view class="data-item-content">
@@ -45,13 +54,13 @@
               </view>
               <view class="c-item">
                 <text>提交账号：</text>
-                <text>{{ item.user_account || '已注销' }} </text>
+                <text>{{ item.user_account || '已注销' }}</text>
 
               </view>
               <view class="c-item">
                 <text>账单笔数：</text>
-                <text @click="toBillList(item)">{{ item.bill_count }} 笔</text>
-                <u-icon @click="toBillList(item)" size="28" color="blue" name="arrow-right"></u-icon>
+                <text @click="toInfo(item)">{{ item.bill_count }} 笔</text>
+                <u-icon @click="toInfo(item)" size="28" color="blue" name="arrow-right"></u-icon>
               </view>
               <view class="c-item">
                 <text>备注：</text>
@@ -59,9 +68,11 @@
               </view>
             </view>
             <view class="data-item-footer">
-              <u-icon v-if="item.buttons.check===1" class="btn" title="审核" @tap="toBillList(item)" size="46" name="checkmark-circle"></u-icon>
+              <u-icon color="red" v-if="item.buttons.check===1" class="btn" title="审核" @tap="toInfo(item)"
+                      size="46"
+                      name="checkmark-circle"></u-icon>
               <u-icon v-if="item.buttons.edit===1" class="btn" @tap="toDetail(item)" size="46" name="edit-pen"></u-icon>
-              <u-icon v-if="item.buttons.delete===1" class="btn"  @tap="del(item)" size="46" name="trash"></u-icon>
+              <u-icon color="gray" v-if="item.buttons.delete===1" class="btn" @tap="del(item)" size="46" name="trash"></u-icon>
             </view>
           </view>
 
@@ -86,6 +97,7 @@
 <script>
 
 import {get_list, remove} from "@/common/p_reimbursement";
+import {options_list} from "@/common/p_cashbook";
 import fab from "@/my-components/fab/index.vue";
 
 export default {
@@ -94,6 +106,7 @@ export default {
   },
   data() {
     return {
+      cashbook_list: [{label: '全部', value: 0}],
       scrollTop: 0,
       statusList: [
         '全部', '待审核', '已通过', '已驳回'
@@ -102,9 +115,10 @@ export default {
       form: {
         page: 0,
         limit: 20,
-        keyword: ''
-      }
-
+        keyword: '',
+        cashbook_id: 0,
+        status: 0
+      },
     }
   },
   watch: {},
@@ -148,7 +162,10 @@ export default {
     console.log('onShow')
   },
   onLoad(options) {
-    this.get_list()
+    this.getCashbooks()
+    setTimeout(() => {
+      this.get_list(true)
+    }, 500)
   },
   created() {
     console.log('created')
@@ -158,6 +175,20 @@ export default {
     this.scrollTop = e.scrollTop;
   },
   methods: {
+    set_cashbook(item) {
+      // this.form.cashbook_id = item.value
+      this.form.cashbook_title = item.label
+      this.get_list(true)
+    },
+    async getCashbooks() {
+      await options_list({from: 'reimbursement'}).then(res => {
+        if (res.code == 0) {
+          this.cashbook_list = this.cashbook_list.concat(res.data.list)
+
+        }
+      })
+    },
+
     toSearch() {
       this.form.page = 0
       this.get_list(true)
@@ -206,7 +237,7 @@ export default {
         })
         return
       }
-      if (is_init){
+      if (is_init) {
         this.form.page = 0
         this.list = []
       }
@@ -219,7 +250,7 @@ export default {
     },
 
 
-    toBillList(item) {
+    toInfo(item) {
       uni.navigateTo({
         url: '/pages/packageA/baoxiao/detail?id=' + item.id,
         fail: (re) => {
@@ -230,7 +261,7 @@ export default {
 
     toDetail(item) {
       uni.navigateTo({
-      url: '/pages/packageA/baoxiao/form?id=' + item.id,
+        url: '/pages/packageA/baoxiao/form?id=' + item.id,
         fail: (re) => {
           console.log(' fail', re)
 
@@ -257,7 +288,7 @@ export default {
     }
   }
 
-  .search-box{
+  .search-box {
     margin-top: 15rpx;
     margin-bottom: 10rpx;
     margin-left: 10rpx;
