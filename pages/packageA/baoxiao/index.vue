@@ -114,7 +114,7 @@ export default {
     if (this.hasLogin && !this.is_fresh) {
       this.is_fresh = true;
       let that = this;
-      that.getList();
+      that.get_list();
       setTimeout(function () {
         that.is_fresh = false;
       }, 300)
@@ -220,7 +220,7 @@ export default {
 
     toBillList(item) {
       uni.navigateTo({
-        url: '/pages/packageA/baoxiao/form?id=' + item.id,
+        url: '/pages/packageA/baoxiao/detail?id=' + item.id,
         fail: (re) => {
           console.log(' fail', re)
         }
