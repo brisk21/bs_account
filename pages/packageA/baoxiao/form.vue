@@ -4,7 +4,7 @@
     <u-steps mode="dot" :list="numList" :current="currentStep"></u-steps>
 
     <!-- 根据当前步骤显示不同的内容 -->
-    <view v-if="currentStep === 0">
+    <view v-show="currentStep === 0">
       <view>
         <view class="search-box">
           <u-dropdown>
@@ -29,7 +29,7 @@
               <u-checkbox :disabled="item.disable ||false" v-model="selectedItems[item.id]" :name="item.id"
                           @change="updateSelected"></u-checkbox>
             </label>
-            <view class="u-flex  box-left box-left">
+            <view class="u-flex-1  box-left box-left">
               <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon>
               {{ item.category.name }}
             </view>
@@ -40,7 +40,7 @@
             <view class="u-flex-1  box-right amount-red" v-else>
               +￥{{ item.amount }}
             </view>
-            <view class="u-flex-2 box-right item-date">
+            <view class="u-flex-1 box-right item-date">
               {{ item.date }}
             </view>
           </view>
@@ -49,7 +49,7 @@
         </view>
       </view>
     </view>
-    <view v-else-if="currentStep === 1">
+    <view v-show="currentStep === 1">
       <view>
         <u-form label-width="150">
 
@@ -141,20 +141,35 @@ export default {
       limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
     }
   },
+  onShow() {
+
+  },
   onLoad(options) {
-    if (options.id) {
-      this.info(options.id)
-    }
-    this.getList(true)
     this.get_search_config()
+    if (options.id) {
+      this.formData.id = options.id
+      this.info()
+    } else {
+      this.getList(true)
+    }
   },
   methods: {
-    info(id) {
-      get_detail({id: id}).then(res => {
-        if (res.code == 0) {
+    async info() {
+      let that = this
+      await get_detail({id: this.formData.id}).then(res => {
+        if (res.code === 0) {
           this.formData = res.data.info
-
+          this.form.cashbook_id = res.data.info.cashbook_id
+          this.getList(true)
+          res.data.cashflows.forEach(item => {
+            this.selectedItems[item.id] = true
+          })
+          if (res.data.info.files.length > 0) {
+            that.initialFiles = res.data.info.files
+          }
         }
+      }).finally(() => {
+
       })
     },
 
@@ -220,8 +235,6 @@ export default {
       return true;
     },
     updateSelected(event) {
-      console.log(event)
-      console.log(this.selectedItems)
       const {name, checked} = event;
       this.$set(this.selectedItems, name, checked);
     },
@@ -296,12 +309,9 @@ export default {
         this.$u.toast('请选择账单')
         return
       }
-      let formData = {
-        ids: ids.join(','),
-        remark: this.formData.remark,
-        images: this.formData.images,
-        cashbook_id: this.form.cashbook_id,
-      }
+
+      this.formData.ids = ids.join(',')
+      this.formData.cashbook_id = this.form.cashbook_id
       let that = this
       uni.showModal({
         title: '',
@@ -309,14 +319,14 @@ export default {
         success: (res) => {
           if (res.confirm) {
             if (this.formData.id) {
-              update(formData).then(res => {
+              update(that.formData).then(res => {
                 that.$u.toast(res.msg);
                 if (res.code == 0) {
                   uni.navigateBack()
                 }
               })
             } else {
-              create(formData).then(res => {
+              create(that.formData).then(res => {
                 that.$u.toast(res.msg);
                 if (res.code == 0) {
                   uni.navigateBack()
@@ -328,8 +338,6 @@ export default {
           }
         }
       })
-      console.log(formData)
-
     },
   }
 }

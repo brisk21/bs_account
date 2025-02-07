@@ -85,6 +85,7 @@ export default {
   watch: {
     defaultFiles(newVal) {
       this.fileList = newVal;
+      console.log('defaultFiles', newVal);
     },
   },
   methods: {
