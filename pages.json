@@ -393,14 +393,14 @@
           "path": "baoxiao/detail",
           "style": {
             "navigationBarTitleText": "详情",
-            "enablePullDownRefresh": true
+            "enablePullDownRefresh": false
           }
         },
         {
           "path": "baoxiao/form",
           "style": {
             "navigationBarTitleText": "增改",
-            "enablePullDownRefresh": true
+            "enablePullDownRefresh": false
           }
         }
       ]

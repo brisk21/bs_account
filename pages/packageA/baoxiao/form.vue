@@ -75,11 +75,11 @@
 
     <!-- 按钮操作 -->
     <view class="button-group">
-      <u-button class="buttons" @click="prevStep" size="medium "  :disabled="currentStep === 0"
-                v-show="currentStep>0">上一步
+      <u-button class="buttons" @click="prevStep" size="medium "  :disabled="currentStep == 0"
+                v-if="currentStep>0">上一步
       </u-button>
-      <u-button class="buttons" @click="nextStep" size="medium "  v-show="currentStep === 0">下一步</u-button>
-      <u-button class="buttons" @click="submit" size="medium "  type="primary" v-show="currentStep === 1">提交
+      <u-button class="buttons" @click="nextStep" size="medium "  v-if="currentStep == 0">下一步</u-button>
+      <u-button class="buttons" @click="submit" size="medium "  type="primary" v-if="currentStep == 1">提交
       </u-button>
     </view>
   </view>
@@ -520,9 +520,13 @@ export default {
     padding: 10px;
     border-radius: 5px;
     border: none;
-    background-color: #42b983;
     color: white;
     font-size: 16px;
+    background-color: #089c08;
+    /* #ifdef MP-WEIXIN */
+    background-color: unset !important;
+    /* #endif */
+
 
     &:disabled {
       background-color: #d3d3d3;

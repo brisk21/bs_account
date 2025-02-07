@@ -357,7 +357,6 @@ export default {
     padding: 10px;
     border-radius: 5px;
     border: none;
-    background-color: #42b983;
     color: white;
     font-size: 16px;
 
