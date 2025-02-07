@@ -20,3 +20,6 @@ export const remove = (params) => {
     return Vue.prototype.$u.delete('extend/reimbursement/remove', params);
 };
 
+export const check = (params) => {
+    return Vue.prototype.$u.put('extend/reimbursement/check', params);
+}

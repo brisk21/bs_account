@@ -59,8 +59,9 @@
               </view>
             </view>
             <view class="data-item-footer">
-              <u-icon class="btn" @tap="toDetail(item)" size="46" name="edit-pen"></u-icon>
-              <u-icon class="btn" v-if="item.is_owner" @tap="del(item)" size="46" name="trash"></u-icon>
+              <u-icon v-if="item.buttons.check===1" class="btn" title="审核" @tap="toBillList(item)" size="46" name="checkmark-circle"></u-icon>
+              <u-icon v-if="item.buttons.edit===1" class="btn" @tap="toDetail(item)" size="46" name="edit-pen"></u-icon>
+              <u-icon v-if="item.buttons.delete===1" class="btn"  @tap="del(item)" size="46" name="trash"></u-icon>
             </view>
           </view>
 

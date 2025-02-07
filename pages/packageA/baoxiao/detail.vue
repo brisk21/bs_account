@@ -32,21 +32,56 @@
 
         </u-form-item>
         <u-form-item label="备注:">
-          <u-input type="textarea" disabled v-model="formData.remark" placeholder="请输入备注" style="height: 100px"
-                   auto-height></u-input>
+          <text style="color: rgb(111,108,108)">{{ formData.remark }}</text>
+
         </u-form-item>
+        <u-form-item label="状态:">
+          <u-tag v-if="formData.status==1" type="success" :text="formData.status_desc"/>
+          <u-tag v-if="formData.status==-1" type="danger" :text="formData.status_desc"/>
+          <u-tag v-if="formData.status==0" type="primary" :text="formData.status_desc"/>
+        </u-form-item>
+        <u-form-item v-if="formData.check_time" label="审核时间:">
+          <text style="color: rgb(111,108,108)">{{ formData.check_time }}</text>
+        </u-form-item>
+        <u-form-item v-if="formData.check_fail_reason" label="驳回理由:">
+          <text style="color: rgb(111,108,108)">{{ formData.check_fail_reason }}</text>
+        </u-form-item>
+        <u-form-item label="提交时间:">
+          <text style="color: rgb(111,108,108)">{{ formData.created_at }}</text>
+        </u-form-item>
+        <u-form-item label="审核状态:" v-if="formData && formData.buttons.check===1">
+          <u-radio-group v-model="form.status">
+            <u-radio name="1">通过</u-radio>
+            <u-radio name="-1">驳回</u-radio>
+          </u-radio-group>
+        </u-form-item>
+        <u-form-item label="审核不通过原因:" v-if=" formData && formData.buttons.check==1 && form.status==-1">
+          <u-input v-model="form.check_fail_reason" placeholder="请输入驳回理由" placeholder-style="color: #c8c4c4"
+                   :border="false"
+                   :clearable="false"
+                   :disabled="formData.buttons.check!==1"
+                   :maxlength="200"
+                   :autofocus="false"
+                   :focus="false"
+                   :show-word-limit="true"
+                   :auto-height="false"></u-input>
+        </u-form-item>
+
       </u-form>
     </view>
     <view class="button-group">
 
-      <u-button class="buttons" @click="goBack" size="medium " plain type="primary"  >返回
+      <u-button class="buttons" @click="goBack" size="medium " plain type="primary">返回
+      </u-button>
+      <u-button v-if="formData && formData.buttons.check==1" class="buttons" type="warning" @click="check" size="medium " plain>
+        提交审核
       </u-button>
     </view>
 
   </view>
 </template>
 <script>
-import {get_detail} from "@/common/p_reimbursement"
+import {get_detail, check} from "@/common/p_reimbursement"
 
 export default {
   components: {},
@@ -60,6 +95,11 @@ export default {
         remark: '',
         images: [],
       },
+      form: {
+        id: 0,
+        status: 1,
+        check_fail_reason: '',
+      }
     }
   },
   onShow() {
@@ -95,6 +135,51 @@ export default {
       uni.navigateBack({
         delta: 1
       })
+    },
+    check() {
+      this.form.id = this.formData.id
+      if (!this.form.status) {
+        uni.showToast({
+          title: '请选择审核状态',
+          icon: 'none'
+        })
+        return
+      }
+      if (this.form.status === -1 && !this.form.check_fail_reason) {
+        uni.showToast({
+          title: '请填写驳回理由',
+          icon: 'none'
+        })
+        return
+      }
+      uni.showModal({
+        title: '确定提交审核吗？',
+        content: '请确认信息无误',
+        success: (res) => {
+          if (res.confirm) {
+            uni.showLoading({
+              title: '正在提交'
+            })
+            check(this.form).then(res => {
+              uni.showToast({
+                title: res.msg,
+                icon: 'none'
+              })
+              if (res.code === 0) {
+
+                setTimeout(() => {
+                  uni.hideLoading()
+                  uni.navigateBack({
+                    delta: 1
+                  })
+                }, 1000)
+              }
+            })
+          }
+        }
+      })
+
+
     },
 
 
