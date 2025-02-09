@@ -40,12 +40,6 @@
         </u-cell-group>
       </view>
     </view>
-    <!-- #ifdef MP-->
-    <ad-custom v-if="userInfo && userInfo.position.setting_page" unit-id="adunit-1709c673b8c4e1e0" bindload="adLoad"
-               binderror="adError" bindclose="adClose"></ad-custom>
-    <!-- #endif-->
-
-
   </view>
 </template>
 
