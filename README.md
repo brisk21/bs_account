@@ -39,13 +39,13 @@
 | **其它基础功能**    | ✔️         | ✔️         |
 | **报销管理**      | ❌          | ✔️         |
 | **私有化部署**     | ✔️         | ✔️         |
- | **代码费用**      | ￥0.00      | ￥200       |
-| **帮忙私有化部署费用** | ￥100        | ￥100        |
-|-  php版本    | 8.0+       | 8.0+       |
-|- 前端框架     | vue2       | vue2       |
-|- 后端框架      | thinkphp8  | thinkphp8  |
-|- 数据库    | mysql      | mysql      |
-|- 管理后台前端框架  | element UI | element UI |
+ | **php代码费用**   | 开源         | ￥200       |
+| **帮忙私有化部署费用** | ￥100       | ￥100        |
+| -  php版本      | 8.0+       | 8.0+       |
+| - 前端框架        | vue2       | vue2       |
+| - 接口后端框架      | thinkphp8  | thinkphp8  |
+| - 数据库         | mysql      | mysql      |
+| - 管理后台前端框架    | element UI | element UI |
 
 ### 系统展示
 <img src="./unpackage/demo-image/gh_8d928c988fe5_258.jpg" width="200" title="微信小程序" />
