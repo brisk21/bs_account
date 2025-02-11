@@ -64,10 +64,10 @@
           {{ info.username||'--' }}
         </view>
       </view>
-      <view class="line" v-if="info.image">
+      <view class="line" v-if="info.image_list && info.image_list.length>0">
         <text class="type">附件：</text>
-        <view style="font-size: 28rpx;width: 70%;">
-         <u-image  @click="previewImg()"  height="150rpx" width="150rpx" :src="info.image"></u-image>
+        <view style="font-size: 28rpx;width: 80px;" v-for="(image,index) in info.image_list" :key="index">
+         <u-image   @click="previewImg(info.image_list)"  height="150rpx" width="150rpx" :src="image"></u-image>
         </view>
       </view>
 
@@ -102,10 +102,10 @@ export default {
     }
   },
   methods: {
-    previewImg() {
+    previewImg(imageList) {
       uni.previewImage({
         current: 0,
-        urls: [this.info.image]
+        urls: imageList
       });
     },
     getCashflowInfo() {

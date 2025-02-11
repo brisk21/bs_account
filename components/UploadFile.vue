@@ -15,11 +15,13 @@
       @on-error="handleError"
       @on-success="uploadSuccess"
       @on-remove="handleRemove"
+      @on-choose-complete="handleChooseOK"
     ></u-upload>
   </view>
 </template>
 
 <script>
+import constConfig from "const"
 export default {
   name: 'UploadFile',
   props: {
@@ -76,6 +78,10 @@ export default {
         return [];
       },
     },
+    unique_id: {
+      type: String|Number,
+      default: '1',
+    },
   },
   data() {
     return {
@@ -85,17 +91,25 @@ export default {
   watch: {
     defaultFiles(newVal) {
       this.fileList = newVal;
-      console.log('defaultFiles', newVal);
     },
   },
   methods: {
+    startUpload() {
+      return this.$refs.upload.upload();
+    },
     handleRemove(index, lists, name) {
-      this.$emit('remove', { index, fileList: lists });
+      this.$emit('remove', { index, fileList: lists , unique_id: this.unique_id,});
       this.fileList = lists;
     },
     uploadSuccess(res, index, lists, name) {
       if (res.code === 0) {
-        this.$emit('success', { url: res.data.full_url, index, fileList: lists ,res});
+        this.$emit('success', {
+          url: res.data.full_url,
+          index,
+          fileList: lists ,
+          res,
+          unique_id: this.unique_id,
+        });
       } else {
         this.$u.toast(res.msg);
         this.handleRemove(index, lists, name);
@@ -107,6 +121,13 @@ export default {
     beforeUpload(file) {
       	return true;
     },
+    handleChooseOK(list,index){
+      this.$emit('choose-ok', {
+        fileList: list,
+        index,
+        unique_id: this.unique_id,
+      });
+    }
   },
 };
 </script>

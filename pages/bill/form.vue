@@ -134,14 +134,19 @@
       <view class="line">
         <text class="popup_type">附件图片：</text>
         <upload-file
-            :action="action"
-            :max-size="maxSize"
-            :max-count="maxCount"
-            :limit-type="limitType"
-            :default-files="initialFiles"
-            @success="handleFileUploadSuccess"
-            @remove="handleFileUploadRemove"
-        />
+              :auto-upload="false"
+              :unique_id="1"
+              ref="upload"
+              :default-files="initialFiles"
+              :action="action"
+              :max-size="maxSize"
+              :max-count="maxCount"
+              :limit-type="limitType"
+              @success="handleFileUploadSuccess"
+              @remove="handleFileUploadRemove"
+              @error="handleError"
+              @choose-ok="handleChooseOK"
+          />
       </view>
 
       <view class="line">
@@ -203,7 +208,7 @@ export default {
         date: '',
         remark: '',
         amount_type: '',
-        image: null,
+        image: [],
         is_cycle: false,
         cycle_type: '', // 新增字段
         cycle_days: '',
@@ -234,8 +239,12 @@ export default {
       action: constConfig.baseUrl + '/upload/image',
 
       maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
-      maxCount: 1, // 可以设置不同的数量限制
+      maxCount: 5, // 可以设置不同的数量限制
       limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
+
+      imageCount: 0,
+      uploadCount: 0,
+      image_list: []
     }
   },
   mounted() {
@@ -324,20 +333,37 @@ export default {
     setAmountType(item) {
       this.formData.amount_type = item
     },
-    handleFileUploadSuccess({url, index, fileList, res}) {
-      console.log('文件上传成功:', url);
+     handleChooseOK(res) {
+      let {fileList, index, unique_id} = res
+      console.log('handleChooseOK', [fileList, index, unique_id])
+      //this.formData[unique_id].image_list = fileList
+      this.imageCount++;
+    },
+     handleError(data, index, lists, name) {
+      this.$u.toast('文件上传失败')
+      this.handleRemove(index, lists, name)
+    },
+    handleFileUploadSuccess({url, index, fileList, res, unique_id}) {
+      console.log('文件上传成功:', fileList);
       if (res.code == 0) {
-        this.formData.image = res.data.full_url
+        this.formData.image.push(res.data.full_url)
+        console.log(this.formData.image)
+       // this.formData.image = this.formData.image
+        this.uploadCount++;
       } else {
         this.$u.toast(res.msg)
         //移除文件
         this.$refs.upload.remove(index)
+
+        this.formData.image.splice(index, 1)
       }
     },
-    handleFileUploadRemove({index, fileList}) {
+    handleFileUploadRemove({index, fileList, unique_id}) {
       // 更新状态或者做其他处理
       console.log('文件已被移除:', index);
-      this.formData.image = null
+      this.formData.image.splice(index, 1)
+      this.imageCount--;
+      return true
     },
     beforeUpload(index, list) {
       return true;
@@ -421,12 +447,28 @@ export default {
           if (res.data.cashbook_list.length > 0) {
             this.cashbook_list = res.data.cashbook_list
           }
+          if (res.data.max_image_count){
+            this.maxCount = res.data.max_image_count
+          }
 
           if (res.data.info) {
             this.formData = res.data.info
             this.formData.type = this.type === 0 ? 20 : 10
-            if (this.formData.image) {
-              this.initialFiles = [{url: this.formData.image}]
+            this.formData.image = [];
+            if (this.formData.image_list.length > 0) {
+              this.formData.image = this.formData.image_list
+              console.log(this.formData.image)
+              //this.imageCount = this.formData.image.length
+              //this.initialFiles = [{url: this.formData.image}]
+              let initialFiles = []
+              for (let i = 0; i < this.formData.image_list.length; i++) {
+                 initialFiles.push({
+                  url: this.formData.image[i],
+                  //unique_id: this.formData.image[i]
+                })
+              }
+              console.log(initialFiles)
+              this.initialFiles =  initialFiles
             }
           }
           if (res.data.diy_action) {
@@ -482,8 +524,12 @@ export default {
     },
 
 
-    submit() {
-      console.log(this.$store.getters, 'getters')
+   async submit() {
+       let that = this;
+      if (that.disabled === true) {
+        return false;
+      }
+
       if (!this.formData.category_id) {
         this.$u.toast('请选择分类')
         return
@@ -493,39 +539,65 @@ export default {
         return
       }
 
-      uni.showModal({
+
+      //todo 多图上传被异步的问题，目前用了while 循环，但可能存在问题，需要优化
+      let pollCount = 0; // 新增：用于记录轮询次数
+      const maxPollAttempts = 60; // 设置最大轮询次数（例如60次，即最多等待60秒）
+      console.log('imageCount', that.imageCount)
+      // 遍历所有的upload组件并调用startUpload
+      await that.$refs.upload.startUpload();
+      // 等待所有图片上传完成
+      while (that.imageCount > that.uploadCount) {
+        uni.showLoading({
+          title: '正在上传...',
+        });
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        pollCount++; // 每次轮询后增加计数器
+        uni.hideLoading();
+
+        // 可选：在每次轮询时检查是否已经完成上传，提前退出
+        if (that.imageCount === that.uploadCount || pollCount >= maxPollAttempts) {
+          break;
+        }
+      }
+      if (pollCount >= maxPollAttempts) {
+        console.warn('达到最大轮询次数，可能有上传任务未完成');
+        // 在这里可以添加一些额外的逻辑，比如提示用户上传可能失败了
+      }
+      console.log('uploadedCount', that.uploadCount)
+      console.log('formData',that.formData)
+
+     let submitAction = function (formData) {
+       uni.showModal({
         title: '',
         content: '确定保存吗？',
-        success: (res) => {
+        success:  (res) => {
           if (res.confirm) {
-            this.disabled = true
-            uni.showLoading({
-              title: '保存中...'
-            })
-            if (this.formData.id) {
-              this.$u.api.updateCashflow(this.formData).then(res => {
-                this.$u.toast(res.msg, 1000);
+            that.disabled = true
+            if (that.formData.id) {
+              that.$u.api.updateCashflow(that.formData).then(res => {
+                that.$u.toast(res.msg, 1000);
                 if (res.code == 0) {
                   setTimeout(() => {
                     uni.navigateBack()
                   }, 1000)
                 }
                 uni.hideLoading()
-                this.disabled = false
+                that.disabled = false
               }).catch(() => {
                 uni.hideLoading()
-                this.disabled = false
+                that.disabled = false
               })
             } else {
-              this.$u.api.createCashFlow(this.formData).then(res => {
+              that.$u.api.createCashFlow(that.formData).then(res => {
                 if (res.code == 0) {
                   //开启了连续添加模式
-                  if (this.diy_action && this.diy_action.bill_action_continue.value) {
-                    this.$u.toast('添加成功，您可以继续添加新记录', 3000)
-                    this.formData = {
+                  if (that.diy_action && that.diy_action.bill_action_continue.value) {
+                    that.$u.toast('添加成功，您可以继续添加新记录', 3000)
+                    that.formData = {
                       id: 0,
                       budge_id: 0,
-                      cashbook_id: 0,
+                      //cashbook_id: 0,
                       type: this.formData.type,
                       amount: '',
                       category_id: 0,
@@ -536,7 +608,7 @@ export default {
                       image: null
                     }
                   } else {
-                    this.$u.toast(res.msg)
+                    that.$u.toast(res.msg)
                     setTimeout(function () {
                       uni.switchTab({
                         url: '/pages/index/index'
@@ -545,20 +617,23 @@ export default {
                   }
 
                 } else {
-                  this.$u.toast(res.msg);
+                  that.$u.toast(res.msg);
                 }
                 uni.hideLoading()
                 this.disabled = false
               }).catch(() => {
                 uni.hideLoading()
-                this.disabled = false
+                that.disabled = false
               })
             }
           } else if (res.cancel) {
-            //this.$u.toast('已取消');
+            //that.$u.toast('已取消');
           }
         }
       })
+     }
+      submitAction(that.formData)
+
     },
 
 
