@@ -20,7 +20,7 @@
           <u-cell-item @click="gotoPath('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
           <u-cell-item @click="gotoPath('/pages/setting/xieyi',false)" title="协议与隐私政策"
                        icon="order"></u-cell-item>
-          <u-cell-item @click="gotoPath('/pages/setting/beian',false)" title="应用备案号" icon="bookmark">
+          <u-cell-item v-if="beian_no" @click="gotoPath('/pages/setting/beian',false)" title="应用备案号" icon="bookmark">
             {{ beian_no }}
           </u-cell-item>
 
