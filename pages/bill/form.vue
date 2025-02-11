@@ -253,6 +253,9 @@ export default {
     this.formData.date = dayjs().format('YYYY-MM-DD')
   },
   onShow() {
+     if (this.hasLogin) {
+      this.$store.dispatch('getUserInfo')
+    }
     this.get_ready()
   },
   created() {
