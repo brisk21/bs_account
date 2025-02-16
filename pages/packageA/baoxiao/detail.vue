@@ -4,6 +4,11 @@
 
     <view>
       <u-form label-width="100" label-position="top">
+        <u-form-item label="小计:" v-if="formData.count">
+          <view style="color: rgb(6,88,238)">总笔数 {{ formData.count.bill_count }} 笔；</view>
+          <view style="color: rgb(233,8,8)">总金额 ￥{{ formData.count.total_amount }} 元</view>
+
+        </u-form-item>
         <u-form-item label="账单:">
           <view v-if="list.length > 0" class="scroll data-list">
 
@@ -25,13 +30,13 @@
             </view>
           </view>
         </u-form-item>
-        <u-form-item label="附件:">
+        <u-form-item label="申请附件:">
           <u-image v-for="(item, index) in formData.images" :key="index"
                    @click="previewImg(index)"
                    height="150rpx" width="150rpx" :src="item"></u-image>
 
         </u-form-item>
-        <u-form-item label="备注:">
+        <u-form-item label="申请说明:">
           <text style="color: rgb(111,108,108)">{{ formData.remark }}</text>
 
         </u-form-item>
@@ -55,6 +60,14 @@
             <u-radio name="-1">驳回</u-radio>
           </u-radio-group>
         </u-form-item>
+        <u-form-item label="审核备注:" v-if="formData.status==1 ||formData.status==-1">
+          <text style="color: rgb(111,108,108)">{{ formData.check_remark || '无'}}</text>
+        </u-form-item>
+        <u-form-item label="审核附件:" v-if="formData.status==1 ||formData.status==-1">
+          <u-image v-for="(item, index) in formData.check_images" :key="index"
+                   @click="previewImgLsit(formData.check_images)"
+                   height="150rpx" width="150rpx" :src="item"></u-image>
+        </u-form-item>
         <u-form-item label="审核不通过原因:" v-if=" formData.buttons && formData.buttons.check==1 && form.status==-1">
           <u-input v-model="form.check_fail_reason" placeholder="请输入驳回理由" placeholder-style="color: #c8c4c4"
                    :border="false"
@@ -65,6 +78,25 @@
                    :show-word-limit="true"
                    :auto-height="false"></u-input>
         </u-form-item>
+        <view v-show="formData.buttons && formData.buttons.check===1">
+          <view>
+            <u-form-item label="审核附件：">
+              <upload-file
+                  :action="action"
+                  :max-size="maxSize"
+                  :max-count="maxCount"
+                  :limit-type="limitType"
+                  :default-files="initialFiles"
+                  @success="handleFileUploadSuccess"
+                  @remove="handleFileUploadRemove"
+              />
+            </u-form-item>
+            <u-form-item label="审核说明：">
+              <u-input type="textarea" v-model="form.check_remark" placeholder="请输入备注" style="height: 100px"
+                       auto-height></u-input>
+            </u-form-item>
+          </view>
+        </view>
 
       </u-form>
     </view>
@@ -82,9 +114,13 @@
 </template>
 <script>
 import {get_detail, check} from "@/common/p_reimbursement"
+import constConfig from "@/const";
+import uploadFile from "@/components/UploadFile.vue";
 
 export default {
-  components: {},
+  components: {
+    uploadFile
+  },
   data() {
     return {
 
@@ -99,11 +135,22 @@ export default {
         id: 0,
         status: 1,
         check_fail_reason: '',
-      }
+        check_remark: '',
+        check_images: [],
+      },
+
+      initialFiles: [],
+      action: constConfig.baseUrl + '/upload/image',
+
+      maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
+      maxCount: 4, // 可以设置不同的数量限制
+      limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
     }
   },
   onShow() {
-
+    if (this.hasLogin) {
+      this.$store.dispatch('getUserInfo')
+    }
   },
   onLoad(options) {
     if (options.id) {
@@ -112,6 +159,22 @@ export default {
     }
   },
   methods: {
+    handleFileUploadSuccess({url, index, fileList, res}) {
+      console.log('文件上传成功:', url);
+      if (res.code == 0) {
+        this.form.check_images.push(res.data.full_url)
+      } else {
+        this.$u.toast(res.msg)
+        //移除文件
+        this.$refs.upload.remove(index)
+      }
+    },
+    handleFileUploadRemove({index, fileList}) {
+      // 更新状态或者做其他处理
+      console.log('文件已被移除:', index);
+      //移除对应的文件
+      this.check_images.images.splice(index, 1)
+    },
     toDetail(id) {
       uni.navigateTo({
         url: `/pages/index/detail?id=${id}`
@@ -129,6 +192,12 @@ export default {
           .finally(() => {
 
           })
+    },
+    previewImgLsit(imageList) {
+      uni.previewImage({
+        current: 0,
+        urls: imageList
+      });
     },
     previewImg(index) {
       uni.previewImage({

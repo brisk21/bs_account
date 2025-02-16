@@ -7,7 +7,7 @@
     <view v-show="currentStep === 0">
       <view>
         <view class="search-box">
-          <u-dropdown  >
+          <u-dropdown>
             <u-dropdown-item v-model="form.cashbook_id" title="选择账本"
                              :value="form.cashbook_id"
                              :options="cashbook_list"
@@ -75,11 +75,11 @@
 
     <!-- 按钮操作 -->
     <view class="button-group">
-      <u-button class="buttons" @click="prevStep" size="medium "  :disabled="currentStep == 0"
+      <u-button class="buttons" @click="prevStep" size="medium " :disabled="currentStep == 0"
                 v-if="currentStep>0">上一步
       </u-button>
-      <u-button class="buttons" @click="nextStep" size="medium "  v-if="currentStep == 0">下一步</u-button>
-      <u-button class="buttons" @click="submit" size="medium "  type="primary" v-if="currentStep == 1">提交
+      <u-button class="buttons" @click="nextStep" size="medium " v-if="currentStep == 0">下一步</u-button>
+      <u-button class="buttons" @click="submit" size="medium " type="primary" v-if="currentStep == 1">提交
       </u-button>
     </view>
   </view>
@@ -142,7 +142,9 @@ export default {
     }
   },
   onShow() {
-
+    if (this.hasLogin) {
+      this.$store.dispatch('getUserInfo')
+    }
   },
   onLoad(options) {
     this.get_search_config()

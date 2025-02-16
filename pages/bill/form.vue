@@ -107,25 +107,26 @@
       </view>
 
 
-
       <u-form-item class="form-item" label="备注：" label-width="120">
         <u-input v-model="formData.remark" type="textarea"
                  placeholder="添加备注" maxlength="500"
                  clearable border auto-height/>
       </u-form-item>
 
-      <u-form-item v-if="diy_action && diy_action.enable_bill_cycle && diy_action.enable_bill_cycle.value" class="form-item" label="周期循环：" label-width="150">
-         <u-radio-group v-model="formData.cycle_type" @change="cycleChange">
-            <u-radio name="">不循环</u-radio>
-            <u-radio name="daily">每日</u-radio>
-            <u-radio name="weekly">每周</u-radio>
-            <u-radio name="monthly">每月</u-radio>
-            <u-radio name="quarterly">每季度</u-radio>
-            <u-radio name="yearly">每年</u-radio>
-            <u-radio name="custom">自定义</u-radio>
-          </u-radio-group>
+      <u-form-item v-if="diy_action && diy_action.enable_bill_cycle && diy_action.enable_bill_cycle.value"
+                   class="form-item" label="周期循环：" label-width="150">
+        <u-radio-group v-model="formData.cycle_type" @change="cycleChange">
+          <u-radio name="">不循环</u-radio>
+          <u-radio name="daily">每日</u-radio>
+          <u-radio name="weekly">每周</u-radio>
+          <u-radio name="monthly">每月</u-radio>
+          <u-radio name="quarterly">每季度</u-radio>
+          <u-radio name="yearly">每年</u-radio>
+          <u-radio name="custom">自定义</u-radio>
+        </u-radio-group>
       </u-form-item>
-      <u-form-item v-if="diy_action && formData.cycle_type && formData.cycle_type === 'custom'" class="form-item" label="循环天数：" label-width="150">
+      <u-form-item v-if="diy_action && formData.cycle_type && formData.cycle_type === 'custom'" class="form-item"
+                   label="循环天数：" label-width="150">
         <u-input v-model="formData.cycle_days" type="digit"
                  placeholder="请输入天数" maxlength="500"
                  clearable border auto-height/>
@@ -134,19 +135,19 @@
       <view class="line">
         <text class="popup_type">附件图片：</text>
         <upload-file
-              :auto-upload="false"
-              :unique_id="1"
-              ref="upload"
-              :default-files="initialFiles"
-              :action="action"
-              :max-size="maxSize"
-              :max-count="maxCount"
-              :limit-type="limitType"
-              @success="handleFileUploadSuccess"
-              @remove="handleFileUploadRemove"
-              @error="handleError"
-              @choose-ok="handleChooseOK"
-          />
+            :auto-upload="false"
+            :unique_id="1"
+            ref="upload"
+            :default-files="initialFiles"
+            :action="action"
+            :max-size="maxSize"
+            :max-count="maxCount"
+            :limit-type="limitType"
+            @success="handleFileUploadSuccess"
+            @remove="handleFileUploadRemove"
+            @error="handleError"
+            @choose-ok="handleChooseOK"
+        />
       </view>
 
       <view class="line">
@@ -263,7 +264,7 @@ export default {
   },
   onShow() {
     if (this.hasLogin) {
-	  this.$store.dispatch('getUserInfo')
+      this.$store.dispatch('getUserInfo')
     }
     this.get_ready()
   },
@@ -273,14 +274,14 @@ export default {
 
   methods: {
 
-    cycleChange(val){
+    cycleChange(val) {
       this.formData.is_cycle = true
-      if (!val){
+      if (!val) {
         this.formData.is_cycle = false
         this.formData.cycle_type = ''
         this.formData.cycle_days = ''
       }
-      if(val !== 'custom'){
+      if (val !== 'custom') {
         this.formData.cycle_days = ''
       }
     },
@@ -336,13 +337,13 @@ export default {
     setAmountType(item) {
       this.formData.amount_type = item
     },
-     handleChooseOK(res) {
+    handleChooseOK(res) {
       let {fileList, index, unique_id} = res
       console.log('handleChooseOK', [fileList, index, unique_id])
       //this.formData[unique_id].image_list = fileList
       this.imageCount++;
     },
-     handleError(data, index, lists, name) {
+    handleError(data, index, lists, name) {
       this.$u.toast('文件上传失败')
       this.handleRemove(index, lists, name)
     },
@@ -351,7 +352,7 @@ export default {
       if (res.code == 0) {
         this.formData.image.push(res.data.full_url)
         console.log(this.formData.image)
-       // this.formData.image = this.formData.image
+        // this.formData.image = this.formData.image
         this.uploadCount++;
       } else {
         this.$u.toast(res.msg)
@@ -450,7 +451,7 @@ export default {
           if (res.data.cashbook_list.length > 0) {
             this.cashbook_list = res.data.cashbook_list
           }
-          if (res.data.max_image_count){
+          if (res.data.max_image_count) {
             this.maxCount = res.data.max_image_count
           }
 
@@ -465,13 +466,13 @@ export default {
               //this.initialFiles = [{url: this.formData.image}]
               let initialFiles = []
               for (let i = 0; i < this.formData.image_list.length; i++) {
-                 initialFiles.push({
+                initialFiles.push({
                   url: this.formData.image[i],
                   //unique_id: this.formData.image[i]
                 })
               }
               console.log(initialFiles)
-              this.initialFiles =  initialFiles
+              this.initialFiles = initialFiles
             }
           }
           if (res.data.diy_action) {
@@ -527,8 +528,8 @@ export default {
     },
 
 
-   async submit() {
-       let that = this;
+    async submit() {
+      let that = this;
       if (that.disabled === true) {
         return false;
       }
@@ -568,73 +569,73 @@ export default {
         // 在这里可以添加一些额外的逻辑，比如提示用户上传可能失败了
       }
       console.log('uploadedCount', that.uploadCount)
-      console.log('formData',that.formData)
+      console.log('formData', that.formData)
 
-     let submitAction = function (formData) {
-       uni.showModal({
-        title: '',
-        content: '确定保存吗？',
-        success:  (res) => {
-          if (res.confirm) {
-            that.disabled = true
-            if (that.formData.id) {
-              that.$u.api.updateCashflow(that.formData).then(res => {
-                that.$u.toast(res.msg, 1000);
-                if (res.code == 0) {
-                  setTimeout(() => {
-                    uni.navigateBack()
-                  }, 1000)
-                }
-                uni.hideLoading()
-                that.disabled = false
-              }).catch(() => {
-                uni.hideLoading()
-                that.disabled = false
-              })
-            } else {
-              that.$u.api.createCashFlow(that.formData).then(res => {
-                if (res.code == 0) {
-                  //开启了连续添加模式
-                  if (that.diy_action && that.diy_action.bill_action_continue.value) {
-                    that.$u.toast('添加成功，您可以继续添加新记录', 3000)
-                    that.formData = {
-                      id: 0,
-                      budge_id: 0,
-                      //cashbook_id: 0,
-                      type: this.formData.type,
-                      amount: '',
-                      category_id: 0,
-                      budget_title: '',
-                      date: this.formData.date,
-                      remark: '',
-                      amount_type: '',
-                      image: null
-                    }
-                  } else {
-                    that.$u.toast(res.msg)
-                    setTimeout(function () {
-                      uni.switchTab({
-                        url: '/pages/index/index'
-                      })
+      let submitAction = function (formData) {
+        uni.showModal({
+          title: '',
+          content: '确定保存吗？',
+          success: (res) => {
+            if (res.confirm) {
+              that.disabled = true
+              if (that.formData.id) {
+                that.$u.api.updateCashflow(that.formData).then(res => {
+                  that.$u.toast(res.msg, 1000);
+                  if (res.code == 0) {
+                    setTimeout(() => {
+                      uni.navigateBack()
                     }, 1000)
                   }
+                  uni.hideLoading()
+                  that.disabled = false
+                }).catch(() => {
+                  uni.hideLoading()
+                  that.disabled = false
+                })
+              } else {
+                that.$u.api.createCashFlow(that.formData).then(res => {
+                  if (res.code == 0) {
+                    //开启了连续添加模式
+                    if (that.diy_action && that.diy_action.bill_action_continue.value) {
+                      that.$u.toast('添加成功，您可以继续添加新记录', 3000)
+                      that.formData = {
+                        id: 0,
+                        budge_id: 0,
+                        //cashbook_id: 0,
+                        type: this.formData.type,
+                        amount: '',
+                        category_id: 0,
+                        budget_title: '',
+                        date: this.formData.date,
+                        remark: '',
+                        amount_type: '',
+                        image: null
+                      }
+                    } else {
+                      that.$u.toast(res.msg)
+                      setTimeout(function () {
+                        uni.switchTab({
+                          url: '/pages/index/index'
+                        })
+                      }, 1000)
+                    }
 
-                } else {
-                  that.$u.toast(res.msg);
-                }
-                uni.hideLoading()
-                this.disabled = false
-              }).catch(() => {
-                uni.hideLoading()
-                that.disabled = false
-              })
+                  } else {
+                    that.$u.toast(res.msg);
+                  }
+                  uni.hideLoading()
+                  this.disabled = false
+                }).catch(() => {
+                  uni.hideLoading()
+                  that.disabled = false
+                })
+              }
+            } else if (res.cancel) {
+              //that.$u.toast('已取消');
             }
-          } else if (res.cancel) {
-            //that.$u.toast('已取消');
           }
-        }
-      })
-     }
+        })
+      }
       submitAction(that.formData)
 
     },
