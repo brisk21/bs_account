@@ -8,9 +8,11 @@ const user = {
 	mutations: {
 		setToken: (state, token) => {
 			state.user_token = token
+			uni.setStorageSync('UserToken', token)
 		},
 		setUserInfo: (state, user_info) => {
 			state.user = user_info
+			uni.setStorageSync('UserInfo', user_info)
 		},
 		setUnreadCount: (state, count) => {
 			state.unread_count = count
@@ -59,6 +61,7 @@ const user = {
 					commit('setUserInfo', res.data)
 					commit('setCurCashbook', res.data.default_cashbook)
 					commit('setUnreadCount', res.data.unread_count)
+					commit('setToken', res.data.token)
 					resolve(res)
 				}).catch(err => {
 					reject(err)
