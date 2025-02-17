@@ -1,7 +1,7 @@
 ## BS记账
 
 ### 简介
-记账APP后台，uniapp（vue2）+ thinkphp6开发,管理后台用element ui
+记账APP后台，uniapp（vue2）+ thinkphp8开发,管理后台用element ui
 
 后端开源仓库：[https://gitee.com/brisklan/bs_account_backend](https://gitee.com/brisklan/bs_account_backend)
 
@@ -37,8 +37,7 @@
 | **消息中心**      | ✔️         | ✔️         |
 | **账簿管理**      | ✔️         | ✔️         |
 | **其它基础功能**    | ✔️         | ✔️         |
-| **报销管理**      | ❌          | ✔️         |
-| **账单多附件**     | ❌          | ✔️         |
+| **APP在线更新**     | ✔️         | ✔️         |
 | **私有化部署**     | ✔️         | ✔️         |
  | **php代码费用**   | 开源         | ￥200       |
 | **帮忙私有化部署费用** | ￥100       | ￥100        |
@@ -47,6 +46,11 @@
 | - 接口后端框架      | thinkphp8  | thinkphp8  |
 | - 数据库         | mysql      | mysql      |
 | - 管理后台前端框架    | element UI | element UI |
+| **报销管理**      | ❌          | ✔️         |
+| **账单多附件**     | ❌          | ✔️         |
+| **管理用户状态**    | ❌          | ✔️         |
+| **H5在线更新**    | ❌          | ✔️         |
+| **管理后台在线更新**    | ❌          | ✔️         |
 
 ### 系统展示
 <img src="./unpackage/demo-image/gh_8d928c988fe5_258.jpg" width="200" title="微信小程序" />
@@ -88,13 +92,13 @@ npm install mp-html@^2.5.0
 3.  在网页使用浏览器打开：https://jz.alipay168.cn
 
 
-### 联系方式
+### 加群讨论（请备注【bs记账】）
 微信：woyekeyiha
 
 遇到问题可以加微信交流。请备注：bs记账
 
 
-### 赞助
+### 投喂2分吧
 <img alt="赞助" src="./unpackage/demo-image/微信收款码.jpg" width="200" title="赞助"/>
 
 <img alt="赞助" src="./unpackage/demo-image/支付宝收款码.jpg" width="200" title="赞助"/>
