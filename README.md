@@ -1,7 +1,7 @@
 ## BS记账
 
 ### 简介
-记账APP后台，uniapp（vue2）+ thinkphp6开发,管理后台用element ui
+记账APP后台，uniapp（vue2）+ thinkphp8开发,管理后台用element ui
 
 后端开源仓库：[https://gitee.com/brisklan/bs_account_backend](https://gitee.com/brisklan/bs_account_backend)
 
@@ -37,9 +37,7 @@
 | **消息中心**      | ✔️         | ✔️         |
 | **账簿管理**      | ✔️         | ✔️         |
 | **其它基础功能**    | ✔️         | ✔️         |
-| **报销管理**      | ❌          | ✔️         |
-| **账单多附件**     | ❌          | ✔️         |
-| **管理用户状态**    | ❌          | ✔️         |
+| **APP在线更新**     | ✔️         | ✔️         |
 | **私有化部署**     | ✔️         | ✔️         |
  | **php代码费用**   | 开源         | ￥200       |
 | **帮忙私有化部署费用** | ￥100       | ￥100        |
@@ -48,6 +46,11 @@
 | - 接口后端框架      | thinkphp8  | thinkphp8  |
 | - 数据库         | mysql      | mysql      |
 | - 管理后台前端框架    | element UI | element UI |
+| **报销管理**      | ❌          | ✔️         |
+| **账单多附件**     | ❌          | ✔️         |
+| **管理用户状态**    | ❌          | ✔️         |
+| **H5在线更新**    | ❌          | ✔️         |
+| **管理后台在线更新**    | ❌          | ✔️         |
 
 ### 系统展示
 <img src="./unpackage/demo-image/gh_8d928c988fe5_258.jpg" width="200" title="微信小程序" />
