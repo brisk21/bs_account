@@ -3,12 +3,12 @@
     <view class="menu-container">
       <view class="menu-list">
         <u-cell-group>
-          <u-cell-item title="随手记备案号" :arrow="false">
+          <u-cell-item title="备案号" :arrow="false">
             {{ beian_no }}
           </u-cell-item>
           <u-cell-item title="查询链接">
-            <u-link :href="'https://beian.miit.gov.cn/'"
-                    :under-line="false">https://beian.miit.gov.cn
+            <u-link :href="beian_url"
+                    :under-line="false">{{beian_url}}
             </u-link>
           </u-cell-item>
         </u-cell-group>
@@ -20,20 +20,33 @@
 </template>
 
 <script>
-import constConfig from "const"
 
+import api from "@/common/setting";
 export default {
   components: {},
   data() {
     return {
-      beian_no: constConfig.beian_no
+      beian_no: '',
+      beian_no_xcx: '',
+      beian_url: ''
     }
   },
 
-  methods: {},
+  methods: {
+    base_info(){
+      api.base_info().then(res=>{
+        if (res.code==0){
+          this.beian_no = res.data.beian_no;
+          this.beian_no_xcx = res.data.beian_no_xcx;
+          this.beian_url = res.data.beian_url
+        }
+      })
+    }
+  },
   onLoad(options) {
+    this.base_info();
     // #ifdef MP-WEIXIN
-    this.beian_no = constConfig.beian_no_xcx;
+    this.beian_no = this.beian_no_xcx
     // #endif
   },
   onShow() {
