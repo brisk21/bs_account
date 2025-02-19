@@ -20,8 +20,8 @@
           <u-cell-item @click="gotoPath('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
           <u-cell-item @click="gotoPath('/pages/setting/xieyi',false)" title="协议与隐私政策"
                        icon="order"></u-cell-item>
-          <u-cell-item v-if="beian_no" @click="gotoPath('/pages/setting/beian',false)" title="应用备案号" icon="bookmark">
-            {{ beian_no }}
+          <u-cell-item @click="gotoPath('/pages/setting/beian',false)" title="应用备案号" icon="bookmark">
+           查看备案信息
           </u-cell-item>
 
 
@@ -59,7 +59,6 @@ export default {
   components: {},
   data() {
     return {
-      beian_no: constConfig.beian_no,
       app_version: null,
       show_version: false,
     }
@@ -150,9 +149,6 @@ export default {
   },
   onLoad(options) {
     this.getSystemInfo()
-    // #ifdef MP-WEIXIN
-    this.beian_no = constConfig.beian_no_xcx;
-    // #endif
   },
   onShow() {
     if (this.hasLogin) {
