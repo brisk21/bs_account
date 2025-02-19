@@ -57,7 +57,7 @@
       </view>
 
       <u-line></u-line>
-      <view class="line">
+      <view class="line" v-if="diy_action && diy_action.enable_amount_type && diy_action.enable_amount_type.value">
         <text class="popup_type">{{ formData.type === 10 ? '收入' : '支出' }}方式：</text>
         <u-tag
             v-show="formData.amount_type"
@@ -83,7 +83,7 @@
 
         <u-button class="save_btn" type="success" :disabled="disabled" size="medium" @click="submit()">保存</u-button>
       </view>
-      <view class="line">
+      <view class="line" v-if="diy_action && diy_action.enable_budget && diy_action.enable_budget.value">
         <text class="popup_type">关联预算：</text>
         <u-tag :closeable="true"
                v-show="!!formData.budget_id"
@@ -148,7 +148,7 @@
         <view>
           自定义操作：可以在【我的】》【设置】》【
           <text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>
-          】中自定义是否连续添加账单功能、启用账簿、启用循环周期功能，开启后添加新账单记录后会清理输入框并保留在当前页面，否则添加后自动返回上一页。
+          】中自定义<text style="color: red">是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理</text>等功能，开启相关功能后，可以有【选择收支方式】、【关联预算】、【关联账簿】等按钮，可以进行自定义操作。
         </view>
       </view>
 

@@ -31,7 +31,7 @@
           {{ info.amount_type || '无' }}
         </view>
       </view>
-      <view class="line">
+      <view class="line" v-if="info.budget_title">
         <text class="type">关联预算：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
           {{ info.budget_title||'无' }}
@@ -43,7 +43,7 @@
           {{ info.cashbook_title||'无' }}
         </view>
       </view>
-      <view class="line" >
+      <view class="line" v-if="info.cycle">
         <text class="type">周期执行：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
           {{info.cycle && info.cycle.cycle_type||'无'}}
