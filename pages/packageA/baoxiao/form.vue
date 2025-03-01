@@ -177,7 +177,6 @@ export default {
     },
 
     loadMore() {
-      this.form.page = this.form.page + 1
       this.getList()
     },
     get_search_config() {
@@ -213,6 +212,7 @@ export default {
     },
     set_cashbook(item) {
       // this.form.cashbook_id = item.value
+      this.selectedItems = {}
       this.form.cashbook_title = item.label
       this.getList(true)
     },

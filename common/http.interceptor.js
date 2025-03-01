@@ -55,7 +55,7 @@ const install = (Vue, vm) => {
                 vm.$u.toast('登录状态已过期，请重新登录')
                 return false;
             } else if (res.statusCode !== 200) {
-                vm.$u.toast('数据异常，请稍后重试')
+                vm.$u.toast('网络请求失败，请重试')
                 return false
             } else {
                 if (res.errMsg === "request:fail") {
