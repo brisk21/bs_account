@@ -212,7 +212,7 @@ export default {
     },
     set_cashbook(item) {
       // this.form.cashbook_id = item.value
-      this.selectedItems = {}
+      //this.selectedItems = {}
       this.form.cashbook_title = item.label
       this.getList(true)
     },
