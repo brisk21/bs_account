@@ -87,7 +87,15 @@ npm install crypto-js@^3.3.0
 #安装mp-html
 npm install mp-html@^2.5.0
 ```
-2. 选择自己的编译模式生成相关平台文件
+3. 修改配置文件
+- 复制const.js.example文件，重命名为const.js，修改里面的配置，如：
+ ```plantuml
+export default {
+    key: '12563456132465789465132465789465',//敏感数据加密秘钥，和后端保持一致
+    baseUrl: 'http://jz.test.top/api',//接口请求地址
+}
+```
+4. 选择自己的编译模式生成相关平台文件(APP记得配置图标)
 
 #### 2.使用线上系统
 1. 下载最新版APP(https://jz.alipay168.cn/#/pages/packageA/h5/index)，注册账号，登录
