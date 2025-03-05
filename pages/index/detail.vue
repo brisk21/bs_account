@@ -26,7 +26,7 @@
       </view>
 
       <view class="line">
-        <text class="type">{{info.type===10?'收入':'支出'}}方式：</text>
+        <text class="type">{{ info.type === 10 ? '收入' : '支出' }}方式：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
           {{ info.amount_type || '无' }}
         </view>
@@ -34,22 +34,22 @@
       <view class="line" v-if="info.budget_title">
         <text class="type">关联预算：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.budget_title||'无' }}
+          {{ info.budget_title || '无' }}
         </view>
       </view>
       <view class="line" v-if="info.cashbook_title">
         <text class="type">所属账本：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.cashbook_title||'无' }}
+          {{ info.cashbook_title || '无' }}
         </view>
       </view>
       <view class="line" v-if="info.cycle">
         <text class="type">周期执行：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{info.cycle && info.cycle.cycle_type||'无'}}
+          {{ info.cycle && info.cycle.cycle_type || '无' }}
         </view>
         <view v-if="info.cycle" style="font-size: 25rpx;color: red">
-           (下次：{{info.cycle.next_time || '--'}})
+          (下次：{{ info.cycle.next_time || '--' }})
         </view>
       </view>
       <view class="line">
@@ -58,16 +58,17 @@
           {{ info.remark || '暂无备注' }}
         </view>
       </view>
-      <view class="line" >
+      <view class="line">
         <text class="type">记录人：</text>
         <view style="font-size: 25rpx;font-weight: 600;color: red">
-          {{ info.username||'--' }}
+          {{ info.username || '--' }}
         </view>
       </view>
-      <view class="line" v-if="info.image_list && info.image_list.length>0">
+      <view class="line" v-if="info.image_list">
         <text class="type">附件：</text>
-        <view style="font-size: 28rpx;width: 80px;" v-for="(image,index) in info.image_list" :key="index">
-         <u-image   @click="previewImg(info.image_list)"  height="150rpx" width="150rpx" :src="image"></u-image>
+        <view class="images" style="font-size: 28rpx;width: 70%;">
+          <u-image v-for="(src,index1) in  info.image_list" @click="previewImg(info.image_list)" height="150rpx"
+                   width="150rpx" :src="src"></u-image>
         </view>
       </view>
 
@@ -102,19 +103,19 @@ export default {
     }
   },
   methods: {
-    previewImg(imageList) {
+    previewImg(urls) {
       uni.previewImage({
         current: 0,
-        urls: imageList
+        urls: urls
       });
     },
     getCashflowInfo() {
       this.$u.api.getCashflowInfo(this.id).then(res => {
-        if (res.code !==0){
+        if (res.code !== 0) {
           this.$u.toast(res.msg)
-          setTimeout(()=>{
+          setTimeout(() => {
             uni.navigateBack()
-          },1500)
+          }, 1500)
           return;
         }
         this.info = res.data
@@ -123,7 +124,7 @@ export default {
     toEdit() {
       let id = this.info.id
       uni.navigateTo({
-        url: `/pages/bill/form?id=${id}`+'&type='+this.info.type
+        url: `/pages/bill/form?id=${id}` + '&type=' + this.info.type
       });
     },
     delCashflow() {
@@ -200,5 +201,10 @@ export default {
   width: 100rpx;
   height: 100rpx;
   margin-left: auto;
+}
+
+.images {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
