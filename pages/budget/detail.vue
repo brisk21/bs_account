@@ -15,7 +15,7 @@
         </u-radio-group>
       </u-form-item>
       <u-form-item label="预算额度" required>
-        <u-input placeholder="请输入预算额度" border :maxlength="10" type="number" clearable class="bs_form_input"
+        <u-input placeholder="请输入预算额度" border :maxlength="10"  clearable class="bs_form_input"
                  v-model="form.amount"/>
       </u-form-item>
       <u-form-item label="预算排序">
