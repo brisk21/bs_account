@@ -20,6 +20,7 @@
         <view class="search-box">
           <view class="search-more">
             <button size="mini" type="default" @click="show_search_box=true">高级搜索</button>
+            <button size="mini" type="default" @click="changeStyle()">切换样式</button>
           </view>
           <view class="input">
             <u-search :clearable="true" :show-action="true" :show-action-icon="true"
@@ -48,28 +49,82 @@
           </u-tr>
 
         </u-table>
-        <view class="list-box-children" v-for="(item, index) in list" :key="index"
-              @click="toDetail(item.id)">
 
-          <view class="u-flex  box-left box-left">
-           <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon> {{ item.category.name }}
+
+        <view v-if="show_list_type==='list'" class="list-type">
+          <view class="list-box-children" v-for="(item, index) in list" :key="index"
+                @click="toDetail(item.id)">
+            <view class="u-flex  box-left box-left">
+              <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon>
+              {{ item.category.name }}
+            </view>
+            <view class="u-flex-1  box-left box-remark">
+              {{ item.amount_type || '--' }}
+            </view>
+            <view class="u-flex-1  box-right amount-green" v-if="item.type===20">
+              -￥{{ item.amount }}
+            </view>
+            <view class="u-flex-1  box-right amount-red" v-else>
+              +￥{{ item.amount }}
+            </view>
+            <view class="u-flex-2 box-right item-date">
+              {{ item.date }}
+              <text v-if="item.is_cycle">（{{ item.cycle_type }}）</text>
+            </view>
           </view>
-          <view class="u-flex-1  box-left box-remark">
-            {{ item.amount_type || '--' }}
-          </view>
-          <view class="u-flex-1  box-right amount-green" v-if="item.type===20">
-            -￥{{ item.amount }}
-          </view>
-          <view class="u-flex-1  box-right amount-red" v-else>
-            +￥{{ item.amount }}
-          </view>
-          <view class="u-flex-2 box-right item-date">
-            {{ item.date }} <text v-if="item.is_cycle">（{{item.cycle_type}}）</text>
+          <view class="no-more" v-if="no_more && list.length>10">
+            我也是有底线的！！！
           </view>
         </view>
-        <view class="no-more" v-if="no_more && list.length>10">
-          我也是有底线的！！！
+        <view v-else class="scroll data-list">
+          <view class="list" v-for="(item, index) in list" :key="index"
+                @click="toDetail(item.id)">
+            <view class="item">
+              <view class="title">
+                {{ item.type == 20 ? '支出' : '收入' }} ￥
+                <text>{{ item.type == 20 ? '-' : '+' }}</text>
+                <text :class="item.type==10?'bs-red':'bs-green'">{{ item.amount }}</text>
+              </view>
+              <view class="bs-item">
+                收支方式： {{ item.amount_type || '--' }}
+              </view>
+              <view class="bs-item">
+                类别： {{ item.category_name }}
+              </view>
+
+              <view class="bs-item" v-if="item.cashbook_title">
+                所属账本：
+                <text style="font-size: 25rpx;font-weight: 600;">
+                  {{ item.cashbook_title || '--' }}
+                </text>
+              </view>
+              <view v-if="item.budget_title" class="bs-item">
+                关联预算： {{ item.budget_title }}
+              </view>
+              <view v-if="item.is_cycle" class="bs-item">
+                周期：{{ item.cycle_days }}
+              </view>
+              <view class="bs-item images" v-if="item.image" @click.stop="previewImg(item.image)">
+                附件：
+                <u-image v-for="(src,index1) in item.image" :key="index1"  height="150rpx" width="150rpx" :src="src"></u-image>
+              </view>
+              <view class="time bs-item">
+                记录人: {{ item.username || '--' }}
+              </view>
+              <view class="time  bs-item">
+                时间： {{ item.date }}
+              </view>
+              <view class="remark  bs-item ">
+                备注：{{ item.remark || '--' }}
+              </view>
+            </view>
+          </view>
+          <view class="no-more" v-if="no_more && form.page > 1">
+            我也是有底线的！！！
+          </view>
         </view>
+
+
       </view>
       <view v-else class="empty">
         <u-empty text="暂无明细" mode="list"></u-empty>
@@ -82,17 +137,6 @@
 
       <u-popup v-model="show_search_box" mode="center" width="90%" height="300px">
         <view class="search-popup">
-<!--          <view class="line">
-            <text class="popup_type">类型：</text>
-            <u-tag
-                v-show="form.type"
-                :closeable="true"
-                :text="form.type_name"
-                @close="unsetType()"
-                @click="openPopup('type')"
-            ></u-tag>
-            <u-button v-show="!form.type" @click="openPopup('type')" size="mini">选择类型</u-button>
-          </view>-->
           <view class="line">
             <text class="popup_type">具体分类：</text>
             <u-tag
@@ -168,6 +212,7 @@ export default {
   },
   data() {
     return {
+      show_list_type: 'list',
       show_search_box: false,
       popup_manager_path: '',
       popup_data_list: [],
@@ -198,7 +243,7 @@ export default {
       cashbook_list: [
         {label: '全部', value: ''}
       ],
-      category_list : [
+      category_list: [
         {label: '全部', value: 0,},
       ],
       time_type_title: '时间',
@@ -313,6 +358,16 @@ export default {
     this.scrollTop = e.scrollTop;
   },
   methods: {
+    changeStyle() {
+      this.show_list_type = this.show_list_type === 'list' ? 'grid' : 'list';
+    },
+    previewImg(urls) {
+      uni.previewImage({
+        current: 0,
+        urls: urls
+      });
+    },
+
     openPopup(type) {
       this.popup_current = type
       if (type === 'amount_type') {
@@ -352,7 +407,7 @@ export default {
         } else if (this.popup_current === 'type') {
           this.form.type = item.value
           this.form.type_name = item.label || 'xxx'
-        }else if (this.popup_current === 'category') {
+        } else if (this.popup_current === 'category') {
           this.form.category_id = item.value
           this.form.category_name = item.label || 'xxx'
         }
@@ -409,7 +464,7 @@ export default {
           if (data.sort_list.length > 0) {
             that.sort_list = data.sort_list
           }
-          if (data.category_list.length > 0){
+          if (data.category_list.length > 0) {
             that.category_list = data.category_list
           }
         }
@@ -594,6 +649,7 @@ export default {
       flex-wrap: nowrap;
       align-content: center;
       align-items: center;
+
       .action-btn {
         width: 100%;
         border-radius: unset !important;
@@ -621,6 +677,67 @@ export default {
     color: rgb(200, 196, 196);
     margin-top: 10rpx;
     margin-bottom: 10rpx;
+  }
+
+  /* 整个列表的样式 */
+  .scroll.data-list {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    /* 预算名称样式 */
+    .title {
+      font-size: 18px;
+      color: #0658ee;
+      font-weight: 200;
+
+      .bs-red {
+        color: red;
+      }
+
+      .bs-green {
+        color: green;
+      }
+
+    }
+
+    /* 列表项的样式 */
+    .list {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .title, .bs-item {
+      margin-bottom: 17rpx;
+    }
+
+    /* 预算金额样式 */
+    .amount {
+      font-size: 14px;
+      color: #20b4bc;
+
+      .view-list {
+        margin-left: 30rpx;
+        color: #19a6de;
+      }
+    }
+    .images{
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    /* 实际金额样式 */
+    .amount-real {
+      font-size: 14px;
+
+    }
+
+    /* 时间样式 */
+    .time, .remark {
+      font-size: 14px;
+      color: #999;
+    }
   }
 
   .list-box-children {

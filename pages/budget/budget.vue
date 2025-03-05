@@ -31,20 +31,20 @@
             </template>
           </view>
           <view class="leave_amount bs-item">
-            预算余额：￥ <text :class="item.leave_amount<0?'bs_red':'bs_green'">{{ item.leave_amount }} 元</text>
+            预算余额：￥ <text :class="item.leave_amount>=0?'bs_red':'bs_green'">{{ item.leave_amount }} 元</text>
             <text class="bs_red"> （{{ item.percent }}）</text>
           </view>
           <view class=" bs-item" v-if="item.type===20 || item.type===0">
-            支出金额：￥ <text :class="item.out_amount>item.amount?'bs_red':'bs_green'">{{ item.out_amount }} 元</text>
+            支出金额：￥ <text class="bs_green">{{ item.out_amount }} 元</text>
           </view>
           <view class=" bs-item" v-if="item.type===10 || item.type===0">
-            收入金额：￥ <text :class="item.in_amount>item.amount?'bs_red':'bs_green'">{{ item.in_amount }} 元</text>
+            收入金额：￥ <text class="bs_red">{{ item.in_amount }} 元</text>
           </view>
           <view class=" bs-item" v-if="item.ext_amount && item.type===10">
             额外收入：￥ <text class="bs_red">{{ item.ext_amount }} 元</text>
           </view>
           <view class=" bs-item" v-if="item.ext_amount && item.type===20">
-            额外支出：￥ <text class="bs_red">{{ item.ext_amount }} 元</text>
+            额外支出：￥ <text class="bs_green">{{ item.ext_amount }} 元</text>
           </view>
 
           <view class="profit  bs-item" v-if="item.type===0">
