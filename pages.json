@@ -402,6 +402,13 @@
             "navigationBarTitleText": "增改",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "statistics/calendar",
+          "style": {
+            "navigationBarTitleText": "账单日历",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }
