@@ -37,8 +37,8 @@ export default {
     const currentYearIndex = yearOptions.indexOf(currentYear);
     return {
       currentYear,
-      income: { /* 示例数据 */ '2025-01-05': 300, '2025-01-14': 60000 },
-      expense: { /* 示例数据 */ '2025-01-07': 200, '2025-01-14': 40000 },
+      income: { /* 示例数据  '2025-01-05': 300, '2025-01-14': 60000 */},
+      expense: { /* 示例数据  '2025-01-07': 200, '2025-01-14': 40000 */},
       yearOptions,
       currentYearIndex
     }
