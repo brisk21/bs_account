@@ -7,18 +7,20 @@
 
     <!-- 按年显示的视图 -->
     <view class="year-view">
-      <view v-for="(month, index) in 12" :key="index" class="month-box">
+      <view v-for="(month, index) in months" :key="index" class="month-box">
         <text>{{ currentYear }}年{{ month }}月</text>
         <view class="dates">
-          <view v-for="date in getDaysInMonth(currentYear, month)" :key="date" class="income-expense-day">
-            <view class="date-number">{{ date }}</view>
+          <view v-for="(date,index1) in getDaysInMonth(currentYear, month)" :key="index1" class="income-expense-day">
+            <view class="date-number">{{ getDate(date) }}</view>
             <view class="amounts">
               <!-- 收入 -->
               <view v-if="income[`${currentYear}-${padZero(month)}-${padZero(date)}`]" :style="{color: 'red'}">+{{ income[`${currentYear}-${padZero(month)}-${padZero(date)}`] }}</view>
               <!-- 支出 -->
               <view v-if="expense[`${currentYear}-${padZero(month)}-${padZero(date)}`]" :style="{color: 'green'}">-{{ expense[`${currentYear}-${padZero(month)}-${padZero(date)}`] }}</view>
               <!-- 如果既没有收入也没有支出，则显示提示信息 -->
-              <view v-if="!income[`${currentYear}-${padZero(month)}-${padZero(date)}`] && !expense[`${currentYear}-${padZero(month)}-${padZero(date)}`]" style="color: #888;">无</view>
+              <view v-if="!income[`${currentYear}-${padZero(month)}-${padZero(date)}`] && !expense[`${currentYear}-${padZero(month)}-${padZero(date)}`]" style="color: #888;">
+                <u-icon name="rmb-circle" size="20" color="#888"></u-icon>
+              </view>
             </view>
           </view>
         </view>
@@ -40,7 +42,8 @@ export default {
       income: { /* 示例数据  '2025-01-05': 300, '2025-01-14': 60000 */},
       expense: { /* 示例数据  '2025-01-07': 200, '2025-01-14': 40000 */},
       yearOptions,
-      currentYearIndex
+      currentYearIndex,
+      months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     }
   },
   mounted() {
@@ -60,8 +63,17 @@ export default {
       this.currentYear = this.yearOptions[e.detail.value];
       this.get_list();
     },
+    //兼容微信小程序从0开始的问题
+    getDate(date) {
+      //#ifdef MP-WEIXIN
+        date++;
+      //#endif
+      return date;
+    },
     getDaysInMonth(year, month) {
-      return new Date(year, month, 0).getDate();
+      let days = new Date(year, month, 0).getDate();
+      console.log('days',days)
+      return days;
     },
 
     padZero(num) {

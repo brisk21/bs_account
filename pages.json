@@ -409,6 +409,13 @@
             "navigationBarTitleText": "账单日历",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "h5/web",
+          "style": {
+            "navigationBarTitleText": "网页",
+            "enablePullDownRefresh": true
+          }
         }
       ]
     }
