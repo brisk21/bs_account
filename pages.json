@@ -381,6 +381,20 @@
             "navigationBarTitleText": "用户列表",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "statistics/calendar",
+          "style": {
+            "navigationBarTitleText": "账单日历",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "h5/web",
+          "style": {
+            "navigationBarTitleText": "网页",
+            "enablePullDownRefresh": true
+          }
         }
       ]
     }
