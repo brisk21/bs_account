@@ -135,7 +135,7 @@
       <view class="line">
         <text class="popup_type">附件图片：</text>
         <upload-file
-            :auto-upload="false"
+            :auto-upload="true"
             :unique_id="1"
             ref="upload"
             :default-files="initialFiles"
@@ -545,7 +545,7 @@ export default {
 
 
       //todo 多图上传被异步的问题，目前用了while 循环，但可能存在问题，需要优化
-      let pollCount = 0; // 新增：用于记录轮询次数
+      /*let pollCount = 0; // 新增：用于记录轮询次数
       const maxPollAttempts = 60; // 设置最大轮询次数（例如60次，即最多等待60秒）
       console.log('imageCount', that.imageCount)
       // 遍历所有的upload组件并调用startUpload
@@ -567,7 +567,7 @@ export default {
       if (pollCount >= maxPollAttempts) {
         console.warn('达到最大轮询次数，可能有上传任务未完成');
         // 在这里可以添加一些额外的逻辑，比如提示用户上传可能失败了
-      }
+      }*/
       console.log('uploadedCount', that.uploadCount)
       console.log('formData', that.formData)
 
