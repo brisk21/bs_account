@@ -154,7 +154,9 @@
         <view>
           自定义操作：可以在【我的】》【设置】》【
           <text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>
-          】中自定义<text style="color: red">是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理</text>等功能，开启相关功能后，可以有【选择收支方式】、【关联预算】、【关联账簿】等按钮，可以进行自定义操作。
+          】中自定义
+          <text style="color: red">是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理</text>
+          等功能，开启相关功能后，可以有【选择收支方式】、【关联预算】、【关联账簿】等按钮，可以进行自定义操作。
         </view>
       </view>
 
@@ -572,7 +574,6 @@ export default {
       console.log('uploadedCount', that.uploadCount)
       console.log('formData', that.formData)
 
-      return ;
       let submitAction = function (formData) {
         uni.showModal({
           title: '',
@@ -582,16 +583,18 @@ export default {
               that.disabled = true
               if (that.formData.id) {
                 that.$u.api.updateCashflow(that.formData).then(res => {
-                  that.$u.toast(res.msg, 1000);
+                  uni.showToast({
+                    icon: 'none',
+                    title: res.msg,
+                    duration: 1500
+                  })
                   if (res.code == 0) {
                     setTimeout(() => {
                       uni.navigateBack()
                     }, 1000)
                   }
-                  uni.hideLoading()
                   that.disabled = false
                 }).catch(() => {
-                  uni.hideLoading()
                   that.disabled = false
                 })
               } else {
@@ -599,7 +602,14 @@ export default {
                   if (res.code == 0) {
                     //开启了连续添加模式
                     if (that.diy_action && that.diy_action.bill_action_continue.value) {
-                      that.$u.toast('添加成功，您可以继续添加新记录', 3000)
+                      uni.showToast({
+                        icon: 'none',
+                        title: '添加成功，您可以继续添加新记录',
+                        duration: 2000,
+                        fail: function(err) {
+                          console.log('msg_err', err)
+                        }
+                      })
                       that.formData = {
                         id: 0,
                         budge_id: 0,
@@ -614,7 +624,14 @@ export default {
                         image: null
                       }
                     } else {
-                      that.$u.toast(res.msg)
+                      uni.showToast({
+                        icon:  'none',
+                        title: res.msg,
+                        duration: 1500,
+                        fail: function(err) {
+                          console.log('msg_err', err)
+                        }
+                      })
                       setTimeout(function () {
                         uni.switchTab({
                           url: '/pages/index/index'
@@ -623,12 +640,14 @@ export default {
                     }
 
                   } else {
-                    that.$u.toast(res.msg);
+                    uni.showToast({
+                      icon: 'none',
+                      title: res.msg,
+                      duration: 2000
+                    })
                   }
-                  uni.hideLoading()
                   this.disabled = false
                 }).catch(() => {
-                  uni.hideLoading()
                   that.disabled = false
                 })
               }
@@ -638,7 +657,7 @@ export default {
           }
         })
       }
-      submitAction(that.formData)
+      await submitAction(that.formData)
 
     },
 

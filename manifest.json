@@ -117,5 +117,6 @@
                 "enable" : true
             }
         }
-    }
+    },
+    "sassImplementationName" : "node-sass"
 }

@@ -235,6 +235,10 @@ export default {
             //console.log('responseText', this.result_list)
           } else {
             this.$u.toast(result.msg)
+            //休眠1秒
+            setTimeout(() => {
+              console.log('responseText', item.responseText)
+            }, 1000)
           }
         } catch (e) {
           console.log('解析失败')
@@ -314,7 +318,7 @@ export default {
             }).finally(()=>{
               setTimeout(function (){
                 uni.hideLoading()
-              },1000)
+              },2000)
             })
           }
         }
