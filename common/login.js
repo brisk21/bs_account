@@ -9,7 +9,15 @@ export function getCode() {
 }
 
 export function loginHandle(code) {
-	store.dispatch('code2token', code).then(response => {
+	store.dispatch('code2token', code).then(res => {
+		if (res.code !==0){
+			uni.showToast({
+				title: res.msg,
+				icon: 'none'
+			})
+			return ;
+		}
+		console.log(res)
 		store.dispatch('getUserInfo').then(res => {
 		  uni.switchTab({
 			url: '/pages/index/index'
