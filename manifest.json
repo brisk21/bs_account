@@ -2,8 +2,8 @@
     "name" : "随手记",
     "appid" : "__UNI__3CF9076",
     "description" : "记账，不只是记录，更是一种生活态度",
-    "versionName" : "1.0.48",
-    "versionCode" : 148,
+    "versionName" : "1.0.49",
+    "versionCode" : 149,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -100,7 +100,7 @@
         }
     },
     "mp-toutiao" : {
-        "appid" : "",
+        "appid" : "tt9b75edc8047e0df101",
         "setting" : {
             "minified" : true,
             "urlCheck" : false,

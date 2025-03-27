@@ -100,7 +100,7 @@ export default {
     },
     handleRemove(index, lists, name) {
       this.$emit('remove', {index, fileList: lists, unique_id: this.unique_id,});
-      this.$refs.upload.remove(index);
+      //this.$refs.upload.remove(index);
       this.fileList = lists;
     },
     uploadSuccess(res, index, lists, name) {

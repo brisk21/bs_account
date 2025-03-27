@@ -365,6 +365,7 @@ export default {
     handleFileUploadRemove({index, fileList, unique_id}) {
       // 更新状态或者做其他处理
       console.log('文件已被移除:', index);
+      console.log('fileList', fileList);
       this.formData.image.splice(index, 1)
       this.imageCount--;
       return true
@@ -571,6 +572,7 @@ export default {
       console.log('uploadedCount', that.uploadCount)
       console.log('formData', that.formData)
 
+      return ;
       let submitAction = function (formData) {
         uni.showModal({
           title: '',
