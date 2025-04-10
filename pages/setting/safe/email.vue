@@ -81,7 +81,7 @@ export default {
         } else {
           this.$u.toast(res.msg);
         }
-      }).finally(()=>{
+      }).catch(()=>{
         this.get_code = true
       })
     },
