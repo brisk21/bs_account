@@ -416,6 +416,20 @@
             "navigationBarTitleText": "网页",
             "enablePullDownRefresh": true
           }
+        },
+        {
+          "path": "staff/index",
+          "style": {
+            "navigationBarTitleText": "员工列表",
+            "enablePullDownRefresh": true
+          }
+        },
+        {
+          "path": "staff/form",
+          "style": {
+            "navigationBarTitleText": "操作",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }
