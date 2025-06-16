@@ -86,6 +86,9 @@
                 <text :class="item.type==10?'bs-red':'bs-green'">{{ item.amount }}</text>
               </view>
               <view class="bs-item">
+                交易平台： {{ item.amount_platform || '--' }}
+              </view>
+              <view class="bs-item">
                 收支方式： {{ item.amount_type || '--' }}
               </view>
               <view class="bs-item">
@@ -147,6 +150,17 @@
                 @click="openPopup('category')"
             ></u-tag>
             <u-button v-show="!form.category_id" @click="openPopup('category')" size="mini">选择分类</u-button>
+          </view>
+          <view class="line">
+            <text class="popup_type">交易平台：</text>
+            <u-tag
+                v-show="form.amount_platform"
+                :closeable="true"
+                :text="form.amount_platform"
+                @close="unsetAmountPlatformType()"
+                @click="openPopup('amount_platform')"
+            ></u-tag>
+            <u-button v-show="!form.amount_platform" @click="openPopup('amount_platform')" size="mini">选择平台</u-button>
           </view>
           <view class="line">
             <text class="popup_type">收支方式：</text>
@@ -246,6 +260,9 @@ export default {
       category_list: [
         {label: '全部', value: 0,},
       ],
+      amount_platform_list: [
+        {label: '全部', value: '',},
+      ],
       time_type_title: '时间',
       show_calendar: false,
       calendar_mode: 'range',
@@ -262,6 +279,7 @@ export default {
         year: '',
         time_type: '',
         amount_type: '',
+        amount_platform: '',
         sort: '',
         page: 0,
         limit: 20
@@ -386,6 +404,10 @@ export default {
         this.popup_manager_path = '/pages/setting/category'
         this.popup_data_list = this.category_list
         this.popup_show_type = 'grid'
+      } else if (type === 'amount_platform') {
+        this.popup_manager_path = '/pages/packageA/amount_platform/index'
+        this.popup_data_list = this.amount_platform_list
+        this.popup_show_type = 'grid'
       } else if (type === 'type') {
         this.popup_data_list = this.type
         this.popup_show_type = 'list'
@@ -399,17 +421,19 @@ export default {
           this.form.amount_type = item.value
         } else if (this.popup_current === 'budget_list') {
           this.form.budget_id = item.value
-          this.form.budget_title = item.label || 'xxx'
+          this.form.budget_title = item.label || ''
           console.log(this.form.budget_title)
         } else if (this.popup_current === 'cashbook') {
           this.form.cashbook_id = item.value
-          this.form.cashbook_title = item.label || 'xxx'
+          this.form.cashbook_title = item.label || ''
         } else if (this.popup_current === 'type') {
           this.form.type = item.value
-          this.form.type_name = item.label || 'xxx'
+          this.form.type_name = item.label || ''
         } else if (this.popup_current === 'category') {
           this.form.category_id = item.value
-          this.form.category_name = item.label || 'xxx'
+          this.form.category_name = item.label || ''
+        } else if (this.popup_current === 'amount_platform') {
+          this.form.amount_platform = item.value || ''
         }
       } catch (e) {
         console.log('err', e)
@@ -434,6 +458,9 @@ export default {
     },
     unsetAmountType() {
       this.form.amount_type = ''
+    },
+    unsetAmountPlatformType() {
+      this.form.amount_platform = ''
     },
     setAmountType(item) {
       this.form.amount_type = item
@@ -466,6 +493,9 @@ export default {
           }
           if (data.category_list.length > 0) {
             that.category_list = data.category_list
+          }
+          if (data.amount_platform_list.length > 0) {
+             that.amount_platform_list = that.amount_platform_list.concat(data.amount_platform_list)
           }
         }
 

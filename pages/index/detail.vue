@@ -26,6 +26,12 @@
       </view>
 
       <view class="line">
+        <text class="type">交易平台：</text>
+        <view style="font-size: 25rpx;font-weight: 600;">
+          {{ info.amount_platform || '无' }}
+        </view>
+      </view>
+      <view class="line">
         <text class="type">{{ info.type === 10 ? '收入' : '支出' }}方式：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
           {{ info.amount_type || '无' }}

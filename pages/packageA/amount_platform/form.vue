@@ -8,18 +8,7 @@
       <u-input placeholder="越大越靠前,可以是负数" border :maxlength="10" type="number"  clearable class="category_form_input"
                v-model="form.sort"/>
     </u-form-item>
-    <u-form-item label="类型">
-      <u-radio-group v-model="form.type">
-        <u-radio
-            @change="radioChange"
-            v-for="(item, index) in bill_list" :key="index"
-            :name="item.value"
 
-        >
-          {{ item.label }}
-        </u-radio>
-      </u-radio-group>
-    </u-form-item>
     <view class="buttons">
       <u-button class="action-btn" type="default" @click="close">取消</u-button>
       <u-button class="action-btn" type="primary" @click="submit">保存</u-button>
@@ -30,36 +19,20 @@
 </template>
 
 <script>
-import api from "@/common/amount_type";
+import api from "@/common/amount_platform";
 export default {
   data() {
     return {
-
       form:{
         id: 0,
         name: '',
         sort: null,
-        type: 20,
-      },
-      bill_list: [
-        {
-          label: '支出',
-          value: 20
-        },
-        {
-          label: '收入',
-          value: 10
-        }
-      ]
+      }
     };
   },
   onLoad(options) {
     if (options.id) {
       this.getInfo(options.id)
-    }else{
-      if (options.type) {
-        this.form.type = options.type == 1 ? 10 : 20;
-      }
     }
   },
   methods: {
@@ -81,10 +54,6 @@ export default {
     async submit() {
       if (!this.form.name) {
         this.$u.toast('请输入名称');
-        return;
-      }
-      if (!this.form.type) {
-        this.$u.toast('请选择分类类型');
         return;
       }
       uni.showModal({

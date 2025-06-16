@@ -430,6 +430,20 @@
             "navigationBarTitleText": "操作",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "amount_platform/index",
+          "style": {
+            "navigationBarTitleText": "交易平台管理",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "amount_platform/form",
+          "style": {
+            "navigationBarTitleText": "操作",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }

@@ -57,6 +57,17 @@
       </view>
 
       <u-line></u-line>
+      <view class="line" v-if="diy_action && diy_action.enable_amount_platform && diy_action.enable_amount_platform.value">
+        <text class="popup_type">交易平台：</text>
+        <u-tag
+            v-show="formData.amount_platform"
+            :closeable="true"
+            :text="formData.amount_platform"
+            @close="unsetAmountPlatformType()"
+            @click="openPopup('amount_platform')"
+        ></u-tag>
+        <u-button v-show="!formData.amount_platform" @click="openPopup('amount_platform')" size="mini">选择方式</u-button>
+      </view>
       <view class="line" v-if="diy_action && diy_action.enable_amount_type && diy_action.enable_amount_type.value">
         <text class="popup_type">{{ formData.type === 10 ? '收入' : '支出' }}方式：</text>
         <u-tag
@@ -155,7 +166,7 @@
           自定义操作：可以在【我的】》【设置】》【
           <text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>
           】中自定义
-          <text style="color: red">是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理</text>
+          <text style="color: red">交易平台、是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理</text>
           等功能，开启相关功能后，可以有【选择收支方式】、【关联预算】、【关联账簿】等按钮，可以进行自定义操作。
         </view>
       </view>
@@ -211,6 +222,7 @@ export default {
         date: '',
         remark: '',
         amount_type: '',
+        amount_platform: '',
         image: [],
         is_cycle: false,
         cycle_type: '', // 新增字段
@@ -237,6 +249,7 @@ export default {
 
       budget_list: [],
       cashbook_list: [],
+      amountPlatforms: [],
 
       initialFiles: [],
       action: constConfig.baseUrl + '/upload/image',
@@ -302,6 +315,10 @@ export default {
         this.popup_manager_path = '/pages/packageA/cashbook/index'
         this.popup_data_list = this.cashbook_list
         this.popup_show_type = 'list'
+      }else if(type === 'amount_platform'){
+         this.popup_manager_path = '/pages/packageA/amount_platform/index'
+         this.popup_data_list = this.amountPlatforms
+         this.popup_show_type = 'list'
       }
 
       this.$refs.type_popup.togglePopup();
@@ -318,6 +335,8 @@ export default {
         } else if (this.popup_current === 'cashbook') {
           this.formData.cashbook_id = item.value
           this.formData.cashbook_title = item.label || 'xxx'
+        }else if(this.popup_current === 'amount_platform'){
+          this.formData.amount_platform = item.value
         }
       } catch (e) {
         console.log('err', e)
@@ -335,6 +354,9 @@ export default {
     },
     unsetAmountType() {
       this.formData.amount_type = ''
+    },
+    unsetAmountPlatformType(){
+      this.formData.amount_platform = ''
     },
     setAmountType(item) {
       this.formData.amount_type = item
@@ -453,6 +475,9 @@ export default {
           this.cashbook_list = []
           if (res.data.cashbook_list.length > 0) {
             this.cashbook_list = res.data.cashbook_list
+          }
+          if (res.data.amountPlatforms) {
+            this.amountPlatforms = res.data.amountPlatforms
           }
           if (res.data.max_image_count) {
             this.maxCount = res.data.max_image_count
