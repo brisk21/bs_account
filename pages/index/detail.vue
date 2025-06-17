@@ -28,31 +28,31 @@
       <view class="line">
         <text class="type">交易平台：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.amount_platform || '无' }}
+          {{ info.amount_platform || '--' }}
         </view>
       </view>
       <view class="line">
         <text class="type">{{ info.type === 10 ? '收入' : '支出' }}方式：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.amount_type || '无' }}
+          {{ info.amount_type || '--' }}
         </view>
       </view>
       <view class="line" v-if="info.budget_title">
         <text class="type">关联预算：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.budget_title || '无' }}
+          {{ info.budget_title || '--' }}
         </view>
       </view>
       <view class="line" v-if="info.cashbook_title">
         <text class="type">所属账本：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.cashbook_title || '无' }}
+          {{ info.cashbook_title || '--' }}
         </view>
       </view>
       <view class="line" v-if="info.cycle">
         <text class="type">周期执行：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.cycle && info.cycle.cycle_type || '无' }}
+          {{ info.cycle && info.cycle.cycle_type || '--' }}
         </view>
         <view v-if="info.cycle" style="font-size: 25rpx;color: red">
           (下次：{{ info.cycle.next_time || '--' }})
@@ -61,7 +61,7 @@
       <view class="line">
         <text class="type">备注：</text>
         <view style="font-size: 28rpx;width: 70%;text-align: left">
-          {{ info.remark || '暂无备注' }}
+          {{ info.remark || '--' }}
         </view>
       </view>
       <view class="line">

@@ -8,6 +8,9 @@
       <u-input placeholder="越大越靠前,可以是负数" border :maxlength="10" type="number"  clearable class="category_form_input"
                v-model="form.sort"/>
     </u-form-item>
+     <u-form-item label="是否默认" label-width="130">
+        <u-switch v-model="form.is_default" :active-value="1" :inactive-value="0"></u-switch>
+      </u-form-item>
 
     <view class="buttons">
       <u-button class="action-btn" type="default" @click="close">取消</u-button>
@@ -27,6 +30,7 @@ export default {
         id: 0,
         name: '',
         sort: null,
+        is_default: false
       }
     };
   },

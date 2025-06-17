@@ -7,8 +7,9 @@
        </u-cell-item>
     </u-cell-group>
     <u-grid :col="2"  >
-      <u-grid-item v-for="(item, index) in  list" :key="index" @click="toEdit(item)">
-
+      <u-grid-item class="item-list" v-for="(item, index) in  list" :key="index" @click="toEdit(item)">
+      <!--“默认”标识-->
+        <u-icon v-if="item.is_default" name="star-fill" class="grid-icon" size="30" color="#ff9900"></u-icon>
         <view class="grid-text">{{ item.name }}</view>
         <!-- 删除图标 -->
         <u-icon v-show="action" color="red" name="close-circle" class="delete-icon" @click.native.stop="delCategory(item.id,index,1)"></u-icon>
@@ -109,7 +110,9 @@ export default {
     }
   }
 
-
+  .u-grid-item{
+    height: 60px;
+  }
   .grid-text {
     font-size: 28rpx;
     margin-top: 4rpx;

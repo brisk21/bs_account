@@ -13,18 +13,18 @@
        </u-cell-item>
     </u-cell-group>
 
-    <u-grid :col="2" v-show="type === 0" >
-      <u-grid-item v-for="(item, index) in out_list" :key="index" @click="toEdit(item)">
-
+    <u-grid :col="2"  v-show="type === 0" >
+      <u-grid-item v-for="(item, index) in out_list" class="item-list" :key="index" @click="toEdit(item)">
+        <u-icon v-if="item.is_default" name="star-fill" class="grid-icon" size="30" color="#ff9900"></u-icon>
         <view class="grid-text">{{ item.name }}</view>
         <!-- 删除图标 -->
         <u-icon v-show="action" color="red" name="close-circle" class="delete-icon" @click.native.stop="delCategory(item.id,index,1)"></u-icon>
       </u-grid-item>
     </u-grid>
 
-    <u-grid :col="2" v-show="type === 1">
-      <u-grid-item v-for="(item, index) in in_list" :key="index" @click="toEdit(item)">
-
+    <u-grid :col="2"  v-show="type === 1">
+      <u-grid-item v-for="(item, index) in in_list" class="item-list" :key="index" @click="toEdit(item)">
+        <u-icon v-if="item.is_default" name="star-fill" class="grid-icon" size="30" color="#ff9900"></u-icon>
         <view class="grid-text">{{ item.name }}</view>
         <!-- 删除图标 -->
         <u-icon v-show="action" color="red" name="close-circle" class="delete-icon" @click.native.stop="delCategory(item.id,index,1)"></u-icon>
@@ -147,7 +147,9 @@ export default {
       margin-right: 30px !important;
     }
   }
-
+  .u-grid-item{
+    height: 60px;
+  }
 
   .grid-text {
     font-size: 28rpx;

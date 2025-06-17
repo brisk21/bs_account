@@ -66,7 +66,7 @@
             @close="unsetAmountPlatformType()"
             @click="openPopup('amount_platform')"
         ></u-tag>
-        <u-button v-show="!formData.amount_platform" @click="openPopup('amount_platform')" size="mini">选择方式</u-button>
+        <u-button v-show="!formData.amount_platform" @click="openPopup('amount_platform')" size="mini">选择平台</u-button>
       </view>
       <view class="line" v-if="diy_action && diy_action.enable_amount_type && diy_action.enable_amount_type.value">
         <text class="popup_type">{{ formData.type === 10 ? '收入' : '支出' }}方式：</text>
@@ -509,6 +509,9 @@ export default {
 
           if (!this.formData.id && res.data.default_amount_type) {
             this.formData.amount_type = res.data.default_amount_type
+          }
+          if (!this.formData.id && res.data.default_amount_platform) {
+            this.formData.amount_platform = res.data.default_amount_platform
           }
           if (!this.formData.id && res.data.default_cashbook) {
             this.formData.cashbook_id = res.data.default_cashbook.cashbook_id

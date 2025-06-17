@@ -68,6 +68,7 @@ export default {
           appWgtVersion: info.appWgtVersion || '',
           osVersion: info.osVersion || '',
           system: info.system || '',
+          runtime_appWgtVersion: plus.runtime.appWgtVersion
         }).then(res => {
           console.log('wgt-get', res)
           if (res.code === 0 && res.data.info_list.length > 0) {
