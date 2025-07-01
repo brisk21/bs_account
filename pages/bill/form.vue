@@ -97,7 +97,7 @@
       <view class="line" v-if="diy_action && diy_action.enable_budget && diy_action.enable_budget.value">
         <text class="popup_type">关联预算：</text>
         <u-tag :closeable="true"
-               v-show="!!formData.budget_id"
+               v-show="formData.budget_title"
                :text="formData.budget_title"
                @click="openPopup('budget_list')"
                @close="unsetBudget()"
@@ -108,13 +108,13 @@
       <view class="line" v-if="diy_action && diy_action.enable_cashbook && diy_action.enable_cashbook.value">
         <text class="popup_type">关联账簿：</text>
         <u-tag :closeable="true"
-               v-show="!!formData.cashbook_id"
+               v-show="formData.cashbook_title"
                :text="formData.cashbook_title"
                @click="openPopup('cashbook')"
                @close="unsetCashbook()"
         ></u-tag>
 
-        <u-button v-show="!formData.cashbook_id" @click="openPopup('cashbook')" size="mini">选择账簿</u-button>
+        <u-button v-show="!formData.cashbook_title" @click="openPopup('cashbook')" size="mini">选择账簿</u-button>
       </view>
 
 
@@ -127,7 +127,7 @@
       <u-form-item v-if="diy_action && diy_action.enable_bill_cycle && diy_action.enable_bill_cycle.value"
                    class="form-item" label="周期循环：" label-width="150">
         <u-radio-group v-model="formData.cycle_type" @change="cycleChange">
-          <u-radio name="">不循环</u-radio>
+          <u-radio  >不循环</u-radio>
           <u-radio name="daily">每日</u-radio>
           <u-radio name="weekly">每周</u-radio>
           <u-radio name="monthly">每月</u-radio>
@@ -178,6 +178,7 @@
         :filtered-list="popup_data_list"
         :path="popup_manager_path"
         :show_type="popup_show_type"
+        :enable-custom="popup_enable_custom"
 
     ></type_popup>
     <u-picker mode="time" v-model="picker_show" :params="pickerOption" :default-time="formData.date"
@@ -202,6 +203,7 @@ export default {
       popup_data_list: [],
       popup_show_type: 'grid',
       popup_current: '',
+      popup_enable_custom: false,// 是否启用自定义
       showOutList: [],
       showInList: [],
       showInAll: false,
@@ -307,34 +309,44 @@ export default {
         this.popup_manager_path = '/pages/packageA/amount_type/index'
         this.popup_data_list = this.amount_type_list
         this.popup_show_type = 'list'
+        this.popup_enable_custom = true
       } else if (type === 'budget_list') {
         this.popup_manager_path = '/pages/budget/budget'
         this.popup_data_list = this.budget_list
         this.popup_show_type = 'list'
+        this.popup_enable_custom = false
       } else if (type === 'cashbook') {
         this.popup_manager_path = '/pages/packageA/cashbook/index'
         this.popup_data_list = this.cashbook_list
         this.popup_show_type = 'list'
+        this.popup_enable_custom = true
       }else if(type === 'amount_platform'){
          this.popup_manager_path = '/pages/packageA/amount_platform/index'
          this.popup_data_list = this.amountPlatforms
          this.popup_show_type = 'list'
+        this.popup_enable_custom = true
       }
 
       this.$refs.type_popup.togglePopup();
     },
     handleTypeSelected(item) {
-      //console.log(this.popup_current + '父组件接收到了:', item);
+     console.log(this.popup_current + '父组件接收到了:', item);
+      let isCustom = item.isCustom || false
       try {
         if (this.popup_current === 'amount_type') {
           this.formData.amount_type = item.value
         } else if (this.popup_current === 'budget_list') {
           this.formData.budget_id = item.value
-          this.formData.budget_title = item.label || 'xxx'
-          console.log(this.formData.budget_title)
+          this.formData.budget_title = item.label
+          if (isCustom){
+            this.formData.budge_id = 0
+          }
         } else if (this.popup_current === 'cashbook') {
           this.formData.cashbook_id = item.value
-          this.formData.cashbook_title = item.label || 'xxx'
+          this.formData.cashbook_title = item.label
+          if (isCustom){
+            this.formData.cashbook_id = 0
+          }
         }else if(this.popup_current === 'amount_platform'){
           this.formData.amount_platform = item.value
         }

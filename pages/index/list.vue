@@ -403,7 +403,7 @@ export default {
       } else if (type === 'category') {
         this.popup_manager_path = '/pages/setting/category'
         this.popup_data_list = this.category_list
-        this.popup_show_type = 'grid'
+        this.popup_show_type = 'list'
       } else if (type === 'amount_platform') {
         this.popup_manager_path = '/pages/packageA/amount_platform/index'
         this.popup_data_list = this.amount_platform_list
