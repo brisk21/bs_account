@@ -24,6 +24,16 @@
       }
     },
     {
+      "path": "pages/index/batch_manager",
+      "style": {
+        "navigationBarTitleText": "批量操作",
+        "enablePullDownRefresh": true,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
       "path": "pages/index/detail",
       "style": {
         "navigationBarTitleText": "详情",

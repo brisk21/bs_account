@@ -24,6 +24,10 @@ const install = (Vue, vm) => {
         });
     }
 
+    const batchActionCashflow = (data) => {
+       return vm.$u.post('batch_action_cashflow', data);
+    };
+
     const cashflowPre = (data) => {
         return vm.$u.get('cashflow-pre', data);
     }
@@ -255,7 +259,8 @@ const install = (Vue, vm) => {
         cancelAccount,
         regretCancelAccount,
         getNotice,
-        bill_list_options
+        bill_list_options,
+        batchActionCashflow
     };
 }
 

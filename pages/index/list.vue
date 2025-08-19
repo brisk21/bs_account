@@ -21,6 +21,7 @@
           <view class="search-more">
             <button size="mini" type="default" @click="show_search_box=true">高级搜索</button>
             <button size="mini" type="default" @click="changeStyle()">切换样式</button>
+            <button size="mini" type="warn" @click="gotoPath('/pages/index/batch_manager',true)">批量操作</button>
           </view>
           <view class="input">
             <u-search :clearable="true" :show-action="true" :show-action-icon="true"
