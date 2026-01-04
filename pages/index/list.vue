@@ -141,6 +141,17 @@
 
       <u-popup v-model="show_search_box" mode="center" width="90%" height="300px">
         <view class="search-popup">
+<!--          <view class="line">
+            <text class="popup_type">类型：</text>
+            <u-tag
+                v-show="form.type"
+                :closeable="true"
+                :text="form.type_name"
+                @close="unsetType()"
+                @click="openPopup('type')"
+            ></u-tag>
+            <u-button v-show="!form.type" @click="openPopup('type')" size="mini">选择类型</u-button>
+          </view>-->
           <view class="line">
             <text class="popup_type">具体分类：</text>
             <u-tag
@@ -196,6 +207,14 @@
 
             <u-button v-show="!form.cashbook_id" @click="openPopup('cashbook')" size="mini">选择账本</u-button>
           </view>
+          <view class="line">
+            <text class="popup_type">是否计入收支：</text>
+            <u-radio-group v-model="is_count_selected">
+              <u-radio name="all">全部</u-radio>
+              <u-radio name="yes">是</u-radio>
+              <u-radio name="no">否</u-radio>
+            </u-radio-group>
+          </view>
           <view class="btn-list">
             <button size="mini" type="warn" class="action-btn u-border" @click="show_search_box = false">取消</button>
             <button size="mini" type="primary" class="action-btn  u-border" @click="toSearch">开始搜索</button>
@@ -233,6 +252,7 @@ export default {
       popup_data_list: [],
       popup_show_type: 'grid',
       popup_current: '',
+      is_count_selected: 'all',
       sort_list: [
         {label: '默认', value: ''},
         {label: '金额降序', value: 'amount_desc'},
@@ -283,7 +303,8 @@ export default {
         amount_platform: '',
         sort: '',
         page: 0,
-        limit: 20
+        limit: 20,
+        is_count: ''
       },
       bg: {
         backgroundColor: '#42b479',
@@ -314,6 +335,15 @@ export default {
       console.log(val, 'time_type')
 
     },
+    is_count_selected(val) {
+      if (val === 'all') {
+        this.form.is_count = ''
+      } else if (val === 'yes') {
+        this.form.is_count = 1
+      } else if (val === 'no') {
+        this.form.is_count = -1
+      }
+    }
   },
   onReady() {
     uni.pageScrollTo({
@@ -785,37 +815,45 @@ export default {
     position: relative;
     box-sizing: border-box;
     width: 100%;
+    min-width: 100%;
     padding: 26rpx 32rpx;
     font-size: 28rpx;
     line-height: 50rpx;
     color: #606266;
     background-color: #fff;
     text-align: left;
+    overflow-x: auto;
 
     .icon {
       font-size: 50rpx;
       padding-right: 10rpx;
+      flex-shrink: 0;
     }
 
     .box-icon {
       width: 50rpx;
       height: 50rpx;
       margin-right: 35rpx;
+      flex-shrink: 0;
     }
 
     .box-left {
-      width: auto;
+      flex: 0 0 auto;
+      min-width: 120rpx;
       font-weight: 500;
       font-size: 28rpx;
+      white-space: nowrap;
     }
 
     .box-right {
-      overflow: hidden;
+      flex: 0 0 auto;
+      min-width: 160rpx;
       text-align: right;
       vertical-align: middle;
       color: #909399;
       font-size: 26rpx;
-
+      font-weight: 600;
+      white-space: nowrap;
     }
 
     .amount-green {
@@ -827,21 +865,20 @@ export default {
     }
 
     .box-remark {
+      flex: 0 0 auto;
+      min-width: 80rpx;
+      margin-left: 20rpx;
       font-weight: 500;
-      width: 100rpx;
-      margin-left: 50rpx;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -ms-text-overflow: ellipsis;
-      display: -webkit-box;
-      line-clamp: 1;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+      white-space: nowrap;
       color: #c8c4c4;
     }
 
     .item-date {
-
+      flex: 0 0 auto;
+      min-width: 180rpx;
+      text-align: right;
+      margin-left: auto;
+      white-space: nowrap;
     }
   }
 
@@ -860,6 +897,25 @@ export default {
   border-radius: 10rpx;
   background: $uni-theme-color;
   color: #fff;
+}
+
+/* 横向滚动条样式 */
+.list-type::-webkit-scrollbar {
+  height: 6px;
+}
+
+.list-type::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.list-type::-webkit-scrollbar-thumb {
+  background: #c8c9cc;
+  border-radius: 3px;
+}
+
+.list-type::-webkit-scrollbar-thumb:hover {
+  background: #909399;
 }
 
 </style>

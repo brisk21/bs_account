@@ -118,6 +118,7 @@
       </view>
 
 
+
       <u-form-item class="form-item" label="备注：" label-width="120">
         <u-input v-model="formData.remark" type="textarea"
                  placeholder="添加备注" maxlength="500"
@@ -142,6 +143,11 @@
                  placeholder="请输入天数" maxlength="500"
                  clearable border auto-height/>
       </u-form-item>
+
+      <view class="line">
+        <text class="popup_type">是否计入收支：</text>
+        <u-switch v-model="formData.is_count" active-color="#19a6de" inactive-color="#c8c9cc"></u-switch>
+      </view>
 
       <view class="line">
         <text class="popup_type">附件图片：</text>
@@ -229,6 +235,7 @@ export default {
         is_cycle: false,
         cycle_type: '', // 新增字段
         cycle_days: '',
+        is_count: true, // 是否计入收支
       },
       pickerOption: {
         year: true,
