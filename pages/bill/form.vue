@@ -132,6 +132,11 @@
       </u-form-item>
 
       <view class="line">
+        <text class="popup_type">是否计入收支：</text>
+        <u-switch v-model="formData.is_count" active-color="#19a6de" inactive-color="#c8c9cc"></u-switch>
+      </view>
+
+      <view class="line">
         <text class="popup_type">附件图片：</text>
         <upload-file
             :action="action"
@@ -207,6 +212,7 @@ export default {
         is_cycle: false,
         cycle_type: '', // 新增字段
         cycle_days: '',
+        is_count: true, // 是否计入收支
       },
       pickerOption: {
         year: true,
@@ -536,7 +542,8 @@ export default {
                       date: this.formData.date,
                       remark: '',
                       amount_type: '',
-                      image: null
+                      image: null,
+                      is_count: true
                     }
                   } else {
                     this.$u.toast(res.msg)
