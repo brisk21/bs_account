@@ -454,6 +454,20 @@
             "navigationBarTitleText": "操作",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "currency/index",
+          "style": {
+            "navigationBarTitleText": "币种管理",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "currency/form",
+          "style": {
+            "navigationBarTitleText": "操作",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }

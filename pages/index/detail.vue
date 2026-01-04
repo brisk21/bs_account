@@ -6,7 +6,7 @@
 				min-height: 100rpx;
 				height: 100rpx;
 				width: 50%;">
-          ￥{{ info.amount }}
+          {{ info.currency_symbol || '￥' }}{{ info.amount }}
         </view>
       </view>
 
@@ -16,6 +16,12 @@
         <text class="type">日期：</text>
         <view style="font-size: 28rpx;font-weight: 600;">
           {{ info.date }}
+        </view>
+      </view>
+      <view class="line">
+        <text class="type">币种：</text>
+        <view style="font-size: 25rpx;font-weight: 600;">
+          {{ info.currency_name || '人民币' }}
         </view>
       </view>
       <view class="line">
@@ -197,7 +203,7 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 26rpx 32rpx;
+  padding: 10rpx 32rpx;
   font-size: 28rpx;
   line-height: 54rpx;
   color: #606266;

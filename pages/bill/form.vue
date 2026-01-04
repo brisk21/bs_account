@@ -57,6 +57,17 @@
       </view>
 
       <u-line></u-line>
+      <view class="line" v-if="diy_action && diy_action.enable_currency && diy_action.enable_currency.value">
+        <text class="popup_type">币种：</text>
+        <u-tag
+            v-show="formData.currency_name"
+            :closeable="true"
+            :text="formData.currency_name"
+            @close="unsetCurrency()"
+            @click="openPopup('currency')"
+        ></u-tag>
+        <u-button v-show="!formData.currency_name" @click="openPopup('currency')" size="mini">选择币种</u-button>
+      </view>
       <view class="line" v-if="diy_action && diy_action.enable_amount_platform && diy_action.enable_amount_platform.value">
         <text class="popup_type">交易平台：</text>
         <u-tag
@@ -172,8 +183,8 @@
           自定义操作：可以在【我的】》【设置】》【
           <text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>
           】中自定义
-          <text style="color: red">交易平台、是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理</text>
-          等功能，开启相关功能后，可以有【选择收支方式】、【关联预算】、【关联账簿】等按钮，可以进行自定义操作。
+          <text style="color: red">交易平台、是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理、多币种支持</text>
+          等功能，开启相关功能后，可以有【选择收支方式】、【关联预算】、【关联账簿】、【选择币种】等按钮，可以进行自定义操作。
         </view>
       </view>
 
@@ -231,6 +242,9 @@ export default {
         remark: '',
         amount_type: '',
         amount_platform: '',
+        currency_id: 0,
+        currency_name: '',
+        currency_symbol: '',
         image: [],
         is_cycle: false,
         cycle_type: '', // 新增字段
@@ -259,6 +273,7 @@ export default {
       budget_list: [],
       cashbook_list: [],
       amountPlatforms: [],
+      currencyList: [],
 
       initialFiles: [],
       action: constConfig.baseUrl + '/upload/image',
@@ -312,7 +327,12 @@ export default {
 
     openPopup(type) {
       this.popup_current = type
-      if (type === 'amount_type') {
+      if (type === 'currency') {
+        this.popup_manager_path = '/pages/packageA/currency/index'
+        this.popup_data_list = this.currencyList
+        this.popup_show_type = 'list'
+        this.popup_enable_custom = true
+      } else if (type === 'amount_type') {
         this.popup_manager_path = '/pages/packageA/amount_type/index'
         this.popup_data_list = this.amount_type_list
         this.popup_show_type = 'list'
@@ -340,7 +360,11 @@ export default {
      console.log(this.popup_current + '父组件接收到了:', item);
       let isCustom = item.isCustom || false
       try {
-        if (this.popup_current === 'amount_type') {
+        if (this.popup_current === 'currency') {
+          this.formData.currency_id = item.value
+          this.formData.currency_name = item.label
+          this.formData.currency_symbol = item.symbol || '￥'
+        } else if (this.popup_current === 'amount_type') {
           this.formData.amount_type = item.value
         } else if (this.popup_current === 'budget_list') {
           this.formData.budget_id = item.value
@@ -376,6 +400,11 @@ export default {
     },
     unsetAmountPlatformType(){
       this.formData.amount_platform = ''
+    },
+    unsetCurrency() {
+      this.formData.currency_id = 0
+      this.formData.currency_name = ''
+      this.formData.currency_symbol = '￥'
     },
     setAmountType(item) {
       this.formData.amount_type = item
@@ -498,6 +527,9 @@ export default {
           if (res.data.amountPlatforms) {
             this.amountPlatforms = res.data.amountPlatforms
           }
+          if (res.data.currencyList) {
+            this.currencyList = res.data.currencyList
+          }
           if (res.data.max_image_count) {
             this.maxCount = res.data.max_image_count
           }
@@ -535,6 +567,11 @@ export default {
           if (!this.formData.id && res.data.default_cashbook) {
             this.formData.cashbook_id = res.data.default_cashbook.cashbook_id
             this.formData.cashbook_title = res.data.default_cashbook.name
+          }
+          if (!this.formData.id && res.data.default_currency) {
+            this.formData.currency_id = res.data.default_currency.id
+            this.formData.currency_name = res.data.default_currency.name
+            this.formData.currency_symbol = res.data.default_currency.symbol || '￥'
           }
 
         }

@@ -63,10 +63,10 @@
               {{ item.amount_type || '--' }}
             </view>
             <view class="u-flex-1  box-right amount-green" v-if="item.type===20">
-              -￥{{ item.amount }}
+              -{{ item.currency_symbol || '￥' }}{{ item.amount }}
             </view>
             <view class="u-flex-1  box-right amount-red" v-else>
-              +￥{{ item.amount }}
+              +{{ item.currency_symbol || '￥' }}{{ item.amount }}
             </view>
             <view class="u-flex-2 box-right item-date">
               {{ item.date }}
@@ -82,9 +82,12 @@
                 @click="toDetail(item.id)">
             <view class="item">
               <view class="title">
-                {{ item.type == 20 ? '支出' : '收入' }} ￥
+                {{ item.type == 20 ? '支出' : '收入' }} {{ item.currency_symbol || '￥' }}
                 <text>{{ item.type == 20 ? '-' : '+' }}</text>
                 <text :class="item.type==10?'bs-red':'bs-green'">{{ item.amount }}</text>
+              </view>
+              <view class="bs-item">
+                币种： {{ item.currency_name || '人民币' }}
               </view>
               <view class="bs-item">
                 交易平台： {{ item.amount_platform || '--' }}
@@ -208,6 +211,17 @@
             <u-button v-show="!form.cashbook_id" @click="openPopup('cashbook')" size="mini">选择账本</u-button>
           </view>
           <view class="line">
+            <text class="popup_type">币种：</text>
+            <u-tag :closeable="true"
+                   v-show="!!form.currency_id"
+                   :text="form.currency_name||'人民币?'"
+                   @click="openPopup('currency')"
+                   @close="unsetCurrency()"
+            ></u-tag>
+
+            <u-button v-show="!form.currency_id" @click="openPopup('currency')" size="mini">选择币种</u-button>
+          </view>
+          <view class="line">
             <text class="popup_type">是否计入收支：</text>
             <u-radio-group v-model="is_count_selected">
               <u-radio name="all">全部</u-radio>
@@ -283,6 +297,9 @@ export default {
       ],
       amount_platform_list: [
         {label: '全部', value: '',},
+      ],
+      currency_list: [
+        {label: '全部', value: '', symbol: ''},
       ],
       time_type_title: '时间',
       show_calendar: false,
@@ -439,6 +456,10 @@ export default {
         this.popup_manager_path = '/pages/packageA/amount_platform/index'
         this.popup_data_list = this.amount_platform_list
         this.popup_show_type = 'grid'
+      } else if (type === 'currency') {
+        this.popup_manager_path = '/pages/packageA/currency/index'
+        this.popup_data_list = this.currency_list
+        this.popup_show_type = 'grid'
       } else if (type === 'type') {
         this.popup_data_list = this.type
         this.popup_show_type = 'list'
@@ -453,7 +474,9 @@ export default {
         } else if (this.popup_current === 'budget_list') {
           this.form.budget_id = item.value
           this.form.budget_title = item.label || ''
-          console.log(this.form.budget_title)
+        }  else if (this.popup_current === 'currency') {
+          this.form.currency_id = item.value
+          this.form.currency_name = item.label || ''
         } else if (this.popup_current === 'cashbook') {
           this.form.cashbook_id = item.value
           this.form.cashbook_title = item.label || ''
@@ -527,6 +550,9 @@ export default {
           }
           if (data.amount_platform_list.length > 0) {
              that.amount_platform_list = that.amount_platform_list.concat(data.amount_platform_list)
+          }
+          if (data.currency_list.length > 0) {
+             that.currency_list = that.currency_list.concat(data.currency_list)
           }
         }
 

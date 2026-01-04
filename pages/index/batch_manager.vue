@@ -39,10 +39,10 @@
             </view>
 
             <view class="u-flex-1  box-right amount-green" v-if="item.type===20" @click="toDetail(item.id)">
-              -￥{{ item.amount }}
+              -{{ item.currency_symbol || '￥' }}{{ item.amount }}
             </view>
             <view class="u-flex-1  box-right amount-red" v-else @click="toDetail(item.id)">
-              +￥{{ item.amount }}
+              +{{ item.currency_symbol || '￥' }}{{ item.amount }}
             </view>
             <view class="u-flex-1 box-right item-date">
               {{ item.date }}

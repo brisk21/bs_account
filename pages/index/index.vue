@@ -32,10 +32,10 @@
           </view>
         </view>
         <view class="item">
-          <view class="font-2x">￥{{ cashflow.in }}</view>
+          <view class="font-2x">{{ cashflow.in }}</view>
         </view>
         <view class="item">
-          <view class="font-2x">￥{{ cashflow.out }}</view>
+          <view class="font-2x">{{ cashflow.out }}</view>
         </view>
         <view class="item">
           <view class="font-2x"></view>
@@ -88,10 +88,10 @@
                   {{ item1.remark || '无' }}
                 </view>
                 <view class="u-flex-1 box-right amount-green" v-if="item1.type==20">
-                  -￥{{ item1.amount }}
+                  -{{ item1.currency_symbol || '￥' }}{{ item1.amount }}
                 </view>
                 <view class="u-flex-1 box-right amount-red" v-else>
-                  +￥{{ item1.amount }}
+                  +{{ item1.currency_symbol || '￥' }}{{ item1.amount }}
                 </view>
               </view>
             </view>
