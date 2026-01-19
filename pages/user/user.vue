@@ -144,8 +144,8 @@ export default {
 
 <style lang="scss">
 .container {
-  background-color: #f5f5f5;
-  height: 100%;
+  background-color: #f5f7fa;
+  min-height: 100vh;
 }
 
 %flex-center {
@@ -160,12 +160,13 @@ export default {
   justify-content: space-around;
   align-content: center;
   background: #fff;
-  border-radius: 10upx;
+  border-radius: 16rpx;
 }
 
 .user-section {
   padding: 100upx 30upx 0;
   position: relative;
+  padding-bottom: 40rpx;
 
   .bg {
     position: absolute;
@@ -173,20 +174,37 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: $uni-theme-color;
+    background: linear-gradient(135deg, #42b479 0%, #38a169 100%);
+    border-radius: 0 0 32rpx 32rpx;
   }
 
   .setting {
     position: absolute;
-    right: 0;
+    right: 30rpx;
     z-index: 10;
     // #ifdef MP-WEIXIN
     top: 80rpx;
     // #endif
-
     color: white;
-  }
+    background: rgba(255, 255, 255, 0.15);
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
 
+    &:active {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }
 
 .user-info-box {
@@ -196,17 +214,40 @@ export default {
   position: relative;
   z-index: 1;
 
+  .portrait-box {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 36rpx;
+      height: 36rpx;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    }
+  }
+
   .portrait {
     width: 130upx;
     height: 130upx;
-    border: 5upx solid #fff;
+    border: 6upx solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  }
+
+  .info-box {
+    flex: 1;
+    margin-left: 24rpx;
   }
 
   .username {
-    font-size: 30rpx;
+    font-size: 36rpx;
     color: #fff;
-    margin-left: 20rpx;
+    font-weight: 600;
+    text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
 
     &.qq_login_btn {
       background-color: $uni-theme-color;
@@ -215,40 +256,64 @@ export default {
 }
 
 .menu-container {
-  background-color: #f5f5f5;
+  background-color: transparent;
   position: relative;
-  padding-bottom: 20rpx;
+  padding: 0 30rpx 20rpx;
 
   .extend-list {
-    padding: 8rpx;
+    padding: 0;
     margin-top: 20rpx;
+    background: #fff;
+    border-radius: 16rpx;
+    overflow: hidden;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
   }
 }
 
 .tj-sction {
   @extend %section;
-
   background-color: #fff;
+  margin: 0 30rpx 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  padding: 20rpx 0;
 
   .tj-item {
     @extend %flex-center;
     flex-direction: column;
     height: 140upx;
     font-size: $font-sm;
-    color: $uni-text-color-grey;
+    color: #909399;
+    position: relative;
+    transition: all 0.3s;
+
+    &:active {
+      background: #f8f8f8;
+    }
+
+    
   }
 
   .num {
-    font-size: 40rpx;
-    color: dodgerblue;
-    margin-bottom: 8upx;
+    font-size: 48rpx;
+    font-weight: 600;
+    background: linear-gradient(135deg, #42b479 0%, #38a169 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12upx;
   }
 }
 
+.alert-tip {
+  padding: 0 30rpx 20rpx;
+}
+
 .menu-list {
-  margin-top: 30upx;
+  margin-top: 0;
   background: #fff;
-  border-radius: 10upx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
 
   switch {
     transform: scale(0.7, 0.7)
@@ -272,5 +337,11 @@ export default {
   margin-right: 10px;
   text-align: right;
   color: #FFFFFF;
+}
+
+.grid-text {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #606266;
 }
 </style>

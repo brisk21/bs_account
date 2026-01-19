@@ -341,10 +341,10 @@ export default {
 
 <style lang="scss">
 .container {
-  background-color: white;
+  background-color: #f5f7fa;
+  min-height: 100vh;
 
   // scroll-view 通过flex 布局 自适应
- /* height: 100vh;*/
   display: flex;
   flex-direction: column;
 
@@ -352,53 +352,65 @@ export default {
     flex: 1;
     overflow: scroll;
   }
+
   .need_login {
     margin-top: 45%;
-    background: white;
+    background: transparent;
   }
 
   .scroll-view {
     text-align: center;
     height: 100%;
   }
-  // 自适应结束
 
   .notice_content{
     min-height: 600rpx;
     padding: 80rpx 10px 10px;
   }
+
   .header-icon {
     padding: 15rpx;
   }
 
   .list-box {
-    padding: 18rpx 18rpx 18rpx 40rpx;
+    padding: 20rpx 30rpx 16rpx;
+    background: #f5f7fa;
+
+    .header-text {
+      font-size: 28rpx;
+      color: #909399;
+      font-weight: 400;
+    }
   }
 
   .list-box-children {
-    display: -webkit-box;
-    display: -webkit-flex;
     display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
     align-items: center;
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    padding: 26rpx 32rpx;
+    padding: 30rpx 32rpx;
+    margin-bottom: 2rpx;
     font-size: 28rpx;
     line-height: 50rpx;
-    color: #606266;
+    color: #303133;
     background-color: #fff;
     text-align: left;
+    transition: all 0.3s;
+
+    &:active {
+      background-color: #f8f8f8;
+    }
 
     .icon {
-      font-size: 50rpx;
-      padding-right: 10rpx;
+      width: 88rpx;
+      height: 88rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(66, 180, 121, 0.1) 0%, rgba(66, 180, 121, 0.05) 100%);
+      border-radius: 16rpx;
+      margin-right: 24rpx;
     }
 
     .box-icon {
@@ -410,16 +422,16 @@ export default {
     .box-left {
       width: auto;
       font-weight: 500;
-      font-size: 28rpx;
+      font-size: 30rpx;
+      color: #303133;
     }
 
     .box-right {
       overflow: hidden;
       text-align: right;
       vertical-align: middle;
-      color: #909399;
-      font-size: 26rpx;
-
+      font-size: 32rpx;
+      font-weight: 600;
     }
 
     .amount-green {
@@ -427,21 +439,21 @@ export default {
     }
 
     .amount-red {
-      color: #ff0000;
+      color: #ff6b6b;
     }
 
     .box-remark {
-      font-weight: 500;
+      font-weight: 400;
       width: 300rpx;
       margin-left: 50rpx;
       overflow: hidden;
       text-overflow: ellipsis;
-      -ms-text-overflow: ellipsis;
       display: -webkit-box;
       line-clamp: 1;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
-      color: #c8c4c4;
+      color: #909399;
+      font-size: 26rpx;
     }
   }
 
@@ -450,10 +462,13 @@ export default {
     top: 160rpx;
     width: 100%;
     padding-bottom: 80px;
+
     .notice-list{
       max-height: 70rpx;
+      margin-bottom: 16rpx;
     }
   }
+
   .empty {
     margin-top: 200px;
   }
@@ -461,43 +476,63 @@ export default {
 
 .setDisplay{
   margin-left: 10rpx;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+
+  &:active {
+    opacity: 1;
+  }
 }
+
 .go-to-login {
-  border-radius: 10rpx;
-  background: $uni-theme-color;
+  border-radius: 50rpx;
+  background: linear-gradient(135deg, #42b479 0%, #38a169 100%);
   color: #fff;
+  box-shadow: 0 8rpx 20rpx rgba(66, 180, 121, 0.3);
+  border: none;
+  padding: 20rpx 60rpx;
+  font-size: 28rpx;
 }
 
 .top {
   position: fixed;
-  top: var(NavigationBar, 44px); /* 使用计算属性，默认值为 44px */
+  top: var(NavigationBar, 44px);
   z-index: 99;
   text-align: center;
   margin: 0 auto;
   width: 100%;
-  height: 176rpx;
-
+  height: auto;
+  background: linear-gradient(135deg, #42b479 0%, #38a169 100%);
+  box-shadow: 0 4rpx 20rpx rgba(66, 180, 121, 0.2);
 
   .line {
     display: flex;
     color: #fff;
-    background-color: $uni-theme-color;
-    padding-left: 30rpx;
-    padding-right: 30rpx;
-    padding-bottom: 30rpx;
+    padding: 24rpx 30rpx 20rpx;
 
+    &:first-child {
+      padding-top: 32rpx;
+      padding-bottom: 24rpx;
+    }
 
     &.data {
       padding-right: 20rpx;
+      padding-top: 16rpx;
+	  justify-content: center;
+	  align-items: center;
 
       .item {
         flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
       }
 
       .font-2x {
-        font-size: 40rpx;
+        font-size: 44rpx;
+        font-weight: 600;
+        text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
       }
-
     }
 
     .item {
@@ -505,7 +540,9 @@ export default {
     }
 
     .header-text {
-      font-size: 36rpx;
+      font-size: 30rpx;
+      opacity: 0.9;
+      font-weight: 400;
     }
 
     .bar {
@@ -515,17 +552,48 @@ export default {
       border-right-style: solid;
       height: 50rpx;
       transform: scaleX(0.5);
-      border-color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
     .month-content {
       display: flex;
+	  margin-bottom: 10rpx;
 
       .month-area {
         display: flex;
-        // align-items: flex-end;
         align-items: center;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 4rpx 16rpx;
+        border-radius: 32rpx;
+        transition: all 0.3s;
+
+        &:active {
+          background: rgba(255, 255, 255, 0.25);
+        }
+
+        .month {
+          font-weight: 600;
+        }
+
+        .month_str {
+          font-size: 24rpx;
+          margin-left: 4rpx;
+          opacity: 0.9;
+        }
+
+        .icon-area {
+          margin-left: 6rpx;
+        }
       }
+    }
+  }
+
+  .search-icon {
+    opacity: 0.9;
+    transition: opacity 0.3s;
+
+    &:active {
+      opacity: 1;
     }
   }
 }
