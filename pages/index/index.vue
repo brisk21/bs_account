@@ -32,10 +32,10 @@
           </view>
         </view>
         <view class="item">
-          <view class="font-2x">{{ cashflow.in }}</view>
+          <view class="font-2x">{{ formatAmount(cashflow.in) }}</view>
         </view>
         <view class="item">
-          <view class="font-2x">{{ cashflow.out }}</view>
+          <view class="font-2x">{{ formatAmount(cashflow.out) }}</view>
         </view>
         <view class="item">
           <view class="font-2x"></view>
@@ -66,13 +66,13 @@
             <view v-for="(item, index) in cashflow.list" :key="index">
               <view class="u-flex list-box">
                 <view class="u-m-r-10 u-flex-1">
-                  <view class="header-text"> {{ item.time }} {{ item.week }}</view>
+                  <view class="header-text"> {{ formatDate(item.time) }} {{ item.week }}</view>
                 </view>
                 <view class="u-m-r-10 u-flex-1">
-                  <view class="header-text">收入 ￥{{ item.in }}</view>
+                  <view class="header-text">收入 ￥{{ formatAmount(item.in) }}</view>
                 </view>
                 <view class="u-m-r-10 u-flex-1">
-                  <view class="header-text">支出 ￥{{ item.out }}</view>
+                  <view class="header-text">支出 ￥{{ formatAmount(item.out) }}</view>
                 </view>
               </view>
 
@@ -82,16 +82,14 @@
                   <u-icon :name="item1.category.icon" color="#42b479" size="46"></u-icon>
                 </view>
                 <view class="box-left">
-                  {{ item1.category.name }}
+                  <view class="category-name">{{ item1.category.name }}</view>
+                  <view class="box-remark" v-if="item1.remark">{{ item1.remark }}</view>
                 </view>
-                <view class="box-remark">
-                  {{ item1.remark || '无' }}
+                <view class="u-flex-1 box-right amount-red" v-if="item1.type==20">
+                  -{{ item1.currency_symbol || '￥' }}{{ formatAmount(item1.amount) }}
                 </view>
-                <view class="u-flex-1 box-right amount-green" v-if="item1.type==20">
-                  -{{ item1.currency_symbol || '￥' }}{{ item1.amount }}
-                </view>
-                <view class="u-flex-1 box-right amount-red" v-else>
-                  +{{ item1.currency_symbol || '￥' }}{{ item1.amount }}
+                <view class="u-flex-1 box-right amount-green" v-else>
+                  +{{ item1.currency_symbol || '￥' }}{{ formatAmount(item1.amount) }}
                 </view>
               </view>
             </view>
@@ -200,6 +198,44 @@ export default {
   },
 
   methods: {
+    // 格式化金额，添加千分位分隔符
+    formatAmount(amount) {
+      if (!amount) return '0.00';
+      const num = parseFloat(amount);
+      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+
+    // 格式化日期显示
+    formatDate(dateStr) {
+      if (!dateStr) return '';
+
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const targetDate = new Date(dateStr);
+
+      // 格式化为 YYYY-MM-DD 进行比较
+      const formatDateOnly = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+
+      const todayStr = formatDateOnly(today);
+      const yesterdayStr = formatDateOnly(yesterday);
+      const targetStr = formatDateOnly(targetDate);
+
+      if (targetStr === todayStr) {
+        return '今天';
+      } else if (targetStr === yesterdayStr) {
+        return '昨天';
+      }
+
+      return dateStr;
+    },
+
     getNotice(){
       this.$u.api.getNotice().then((res)=>{
         if (res.code === 0){
@@ -373,13 +409,18 @@ export default {
   }
 
   .list-box {
-    padding: 20rpx 30rpx 16rpx;
+    padding: 32rpx 30rpx 20rpx;
     background: #f5f7fa;
+    margin-top: 8rpx;
+
+    &:first-child {
+      margin-top: 0;
+    }
 
     .header-text {
       font-size: 28rpx;
-      color: #909399;
-      font-weight: 400;
+      color: #606266;
+      font-weight: 500;
     }
   }
 
@@ -388,18 +429,21 @@ export default {
     align-items: center;
     position: relative;
     box-sizing: border-box;
-    width: 100%;
     padding: 30rpx 32rpx;
-    margin-bottom: 2rpx;
+    margin: 0 20rpx 16rpx;
     font-size: 28rpx;
     line-height: 50rpx;
     color: #303133;
     background-color: #fff;
     text-align: left;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
     transition: all 0.3s;
 
     &:active {
       background-color: #f8f8f8;
+      transform: scale(0.98);
+      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
     }
 
     .icon {
@@ -408,9 +452,10 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, rgba(66, 180, 121, 0.1) 0%, rgba(66, 180, 121, 0.05) 100%);
-      border-radius: 16rpx;
+      background: linear-gradient(135deg, rgba(66, 180, 121, 0.12) 0%, rgba(66, 180, 121, 0.06) 100%);
+      border-radius: 20rpx;
       margin-right: 24rpx;
+      flex-shrink: 0;
     }
 
     .box-icon {
@@ -420,18 +465,26 @@ export default {
     }
 
     .box-left {
-      width: auto;
-      font-weight: 500;
-      font-size: 30rpx;
-      color: #303133;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .category-name {
+        font-weight: 500;
+        font-size: 30rpx;
+        color: #303133;
+        line-height: 42rpx;
+      }
     }
 
     .box-right {
       overflow: hidden;
       text-align: right;
       vertical-align: middle;
-      font-size: 32rpx;
+      font-size: 34rpx;
       font-weight: 600;
+      letter-spacing: 0.5rpx;
     }
 
     .amount-green {
@@ -444,8 +497,7 @@ export default {
 
     .box-remark {
       font-weight: 400;
-      width: 300rpx;
-      margin-left: 50rpx;
+      margin-top: 4rpx;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -453,7 +505,8 @@ export default {
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       color: #909399;
-      font-size: 26rpx;
+      font-size: 24rpx;
+      line-height: 34rpx;
     }
   }
 
@@ -462,10 +515,11 @@ export default {
     top: 160rpx;
     width: 100%;
     padding-bottom: 80px;
+    padding-top: 16rpx;
 
     .notice-list{
       max-height: 70rpx;
-      margin-bottom: 16rpx;
+      margin: 0 20rpx 20rpx;
     }
   }
 
