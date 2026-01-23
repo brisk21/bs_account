@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <fab :bg="bg" :is-show="hasLogin" icon_name="plus" :url="'/pages/budget/detail'"></fab>
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
@@ -31,24 +31,24 @@
             </template>
           </view>
           <view class="leave_amount bs-item">
-            预算余额：￥ <text :class="item.leave_amount>=0?'bs_red':'bs_green'">{{ item.leave_amount }} 元</text>
-            <text class="bs_red"> （{{ item.percent }}）</text>
+            预算余额：￥ <text :class="item.leave_amount>=0?'bs_red':'bs_green'" :style="item.leave_amount>=0?'color:'+themePrimary+'!important':'color:'+themePrimary+'!important'">{{ item.leave_amount }} 元</text>
+            <text class="bs_red" :style="'color:'+themePrimary+'!important'"> （{{ item.percent }}）</text>
           </view>
           <view class=" bs-item" v-if="item.type===20 || item.type===0">
-            支出金额：￥ <text class="bs_green">{{ item.out_amount }} 元</text>
+            支出金额：￥ <text class="bs_green" :style="'color:'+themePrimary+'!important'">{{ item.out_amount }} 元</text>
           </view>
           <view class=" bs-item" v-if="item.type===10 || item.type===0">
-            收入金额：￥ <text class="bs_red">{{ item.in_amount }} 元</text>
+            收入金额：￥ <text class="bs_red" :style="'color:'+themePrimary+'!important'">{{ item.in_amount }} 元</text>
           </view>
           <view class=" bs-item" v-if="item.ext_amount && item.type===10">
-            额外收入：￥ <text class="bs_red">{{ item.ext_amount }} 元</text>
+            额外收入：￥ <text class="bs_red" :style="'color:'+themePrimary+'!important'">{{ item.ext_amount }} 元</text>
           </view>
           <view class=" bs-item" v-if="item.ext_amount && item.type===20">
-            额外支出：￥ <text class="bs_green">{{ item.ext_amount }} 元</text>
+            额外支出：￥ <text class="bs_green" :style="'color:'+themePrimary+'!important'">{{ item.ext_amount }} 元</text>
           </view>
 
           <view class="profit  bs-item" v-if="item.type===0">
-            收支差额：￥ <text :class="item.profit>=0?'bs_red':'bs_green'">{{ item.profit }} 元</text>
+            收支差额：￥ <text :class="item.profit>=0?'bs_red':'bs_green'" :style="'color:'+themePrimary+'!important'">{{ item.profit }} 元</text>
           </view>
           <view class="time  bs-item">
             时间：{{ item.time_set }}
@@ -76,7 +76,10 @@
 <script>
 import api from "@/common/budget";
 import fab from "@/my-components/fab/index.vue";
+import themeMixin from '@/common/theme-mixin.js'
+
 export default {
+  mixins: [themeMixin],
   components: {
     fab
   },
@@ -144,6 +147,8 @@ export default {
   onShow() {
     console.log('onShow')
      this.getList(true)
+     // 应用主题颜色
+     this.bg.backgroundColor = this.themePrimary
   },
   onLoad(options) {
     console.log('onLoad')
@@ -157,6 +162,16 @@ export default {
     this.scrollTop = e.scrollTop;
   },
   methods: {
+    // 获取颜色样式
+    getColorStyle(colorClass) {
+      if (colorClass === 'bs_red') {
+        return 'color:' + this.themePrimary + '!important'
+      }
+      if (colorClass === 'bs_green') {
+        return 'color:' + this.themePrimary + '!important'
+      }
+      return ''
+    },
     to_detail(id){
       uni.navigateTo({
         url: `/pages/index/list?budget_id=${id}`
@@ -235,10 +250,10 @@ export default {
     background: white;
   }
   .bs_red{
-    color: #ff0000;
+    color: var(--theme-primary, #ff0000);
   }
   .bs_green{
-    color: green;
+    color: var(--theme-primary, green);
   }
   .no-more{
     text-align: center;
