@@ -462,6 +462,11 @@ export default {
   }
   .empty {
     margin-top: 200px;
+    height: calc(100vh - 176rpx);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--theme-background, #f5f5f5);
   }
 }
 

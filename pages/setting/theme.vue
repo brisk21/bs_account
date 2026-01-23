@@ -3,6 +3,7 @@
 		<view class="theme-header">
 			<text class="title">主题切换</text>
 			<text class="subtitle">选择你喜欢的主题风格</text>
+			<text class="subtitle">切换后部分机型需重新启动应用，清理缓存后主题将重新恢复默认！</text>
 		</view>
 		
 		<view class="theme-list">

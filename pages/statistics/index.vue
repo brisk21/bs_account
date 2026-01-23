@@ -47,7 +47,9 @@
               <u-th class="u-th" v-for="(th,index1) in item.th" :key="index1">{{ th }}</u-th>
             </u-tr>
             <u-tr class="u-tr" v-for="(td,index2) in item.td" :key="index2">
-              <u-td :class="'u-td' + ' '+(value.class||'') " v-for="(value,index3) in td" :key="index3">
+              <u-td :class="'u-td' + ' '+(value.class||'') "
+                     :style="(value.class === 'bs-green' || value.class === 'amount-green') ? 'color:' + themePrimary : ''"
+                     v-for="(value,index3) in td" :key="index3">
                 {{ value.label }}
               </u-td>
             </u-tr>
@@ -359,34 +361,28 @@ export default {
       }
 
       .u-tr {
-
-              .bs-red {
-
-                color: red !important;
-
-              }
-
-      
-
-              .bs-green {
-
-                color: var(--theme-primary, #42b479) !important;
-
-              }
-
-      
-
-              .bs-gray {
-
-                color: #999 !important;
-
-              }
-
-            }
-
-          }
-
+        .bs-red {
+          color: red !important;
         }
 
+        .bs-green {
+          color: var(--theme-primary, #42b479) !important;
+        }
+
+        .bs-gray {
+          color: #999 !important;
+        }
       }
+    }
+  }
+}
+
+/* 深度选择器 - 用于小程序和APP */
+::v-deep .bs-green {
+  color: var(--theme-primary, #42b479) !important;
+}
+
+::v-deep .amount-green {
+  color: var(--theme-primary, #42b479) !important;
+}
 </style>
