@@ -72,18 +72,20 @@
 				<view class="popup-header">
 					<text class="popup-title">选择颜色</text>
 				</view>
-				<view class="color-grid">
-					<view 
-						v-for="color in colorPalette" 
-						:key="color"
-						class="color-grid-item"
-						:style="{ backgroundColor: color }"
-						:class="{ 'active': customColor === color }"
-						@click="selectColor(color)"
-					>
-						<text v-if="customColor === color" class="selected-icon">✓</text>
+				<scroll-view class="color-grid" scroll-y="true">
+					<view class="grid-content">
+						<view 
+							v-for="color in colorPalette" 
+							:key="color"
+							class="color-grid-item"
+							:style="{ backgroundColor: color }"
+							:class="{ 'active': customColor === color }"
+							@click="selectColor(color)"
+						>
+							<text v-if="customColor === color" class="selected-icon">✓</text>
+						</view>
 					</view>
-				</view>
+				</scroll-view>
 				<view class="popup-footer">
 					<view class="current-color-display">
 						<text class="current-color-label">当前选择：</text>
@@ -382,11 +384,14 @@ export default {
 	background-color: #fff;
 	border-radius: 20upx;
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 	
 	.popup-header {
 		padding: 30upx;
 		text-align: center;
 		border-bottom: 1upx solid #e5e5e5;
+		flex-shrink: 0;
 		
 		.popup-title {
 			font-size: 36upx;
@@ -397,34 +402,37 @@ export default {
 	
 	.color-grid {
 		padding: 30upx;
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		gap: 15upx;
 		max-height: 500upx;
-		overflow-y: auto;
+		flex-shrink: 0;
 		
-		.color-grid-item {
-			width: 100%;
-			padding-bottom: 100%;
-			position: relative;
-			border-radius: 12upx;
-			border: 3upx solid transparent;
-			transition: all 0.3s;
+		.grid-content {
+			display: grid;
+			grid-template-columns: repeat(5, 1fr);
+			gap: 15upx;
 			
-			&.active {
-				border-color: #333;
-				transform: scale(1.1);
-			}
-			
-			.selected-icon {
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				font-size: 40upx;
-				font-weight: bold;
-				color: #fff;
-				text-shadow: 0 0 4upx rgba(0, 0, 0, 0.5);
+			.color-grid-item {
+				width: 100%;
+				padding-bottom: 100%;
+				position: relative;
+				border-radius: 12upx;
+				border: 3upx solid transparent;
+				transition: all 0.3s;
+				
+				&.active {
+					border-color: #333;
+					transform: scale(1.1);
+				}
+				
+				.selected-icon {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					font-size: 40upx;
+					font-weight: bold;
+					color: #fff;
+					text-shadow: 0 0 4upx rgba(0, 0, 0, 0.5);
+				}
 			}
 		}
 	}
@@ -432,6 +440,7 @@ export default {
 	.popup-footer {
 		padding: 30upx;
 		border-top: 1upx solid #e5e5e5;
+		flex-shrink: 0;
 		
 		.current-color-display {
 			display: flex;
