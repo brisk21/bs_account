@@ -288,6 +288,13 @@
         "navigationBarTitleText": "操作账单",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/setting/theme",
+      "style": {
+        "navigationBarTitleText": "主题切换",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "subPackages": [

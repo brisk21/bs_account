@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <fab></fab>
 
 
@@ -97,8 +97,10 @@
 <script>
 import fab from '@/my-components/fab/index.vue'
 import extend from "@/common/extend";
+import themeMixin from '@/common/theme-mixin.js'
 
 export default {
+  mixins: [themeMixin],
   components: {
     fab
   },
@@ -173,7 +175,7 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: $uni-theme-color;
+    background-color: var(--theme-primary, #42b479);
   }
 
   .setting {
@@ -209,7 +211,7 @@ export default {
     margin-left: 20rpx;
 
     &.qq_login_btn {
-      background-color: $uni-theme-color;
+      background-color: var(--theme-primary, #42b479);
     }
   }
 }

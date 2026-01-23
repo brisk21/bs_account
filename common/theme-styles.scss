@@ -1,0 +1,68 @@
+/* 主题动态样式 */
+/* 这些变量会在应用启动时通过JS动态设置 */
+
+:root {
+	--theme-primary: #42b479;
+	--theme-primary-light: #6cd299;
+	--theme-primary-dark: #2e8a56;
+	--theme-background: #f5f5f5;
+	--theme-card-background: #ffffff;
+}
+
+/* 使用主题颜色的通用类 */
+.theme-primary {
+	color: var(--theme-primary) !important;
+}
+
+.theme-primary-bg {
+	background-color: var(--theme-primary) !important;
+}
+
+.theme-primary-light {
+	color: var(--theme-primary-light) !important;
+}
+
+.theme-primary-light-bg {
+	background-color: var(--theme-primary-light) !important;
+}
+
+.theme-primary-dark {
+	color: var(--theme-primary-dark) !important;
+}
+
+.theme-primary-dark-bg {
+	background-color: var(--theme-primary-dark) !important;
+}
+
+.theme-background {
+	background-color: var(--theme-background) !important;
+}
+
+.theme-card-background {
+	background-color: var(--theme-card-background) !important;
+}
+
+/* 边框颜色 */
+.theme-border {
+	border-color: var(--theme-primary) !important;
+}
+
+/* 图标颜色 */
+.theme-icon {
+	color: var(--theme-primary) !important;
+}
+
+/* 导航栏样式支持 - H5环境 */
+/* #ifdef H5 */
+.uni-page-head {
+	background-color: var(--theme-primary) !important;
+}
+
+.uni-page-head__title {
+	color: #fff !important;
+}
+
+.uni-page-head .uni-btn-icon {
+	color: #fff !important;
+}
+/* #endif */

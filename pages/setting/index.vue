@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <view class="menu-container">
       <view class="menu-list">
         <u-cell-group>
@@ -20,6 +20,10 @@
                        icon="fingerprint">
             自定义操作习惯
             <u-badge count="新" :absolute="false" slot="right-icon"></u-badge>
+          </u-cell-item>
+          <u-cell-item @click="gotoPath('/pages/setting/theme',true)" title="主题切换"
+                       icon="grid">
+            选择你喜欢的主题风格
           </u-cell-item>
           <u-cell-item @click="gotoPath('/pages/setting/push',true)" title="推送设置" icon="volume-up"></u-cell-item>
           <u-cell-item @click="gotoPath('/pages/setting/xieyi',false)" title="协议与隐私政策"
@@ -52,8 +56,10 @@
 import checkappupdate from 'js_sdk/wonyes-checkappupdate/wonyes/checkappupdate.js'
 // #endif
 import constConfig from '@/const.js'
+import themeMixin from '@/common/theme-mixin.js'
 
 export default {
+  mixins: [themeMixin],
   components: {},
   data() {
     return {

@@ -1,6 +1,6 @@
 <template>
 
-  <view class="container">
+  <view class="container" :style="themeStyles">
 
     <view class="top">
       <view class="line">
@@ -79,7 +79,7 @@
               <view class="list-box-children" v-for="(item1, index1) in item.list" :key="index1"
                     @click="toDetail(item1.id)">
                 <view class="u-flex icon">
-                  <u-icon :name="item1.category.icon" color="#42b479" size="46"></u-icon>
+                  <u-icon :name="item1.category.icon" :color="themePrimary" size="46"></u-icon>
                 </view>
                 <view class="box-left">
                   {{ item1.category.name }}
@@ -119,7 +119,10 @@
 <script>
 import fab from '@/my-components/fab/index.vue'
 
+import themeMixin from '@/common/theme-mixin.js'
+
 export default {
+  mixins: [themeMixin],
   components: {
     fab
   },
@@ -184,6 +187,8 @@ export default {
   onShow() {
     console.log('onShow')
    this.init_data()
+   // 应用主题颜色
+   this.bg.backgroundColor = this.themePrimary
   },
   onLoad(options) {
     console.log('onLoad')
@@ -191,7 +196,8 @@ export default {
     if (this.hasLogin){
       this.getNotice()
     }
-
+    // 应用主题颜色
+    this.bg.backgroundColor = this.themePrimary
   },
   created() {
     console.log('created')
@@ -423,7 +429,7 @@ export default {
     }
 
     .amount-green {
-      color: #42b479;
+      color: var(--theme-primary, #42b479);
     }
 
     .amount-red {
@@ -464,7 +470,7 @@ export default {
 }
 .go-to-login {
   border-radius: 10rpx;
-  background: $uni-theme-color;
+  background: var(--theme-primary, #42b479);
   color: #fff;
 }
 
@@ -481,7 +487,7 @@ export default {
   .line {
     display: flex;
     color: #fff;
-    background-color: $uni-theme-color;
+    background-color: var(--theme-primary, #42b479);
     padding-left: 30rpx;
     padding-right: 30rpx;
     padding-bottom: 30rpx;

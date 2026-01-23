@@ -1,5 +1,6 @@
 <style lang="scss">
 @import "uview-ui/index.scss";
+@import "@/common/theme-styles.scss";
 </style>
 
 <script>
@@ -9,11 +10,18 @@ import checkappupdate from 'js_sdk/wonyes-checkappupdate/wonyes/checkappupdate.j
 import constConfig from '@/const.js'
 import wgt from "@/common/wgt";
 import { mapState, mapActions } from 'vuex';
+import { applyGlobalTheme } from '@/common/theme-app.js';
+import { initThemeInjector } from '@/common/theme-injector.js';
 export default {
   computed: {
     ...mapState('network', ['isConnected']),
   },
   onLaunch: function () {
+    // 应用主题
+    applyGlobalTheme();
+    // 初始化主题注入器（H5环境）
+    initThemeInjector();
+    
     // #ifdef APP-PLUS
     console.log('update')
     checkappupdate.check({
