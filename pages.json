@@ -24,6 +24,16 @@
       }
     },
     {
+      "path": "pages/index/batch_manager",
+      "style": {
+        "navigationBarTitleText": "批量操作",
+        "enablePullDownRefresh": true,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
       "path": "pages/index/detail",
       "style": {
         "navigationBarTitleText": "详情",
@@ -383,6 +393,27 @@
           }
         },
         {
+          "path": "baoxiao/index",
+          "style": {
+            "navigationBarTitleText": "报销管理",
+            "enablePullDownRefresh": true
+          }
+        },
+        {
+          "path": "baoxiao/detail",
+          "style": {
+            "navigationBarTitleText": "详情",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "baoxiao/form",
+          "style": {
+            "navigationBarTitleText": "增改",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
           "path": "statistics/calendar",
           "style": {
             "navigationBarTitleText": "账单日历",
@@ -405,6 +436,34 @@
         },
         {
           "path": "staff/form",
+          "style": {
+            "navigationBarTitleText": "操作",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "amount_platform/index",
+          "style": {
+            "navigationBarTitleText": "交易平台管理",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "amount_platform/form",
+          "style": {
+            "navigationBarTitleText": "操作",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "currency/index",
+          "style": {
+            "navigationBarTitleText": "币种管理",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "currency/form",
           "style": {
             "navigationBarTitleText": "操作",
             "enablePullDownRefresh": false

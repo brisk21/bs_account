@@ -10,6 +10,10 @@
           </u-cell-item>
           <u-cell-item @click="gotoPath('/pages/packageA/amount_type/index',true)" title="收支方式管理"
                        icon="grid"></u-cell-item>
+          <u-cell-item @click="gotoPath('/pages/packageA/currency/index',true)" title="币种管理"
+                       icon="rmb-circle">
+            管理多币种
+          </u-cell-item>
           <u-cell-item @click="gotoPath('/pages/setting/feedback',true)" title="反馈&建议"
                        icon="volume"></u-cell-item>
           <u-cell-item @click="gotoPath('/pages/packageA/user_setting/gexing',true)" title="个性化配置"
@@ -40,12 +44,6 @@
         </u-cell-group>
       </view>
     </view>
-    <!-- #ifdef MP-->
-    <ad-custom v-if="userInfo && userInfo.position.setting_page" unit-id="adunit-1709c673b8c4e1e0" bindload="adLoad"
-               binderror="adError" bindclose="adClose"></ad-custom>
-    <!-- #endif-->
-
-
   </view>
 </template>
 

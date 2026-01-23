@@ -6,7 +6,7 @@
 				min-height: 100rpx;
 				height: 100rpx;
 				width: 50%;">
-          ￥{{ info.amount }}
+          {{ info.currency_symbol || '￥' }}{{ info.amount }}
         </view>
       </view>
 
@@ -19,6 +19,12 @@
         </view>
       </view>
       <view class="line">
+        <text class="type">币种：</text>
+        <view style="font-size: 25rpx;font-weight: 600;">
+          {{ info.currency_name || '人民币' }}
+        </view>
+      </view>
+      <view class="line">
         <text class="type">分类：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
           {{ info.category.name }}
@@ -26,36 +32,48 @@
       </view>
 
       <view class="line">
+        <text class="type">交易平台：</text>
+        <view style="font-size: 25rpx;font-weight: 600;">
+          {{ info.amount_platform || '--' }}
+        </view>
+      </view>
+      <view class="line">
         <text class="type">{{ info.type === 10 ? '收入' : '支出' }}方式：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.amount_type || '无' }}
+          {{ info.amount_type || '--' }}
         </view>
       </view>
       <view class="line" v-if="info.budget_title">
         <text class="type">关联预算：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.budget_title || '无' }}
+          {{ info.budget_title || '--' }}
         </view>
       </view>
       <view class="line" v-if="info.cashbook_title">
         <text class="type">所属账本：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.cashbook_title || '无' }}
+          {{ info.cashbook_title || '--' }}
         </view>
       </view>
       <view class="line" v-if="info.cycle">
         <text class="type">周期执行：</text>
         <view style="font-size: 25rpx;font-weight: 600;">
-          {{ info.cycle && info.cycle.cycle_type || '无' }}
+          {{ info.cycle && info.cycle.cycle_type || '--' }}
         </view>
         <view v-if="info.cycle" style="font-size: 25rpx;color: red">
           (下次：{{ info.cycle.next_time || '--' }})
         </view>
       </view>
       <view class="line">
+        <text class="type">是否计入收支：</text>
+        <view style="font-size: 25rpx;font-weight: 600;">
+          {{ info.is_count ==1 ? '是' : '否' }}
+        </view>
+      </view>
+      <view class="line">
         <text class="type">备注：</text>
         <view style="font-size: 28rpx;width: 70%;text-align: left">
-          {{ info.remark || '暂无备注' }}
+          {{ info.remark || '--' }}
         </view>
       </view>
       <view class="line">
@@ -185,7 +203,7 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 26rpx 32rpx;
+  padding: 10rpx 32rpx;
   font-size: 28rpx;
   line-height: 54rpx;
   color: #606266;

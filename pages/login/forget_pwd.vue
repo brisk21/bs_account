@@ -124,8 +124,8 @@ export default {
           this.getCaptcha()
           this.get_code = true
         }
-      }).finally(()=>{
-
+      }).catch(()=>{
+        this.get_code = true
       })
     },
   }

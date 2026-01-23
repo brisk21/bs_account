@@ -1,42 +1,28 @@
 <template>
   <view class="category-list">
 
-    <view class="type_selector">
-      <u-subsection class="selector" :list="list" @change="typeChange" active-color="#fff" :current="type"
-                    mode="subsection">
-      </u-subsection>
-
-    </view>
     <u-cell-group>
        <u-cell-item  :arrow="false" title="右边可开启删除按钮" :title-style="{color: '#a3a390'}">
           <u-switch slot="right-icon" v-model="action"  ></u-switch>
        </u-cell-item>
     </u-cell-group>
-
-    <u-grid :col="2"  v-show="type === 0" >
-      <u-grid-item v-for="(item, index) in out_list" class="item-list" :key="index" @click="toEdit(item)">
+    <u-grid :col="2"  >
+      <u-grid-item class="item-list" v-for="(item, index) in  list" :key="index" @click="toEdit(item)">
+      <!--“默认”标识-->
         <u-icon v-if="item.is_default" name="star-fill" class="grid-icon" size="30" color="#ff9900"></u-icon>
         <view class="grid-text">{{ item.name }}</view>
         <!-- 删除图标 -->
         <u-icon v-show="action" color="red" name="close-circle" class="delete-icon" @click.native.stop="delCategory(item.id,index,1)"></u-icon>
       </u-grid-item>
     </u-grid>
-
-    <u-grid :col="2"  v-show="type === 1">
-      <u-grid-item v-for="(item, index) in in_list" class="item-list" :key="index" @click="toEdit(item)">
-        <u-icon v-if="item.is_default" name="star-fill" class="grid-icon" size="30" color="#ff9900"></u-icon>
-        <view class="grid-text">{{ item.name }}</view>
-        <!-- 删除图标 -->
-        <u-icon v-show="action" color="red" name="close-circle" class="delete-icon" @click.native.stop="delCategory(item.id,index,1)"></u-icon>
-      </u-grid-item>
-    </u-grid>
-    <fab :bg="bg" :is-show="hasLogin" icon_name="plus" :url="'/pages/packageA/amount_type/form?type='+type"></fab>
+    <fab :bg="bg" :is-show="hasLogin" icon_name="plus" :url="'/pages/packageA/amount_platform/form'"></fab>
   </view>
+
 </template>
 
 <script>
 import fab from "@/my-components/fab/index.vue";
-import api from "@/common/amount_type";
+import api from "@/common/amount_platform";
 export default {
   components: {
     fab
@@ -50,10 +36,7 @@ export default {
       action: false,
       categoryName: '',
       show: false,
-      list: ['支出', '收入'],
-      type: 0,
-      in_list: [],
-      out_list: []
+      list: [],
     }
   },
   created() {
@@ -63,31 +46,21 @@ export default {
     this.get_list()
   },
   methods: {
-    typeChange(index) {
-      this.type = index;
-    },
+
     get_list() {
-      this.in_list = []
-      this.out_list = []
+      this.list = []
       api.get_list({is_all:1}).then(res => {
-        //type10=收入，type20=支出
         if (res.code == 0 && res.data.list.length > 0) {
-          for (let i = 0; i < res.data.list.length; i++) {
-            if (res.data.list[i].type === 10) {
-              this.in_list.push(res.data.list[i])
-            } else {
-              this.out_list.push(res.data.list[i])
-            }
-          }
+            this.list = res.data.list
         }
       })
     },
     toEdit(item) {
       uni.navigateTo({
-        url: '/pages/packageA/amount_type/form?id=' + item.id + '&type=' + item.type + '&name=' + item.name,
+        url: '/pages/packageA/amount_platform/form?id=' + item.id + '&name=' + item.name,
       })
     },
-    delCategory(id, index, type) {
+    delCategory(id, index) {
       uni.showModal({
         title: '',
         content: '确定删除吗？',
@@ -119,17 +92,6 @@ export default {
 </script>
 
 <style lang="scss">
-.type_selector {
-  width: 100%;
-  background-color: $uni-theme-color;
-  display: flex;
-  justify-content: center;
-  padding-bottom: 30rpx;
-
-  .selector {
-    width: 80%;
-  }
-}
 
 .category-list {
   .bottom_btn {
@@ -147,10 +109,10 @@ export default {
       margin-right: 30px !important;
     }
   }
+
   .u-grid-item{
     height: 60px;
   }
-
   .grid-text {
     font-size: 28rpx;
     margin-top: 4rpx;

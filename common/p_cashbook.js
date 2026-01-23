@@ -35,3 +35,7 @@ export const user_list = (params) => {
 export const unbind_user = (params) => {
     return Vue.prototype.$u.delete('extend/cashbook/unbind_user', params);
 };
+
+export const options_list = (params) => {
+    return Vue.prototype.$u.get('extend/cashbook/list_options', params);
+};

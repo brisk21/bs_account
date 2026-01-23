@@ -21,6 +21,7 @@
           <view class="search-more">
             <button size="mini" type="default" @click="show_search_box=true">高级搜索</button>
             <button size="mini" type="default" @click="changeStyle()">切换样式</button>
+            <button size="mini" type="warn" @click="gotoPath('/pages/index/batch_manager',true)">批量操作</button>
           </view>
           <view class="input">
             <u-search :clearable="true" :show-action="true" :show-action-icon="true"
@@ -62,10 +63,10 @@
               {{ item.amount_type || '--' }}
             </view>
             <view class="u-flex-1  box-right amount-green" v-if="item.type===20">
-              -￥{{ item.amount }}
+              -{{ item.currency_symbol || '￥' }}{{ item.amount }}
             </view>
             <view class="u-flex-1  box-right amount-red" v-else>
-              +￥{{ item.amount }}
+              +{{ item.currency_symbol || '￥' }}{{ item.amount }}
             </view>
             <view class="u-flex-2 box-right item-date">
               {{ item.date }}
@@ -81,9 +82,15 @@
                 @click="toDetail(item.id)">
             <view class="item">
               <view class="title">
-                {{ item.type == 20 ? '支出' : '收入' }} ￥
+                {{ item.type == 20 ? '支出' : '收入' }} {{ item.currency_symbol || '￥' }}
                 <text>{{ item.type == 20 ? '-' : '+' }}</text>
                 <text :class="item.type==10?'bs-red':'bs-green'">{{ item.amount }}</text>
+              </view>
+              <view class="bs-item">
+                币种： {{ item.currency_name || '人民币' }}
+              </view>
+              <view class="bs-item">
+                交易平台： {{ item.amount_platform || '--' }}
               </view>
               <view class="bs-item">
                 收支方式： {{ item.amount_type || '--' }}
@@ -137,6 +144,17 @@
 
       <u-popup v-model="show_search_box" mode="center" width="90%" height="300px">
         <view class="search-popup">
+<!--          <view class="line">
+            <text class="popup_type">类型：</text>
+            <u-tag
+                v-show="form.type"
+                :closeable="true"
+                :text="form.type_name"
+                @close="unsetType()"
+                @click="openPopup('type')"
+            ></u-tag>
+            <u-button v-show="!form.type" @click="openPopup('type')" size="mini">选择类型</u-button>
+          </view>-->
           <view class="line">
             <text class="popup_type">具体分类：</text>
             <u-tag
@@ -147,6 +165,17 @@
                 @click="openPopup('category')"
             ></u-tag>
             <u-button v-show="!form.category_id" @click="openPopup('category')" size="mini">选择分类</u-button>
+          </view>
+          <view class="line">
+            <text class="popup_type">交易平台：</text>
+            <u-tag
+                v-show="form.amount_platform"
+                :closeable="true"
+                :text="form.amount_platform"
+                @close="unsetAmountPlatformType()"
+                @click="openPopup('amount_platform')"
+            ></u-tag>
+            <u-button v-show="!form.amount_platform" @click="openPopup('amount_platform')" size="mini">选择平台</u-button>
           </view>
           <view class="line">
             <text class="popup_type">收支方式：</text>
@@ -180,6 +209,25 @@
             ></u-tag>
 
             <u-button v-show="!form.cashbook_id" @click="openPopup('cashbook')" size="mini">选择账本</u-button>
+          </view>
+          <view class="line">
+            <text class="popup_type">币种：</text>
+            <u-tag :closeable="true"
+                   v-show="!!form.currency_id"
+                   :text="form.currency_name||'人民币?'"
+                   @click="openPopup('currency')"
+                   @close="unsetCurrency()"
+            ></u-tag>
+
+            <u-button v-show="!form.currency_id" @click="openPopup('currency')" size="mini">选择币种</u-button>
+          </view>
+          <view class="line">
+            <text class="popup_type">是否计入收支：</text>
+            <u-radio-group v-model="is_count_selected">
+              <u-radio name="all">全部</u-radio>
+              <u-radio name="yes">是</u-radio>
+              <u-radio name="no">否</u-radio>
+            </u-radio-group>
           </view>
           <view class="btn-list">
             <button size="mini" type="warn" class="action-btn u-border" @click="show_search_box = false">取消</button>
@@ -218,6 +266,7 @@ export default {
       popup_data_list: [],
       popup_show_type: 'grid',
       popup_current: '',
+      is_count_selected: 'all',
       sort_list: [
         {label: '默认', value: ''},
         {label: '金额降序', value: 'amount_desc'},
@@ -246,6 +295,12 @@ export default {
       category_list: [
         {label: '全部', value: 0,},
       ],
+      amount_platform_list: [
+        {label: '全部', value: '',},
+      ],
+      currency_list: [
+        {label: '全部', value: '', symbol: ''},
+      ],
       time_type_title: '时间',
       show_calendar: false,
       calendar_mode: 'range',
@@ -262,9 +317,11 @@ export default {
         year: '',
         time_type: '',
         amount_type: '',
+        amount_platform: '',
         sort: '',
         page: 0,
-        limit: 20
+        limit: 20,
+        is_count: ''
       },
       bg: {
         backgroundColor: '#42b479',
@@ -295,6 +352,15 @@ export default {
       console.log(val, 'time_type')
 
     },
+    is_count_selected(val) {
+      if (val === 'all') {
+        this.form.is_count = ''
+      } else if (val === 'yes') {
+        this.form.is_count = 1
+      } else if (val === 'no') {
+        this.form.is_count = -1
+      }
+    }
   },
   onReady() {
     uni.pageScrollTo({
@@ -385,6 +451,14 @@ export default {
       } else if (type === 'category') {
         this.popup_manager_path = '/pages/setting/category'
         this.popup_data_list = this.category_list
+        this.popup_show_type = 'list'
+      } else if (type === 'amount_platform') {
+        this.popup_manager_path = '/pages/packageA/amount_platform/index'
+        this.popup_data_list = this.amount_platform_list
+        this.popup_show_type = 'grid'
+      } else if (type === 'currency') {
+        this.popup_manager_path = '/pages/packageA/currency/index'
+        this.popup_data_list = this.currency_list
         this.popup_show_type = 'grid'
       } else if (type === 'type') {
         this.popup_data_list = this.type
@@ -399,17 +473,21 @@ export default {
           this.form.amount_type = item.value
         } else if (this.popup_current === 'budget_list') {
           this.form.budget_id = item.value
-          this.form.budget_title = item.label || 'xxx'
-          console.log(this.form.budget_title)
+          this.form.budget_title = item.label || ''
+        }  else if (this.popup_current === 'currency') {
+          this.form.currency_id = item.value
+          this.form.currency_name = item.label || ''
         } else if (this.popup_current === 'cashbook') {
           this.form.cashbook_id = item.value
-          this.form.cashbook_title = item.label || 'xxx'
+          this.form.cashbook_title = item.label || ''
         } else if (this.popup_current === 'type') {
           this.form.type = item.value
-          this.form.type_name = item.label || 'xxx'
+          this.form.type_name = item.label || ''
         } else if (this.popup_current === 'category') {
           this.form.category_id = item.value
-          this.form.category_name = item.label || 'xxx'
+          this.form.category_name = item.label || ''
+        } else if (this.popup_current === 'amount_platform') {
+          this.form.amount_platform = item.value || ''
         }
       } catch (e) {
         console.log('err', e)
@@ -434,6 +512,9 @@ export default {
     },
     unsetAmountType() {
       this.form.amount_type = ''
+    },
+    unsetAmountPlatformType() {
+      this.form.amount_platform = ''
     },
     setAmountType(item) {
       this.form.amount_type = item
@@ -466,6 +547,12 @@ export default {
           }
           if (data.category_list.length > 0) {
             that.category_list = data.category_list
+          }
+          if (data.amount_platform_list.length > 0) {
+             that.amount_platform_list = that.amount_platform_list.concat(data.amount_platform_list)
+          }
+          if (data.currency_list.length > 0) {
+             that.currency_list = that.currency_list.concat(data.currency_list)
           }
         }
 
@@ -754,37 +841,45 @@ export default {
     position: relative;
     box-sizing: border-box;
     width: 100%;
+    min-width: 100%;
     padding: 26rpx 32rpx;
     font-size: 28rpx;
     line-height: 50rpx;
     color: #606266;
     background-color: #fff;
     text-align: left;
+    overflow-x: auto;
 
     .icon {
       font-size: 50rpx;
       padding-right: 10rpx;
+      flex-shrink: 0;
     }
 
     .box-icon {
       width: 50rpx;
       height: 50rpx;
       margin-right: 35rpx;
+      flex-shrink: 0;
     }
 
     .box-left {
-      width: auto;
+      flex: 0 0 auto;
+      min-width: 120rpx;
       font-weight: 500;
       font-size: 28rpx;
+      white-space: nowrap;
     }
 
     .box-right {
-      overflow: hidden;
+      flex: 0 0 auto;
+      min-width: 160rpx;
       text-align: right;
       vertical-align: middle;
       color: #909399;
       font-size: 26rpx;
-
+      font-weight: 600;
+      white-space: nowrap;
     }
 
     .amount-green {
@@ -796,21 +891,20 @@ export default {
     }
 
     .box-remark {
+      flex: 0 0 auto;
+      min-width: 80rpx;
+      margin-left: 20rpx;
       font-weight: 500;
-      width: 100rpx;
-      margin-left: 50rpx;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -ms-text-overflow: ellipsis;
-      display: -webkit-box;
-      line-clamp: 1;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+      white-space: nowrap;
       color: #c8c4c4;
     }
 
     .item-date {
-
+      flex: 0 0 auto;
+      min-width: 180rpx;
+      text-align: right;
+      margin-left: auto;
+      white-space: nowrap;
     }
   }
 
@@ -829,6 +923,25 @@ export default {
   border-radius: 10rpx;
   background: $uni-theme-color;
   color: #fff;
+}
+
+/* 横向滚动条样式 */
+.list-type::-webkit-scrollbar {
+  height: 6px;
+}
+
+.list-type::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.list-type::-webkit-scrollbar-thumb {
+  background: #c8c9cc;
+  border-radius: 3px;
+}
+
+.list-type::-webkit-scrollbar-thumb:hover {
+  background: #909399;
 }
 
 </style>

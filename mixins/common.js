@@ -25,6 +25,7 @@ module.exports = {
                 this.$u.toast('暂未开放');
                 return;
             }
+
             if (path.indexOf('http') === 0) {
                 uni.navigateTo({
                     url: '/pages/packageA/h5/web?url=' + path,
@@ -36,6 +37,7 @@ module.exports = {
                 })
                 return;
             }
+
             // 如果提供了参数param，则将其拼接到path中
             if (param) {
                 path += (path.indexOf('?') === -1 ? '?' : '&') + this.serializeParam(param);

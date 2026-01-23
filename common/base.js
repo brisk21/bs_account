@@ -24,6 +24,10 @@ const install = (Vue, vm) => {
         });
     }
 
+    const batchActionCashflow = (data) => {
+       return vm.$u.post('batch_action_cashflow', data);
+    };
+
     const cashflowPre = (data) => {
         return vm.$u.get('cashflow-pre', data);
     }
@@ -45,6 +49,10 @@ const install = (Vue, vm) => {
 
     const bill_list = (data) => {
         return vm.$u.get('cashflow-list-all', data);
+    }
+
+    const bill_list_options = (data) => {
+        return vm.$u.get('cashflow-list-options', data);
     }
 
     const bill_list_search = (data) => {
@@ -190,7 +198,6 @@ const install = (Vue, vm) => {
     }
 
 
-
     //注销
     const cancelAccount = (params) => {
         return vm.$u.post('cancel-account', encrypt(params));
@@ -251,7 +258,9 @@ const install = (Vue, vm) => {
         updateLog,
         cancelAccount,
         regretCancelAccount,
-        getNotice
+        getNotice,
+        bill_list_options,
+        batchActionCashflow
     };
 }
 

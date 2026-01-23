@@ -57,6 +57,28 @@
       </view>
 
       <u-line></u-line>
+      <view class="line" v-if="diy_action && diy_action.enable_currency && diy_action.enable_currency.value">
+        <text class="popup_type">币种：</text>
+        <u-tag
+            v-show="formData.currency_name"
+            :closeable="true"
+            :text="formData.currency_name"
+            @close="unsetCurrency()"
+            @click="openPopup('currency')"
+        ></u-tag>
+        <u-button v-show="!formData.currency_name" @click="openPopup('currency')" size="mini">选择币种</u-button>
+      </view>
+      <view class="line" v-if="diy_action && diy_action.enable_amount_platform && diy_action.enable_amount_platform.value">
+        <text class="popup_type">交易平台：</text>
+        <u-tag
+            v-show="formData.amount_platform"
+            :closeable="true"
+            :text="formData.amount_platform"
+            @close="unsetAmountPlatformType()"
+            @click="openPopup('amount_platform')"
+        ></u-tag>
+        <u-button v-show="!formData.amount_platform" @click="openPopup('amount_platform')" size="mini">选择平台</u-button>
+      </view>
       <view class="line" v-if="diy_action && diy_action.enable_amount_type && diy_action.enable_amount_type.value">
         <text class="popup_type">{{ formData.type === 10 ? '收入' : '支出' }}方式：</text>
         <u-tag
@@ -86,7 +108,7 @@
       <view class="line" v-if="diy_action && diy_action.enable_budget && diy_action.enable_budget.value">
         <text class="popup_type">关联预算：</text>
         <u-tag :closeable="true"
-               v-show="!!formData.budget_id"
+               v-show="formData.budget_title"
                :text="formData.budget_title"
                @click="openPopup('budget_list')"
                @close="unsetBudget()"
@@ -97,13 +119,13 @@
       <view class="line" v-if="diy_action && diy_action.enable_cashbook && diy_action.enable_cashbook.value">
         <text class="popup_type">关联账簿：</text>
         <u-tag :closeable="true"
-               v-show="!!formData.cashbook_id"
+               v-show="formData.cashbook_title"
                :text="formData.cashbook_title"
                @click="openPopup('cashbook')"
                @close="unsetCashbook()"
         ></u-tag>
 
-        <u-button v-show="!formData.cashbook_id" @click="openPopup('cashbook')" size="mini">选择账簿</u-button>
+        <u-button v-show="!formData.cashbook_title" @click="openPopup('cashbook')" size="mini">选择账簿</u-button>
       </view>
 
 
@@ -114,33 +136,45 @@
                  clearable border auto-height/>
       </u-form-item>
 
-      <u-form-item v-if="diy_action && diy_action.enable_bill_cycle && diy_action.enable_bill_cycle.value" class="form-item" label="周期循环：" label-width="150">
-         <u-radio-group v-model="formData.cycle_type" @change="cycleChange">
-            <u-radio name="">不循环</u-radio>
-            <u-radio name="daily">每日</u-radio>
-            <u-radio name="weekly">每周</u-radio>
-            <u-radio name="monthly">每月</u-radio>
-            <u-radio name="quarterly">每季度</u-radio>
-            <u-radio name="yearly">每年</u-radio>
-            <u-radio name="custom">自定义</u-radio>
-          </u-radio-group>
+      <u-form-item v-if="diy_action && diy_action.enable_bill_cycle && diy_action.enable_bill_cycle.value"
+                   class="form-item" label="周期循环：" label-width="150">
+        <u-radio-group v-model="formData.cycle_type" @change="cycleChange">
+          <u-radio  >不循环</u-radio>
+          <u-radio name="daily">每日</u-radio>
+          <u-radio name="weekly">每周</u-radio>
+          <u-radio name="monthly">每月</u-radio>
+          <u-radio name="quarterly">每季度</u-radio>
+          <u-radio name="yearly">每年</u-radio>
+          <u-radio name="custom">自定义</u-radio>
+        </u-radio-group>
       </u-form-item>
-      <u-form-item v-if="diy_action && formData.cycle_type && formData.cycle_type === 'custom'" class="form-item" label="循环天数：" label-width="150">
+      <u-form-item v-if="diy_action && formData.cycle_type && formData.cycle_type === 'custom'" class="form-item"
+                   label="循环天数：" label-width="150">
         <u-input v-model="formData.cycle_days" type="digit"
                  placeholder="请输入天数" maxlength="500"
                  clearable border auto-height/>
       </u-form-item>
 
       <view class="line">
+        <text class="popup_type">是否计入收支：</text>
+        <u-switch v-model="formData.is_count" active-color="#19a6de" inactive-color="#c8c9cc"></u-switch>
+      </view>
+
+      <view class="line">
         <text class="popup_type">附件图片：</text>
         <upload-file
+            :auto-upload="true"
+            :unique_id="1"
+            ref="upload"
+            :default-files="initialFiles"
             :action="action"
             :max-size="maxSize"
             :max-count="maxCount"
             :limit-type="limitType"
-            :default-files="initialFiles"
             @success="handleFileUploadSuccess"
             @remove="handleFileUploadRemove"
+            @error="handleError"
+            @choose-ok="handleChooseOK"
         />
       </view>
 
@@ -148,7 +182,9 @@
         <view>
           自定义操作：可以在【我的】》【设置】》【
           <text class="topath" @click="gotoPath('/pages/packageA/user_setting/gexing',true)">个性化配置</text>
-          】中自定义<text style="color: red">是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理</text>等功能，开启相关功能后，可以有【选择收支方式】、【关联预算】、【关联账簿】等按钮，可以进行自定义操作。
+          】中自定义
+          <text style="color: red">交易平台、是否连续添加账单功能、启用账簿、启用循环周期、收支方式、预算管理、多币种支持</text>
+          等功能，开启相关功能后，可以有【选择收支方式】、【关联预算】、【关联账簿】、【选择币种】等按钮，可以进行自定义操作。
         </view>
       </view>
 
@@ -159,6 +195,7 @@
         :filtered-list="popup_data_list"
         :path="popup_manager_path"
         :show_type="popup_show_type"
+        :enable-custom="popup_enable_custom"
 
     ></type_popup>
     <u-picker mode="time" v-model="picker_show" :params="pickerOption" :default-time="formData.date"
@@ -183,6 +220,7 @@ export default {
       popup_data_list: [],
       popup_show_type: 'grid',
       popup_current: '',
+      popup_enable_custom: false,// 是否启用自定义
       showOutList: [],
       showInList: [],
       showInAll: false,
@@ -203,10 +241,15 @@ export default {
         date: '',
         remark: '',
         amount_type: '',
-        image: null,
+        amount_platform: '',
+        currency_id: 0,
+        currency_name: '',
+        currency_symbol: '',
+        image: [],
         is_cycle: false,
         cycle_type: '', // 新增字段
         cycle_days: '',
+        is_count: true, // 是否计入收支
       },
       pickerOption: {
         year: true,
@@ -229,13 +272,19 @@ export default {
 
       budget_list: [],
       cashbook_list: [],
+      amountPlatforms: [],
+      currencyList: [],
 
       initialFiles: [],
       action: constConfig.baseUrl + '/upload/image',
 
       maxSize: 2 * 1024 * 1024, // 可以设置不同的大小限制
-      maxCount: 1, // 可以设置不同的数量限制
+      maxCount: 5, // 可以设置不同的数量限制
       limitType: ['png', 'jpg', 'jpeg'], // 支持的文件类型
+
+      imageCount: 0,
+      uploadCount: 0,
+      image_list: []
     }
   },
   mounted() {
@@ -253,7 +302,7 @@ export default {
     this.formData.date = dayjs().format('YYYY-MM-DD')
   },
   onShow() {
-     if (this.hasLogin) {
+    if (this.hasLogin) {
       this.$store.dispatch('getUserInfo')
     }
     this.get_ready()
@@ -264,48 +313,73 @@ export default {
 
   methods: {
 
-    cycleChange(val){
+    cycleChange(val) {
       this.formData.is_cycle = true
-      if (!val){
+      if (!val) {
         this.formData.is_cycle = false
         this.formData.cycle_type = ''
         this.formData.cycle_days = ''
       }
-      if(val !== 'custom'){
+      if (val !== 'custom') {
         this.formData.cycle_days = ''
       }
     },
 
     openPopup(type) {
       this.popup_current = type
-      if (type === 'amount_type') {
+      if (type === 'currency') {
+        this.popup_manager_path = '/pages/packageA/currency/index'
+        this.popup_data_list = this.currencyList
+        this.popup_show_type = 'list'
+        this.popup_enable_custom = true
+      } else if (type === 'amount_type') {
         this.popup_manager_path = '/pages/packageA/amount_type/index'
         this.popup_data_list = this.amount_type_list
         this.popup_show_type = 'list'
+        this.popup_enable_custom = true
       } else if (type === 'budget_list') {
         this.popup_manager_path = '/pages/budget/budget'
         this.popup_data_list = this.budget_list
         this.popup_show_type = 'list'
+        this.popup_enable_custom = false
       } else if (type === 'cashbook') {
         this.popup_manager_path = '/pages/packageA/cashbook/index'
         this.popup_data_list = this.cashbook_list
         this.popup_show_type = 'list'
+        this.popup_enable_custom = true
+      }else if(type === 'amount_platform'){
+         this.popup_manager_path = '/pages/packageA/amount_platform/index'
+         this.popup_data_list = this.amountPlatforms
+         this.popup_show_type = 'list'
+        this.popup_enable_custom = true
       }
 
       this.$refs.type_popup.togglePopup();
     },
     handleTypeSelected(item) {
-      //console.log(this.popup_current + '父组件接收到了:', item);
+     console.log(this.popup_current + '父组件接收到了:', item);
+      let isCustom = item.isCustom || false
       try {
-        if (this.popup_current === 'amount_type') {
+        if (this.popup_current === 'currency') {
+          this.formData.currency_id = item.value
+          this.formData.currency_name = item.label
+          this.formData.currency_symbol = item.symbol || '￥'
+        } else if (this.popup_current === 'amount_type') {
           this.formData.amount_type = item.value
         } else if (this.popup_current === 'budget_list') {
           this.formData.budget_id = item.value
-          this.formData.budget_title = item.label || 'xxx'
-          console.log(this.formData.budget_title)
+          this.formData.budget_title = item.label
+          if (isCustom){
+            this.formData.budge_id = 0
+          }
         } else if (this.popup_current === 'cashbook') {
           this.formData.cashbook_id = item.value
-          this.formData.cashbook_title = item.label || 'xxx'
+          this.formData.cashbook_title = item.label
+          if (isCustom){
+            this.formData.cashbook_id = 0
+          }
+        }else if(this.popup_current === 'amount_platform'){
+          this.formData.amount_platform = item.value
         }
       } catch (e) {
         console.log('err', e)
@@ -324,23 +398,49 @@ export default {
     unsetAmountType() {
       this.formData.amount_type = ''
     },
+    unsetAmountPlatformType(){
+      this.formData.amount_platform = ''
+    },
+    unsetCurrency() {
+      this.formData.currency_id = 0
+      this.formData.currency_name = ''
+      this.formData.currency_symbol = '￥'
+    },
     setAmountType(item) {
       this.formData.amount_type = item
     },
-    handleFileUploadSuccess({url, index, fileList, res}) {
-      console.log('文件上传成功:', url);
+    handleChooseOK(res) {
+      let {fileList, index, unique_id} = res
+      console.log('handleChooseOK', [fileList, index, unique_id])
+      //this.formData[unique_id].image_list = fileList
+      this.imageCount++;
+    },
+    handleError(data, index, lists, name) {
+      this.$u.toast('文件上传失败')
+      this.handleRemove(index, lists, name)
+    },
+    handleFileUploadSuccess({url, index, fileList, res, unique_id}) {
+      console.log('文件上传成功:', fileList);
       if (res.code == 0) {
-        this.formData.image = res.data.full_url
+        this.formData.image.push(res.data.full_url)
+        console.log(this.formData.image)
+        // this.formData.image = this.formData.image
+        this.uploadCount++;
       } else {
         this.$u.toast(res.msg)
         //移除文件
         this.$refs.upload.remove(index)
+
+        this.formData.image.splice(index, 1)
       }
     },
-    handleFileUploadRemove({index, fileList}) {
+    handleFileUploadRemove({index, fileList, unique_id}) {
       // 更新状态或者做其他处理
       console.log('文件已被移除:', index);
-      this.formData.image = null
+      console.log('fileList', fileList);
+      this.formData.image.splice(index, 1)
+      this.imageCount--;
+      return true
     },
     beforeUpload(index, list) {
       return true;
@@ -424,12 +524,34 @@ export default {
           if (res.data.cashbook_list.length > 0) {
             this.cashbook_list = res.data.cashbook_list
           }
+          if (res.data.amountPlatforms) {
+            this.amountPlatforms = res.data.amountPlatforms
+          }
+          if (res.data.currencyList) {
+            this.currencyList = res.data.currencyList
+          }
+          if (res.data.max_image_count) {
+            this.maxCount = res.data.max_image_count
+          }
 
           if (res.data.info) {
             this.formData = res.data.info
             this.formData.type = this.type === 0 ? 20 : 10
-            if (this.formData.image) {
-              this.initialFiles = [{url: this.formData.image}]
+            this.formData.image = [];
+            if (this.formData.image_list.length > 0) {
+              this.formData.image = this.formData.image_list
+              console.log(this.formData.image)
+              //this.imageCount = this.formData.image.length
+              //this.initialFiles = [{url: this.formData.image}]
+              let initialFiles = []
+              for (let i = 0; i < this.formData.image_list.length; i++) {
+                initialFiles.push({
+                  url: this.formData.image[i],
+                  //unique_id: this.formData.image[i]
+                })
+              }
+              console.log(initialFiles)
+              this.initialFiles = initialFiles
             }
           }
           if (res.data.diy_action) {
@@ -439,9 +561,17 @@ export default {
           if (!this.formData.id && res.data.default_amount_type) {
             this.formData.amount_type = res.data.default_amount_type
           }
+          if (!this.formData.id && res.data.default_amount_platform) {
+            this.formData.amount_platform = res.data.default_amount_platform
+          }
           if (!this.formData.id && res.data.default_cashbook) {
             this.formData.cashbook_id = res.data.default_cashbook.cashbook_id
             this.formData.cashbook_title = res.data.default_cashbook.name
+          }
+          if (!this.formData.id && res.data.default_currency) {
+            this.formData.currency_id = res.data.default_currency.id
+            this.formData.currency_name = res.data.default_currency.name
+            this.formData.currency_symbol = res.data.default_currency.symbol || '￥'
           }
 
         }
@@ -485,8 +615,12 @@ export default {
     },
 
 
-    submit() {
-      console.log(this.$store.getters, 'getters')
+    async submit() {
+      let that = this;
+      if (that.disabled === true) {
+        return false;
+      }
+
       if (!this.formData.category_id) {
         this.$u.toast('请选择分类')
         return
@@ -496,72 +630,119 @@ export default {
         return
       }
 
-      uni.showModal({
-        title: '',
-        content: '确定保存吗？',
-        success: (res) => {
-          if (res.confirm) {
-            this.disabled = true
-            uni.showLoading({
-              title: '保存中...'
-            })
-            if (this.formData.id) {
-              this.$u.api.updateCashflow(this.formData).then(res => {
-                this.$u.toast(res.msg, 1000);
-                if (res.code == 0) {
-                  setTimeout(() => {
-                    uni.navigateBack()
-                  }, 1000)
-                }
-                uni.hideLoading()
-                this.disabled = false
-              }).catch(() => {
-                uni.hideLoading()
-                this.disabled = false
-              })
-            } else {
-              this.$u.api.createCashFlow(this.formData).then(res => {
-                if (res.code == 0) {
-                  //开启了连续添加模式
-                  if (this.diy_action && this.diy_action.bill_action_continue.value) {
-                    this.$u.toast('添加成功，您可以继续添加新记录', 3000)
-                    this.formData = {
-                      id: 0,
-                      budge_id: 0,
-                      cashbook_id: 0,
-                      type: this.formData.type,
-                      amount: '',
-                      category_id: 0,
-                      budget_title: '',
-                      date: this.formData.date,
-                      remark: '',
-                      amount_type: '',
-                      image: null
-                    }
-                  } else {
-                    this.$u.toast(res.msg)
-                    setTimeout(function () {
-                      uni.switchTab({
-                        url: '/pages/index/index'
-                      })
+
+      //todo 多图上传被异步的问题，目前用了while 循环，但可能存在问题，需要优化
+      /*let pollCount = 0; // 新增：用于记录轮询次数
+      const maxPollAttempts = 60; // 设置最大轮询次数（例如60次，即最多等待60秒）
+      console.log('imageCount', that.imageCount)
+      // 遍历所有的upload组件并调用startUpload
+      await that.$refs.upload.startUpload();
+      // 等待所有图片上传完成
+      while (that.imageCount > that.uploadCount) {
+        uni.showLoading({
+          title: '正在上传...',
+        });
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        pollCount++; // 每次轮询后增加计数器
+        uni.hideLoading();
+
+        // 可选：在每次轮询时检查是否已经完成上传，提前退出
+        if (that.imageCount === that.uploadCount || pollCount >= maxPollAttempts) {
+          break;
+        }
+      }
+      if (pollCount >= maxPollAttempts) {
+        console.warn('达到最大轮询次数，可能有上传任务未完成');
+        // 在这里可以添加一些额外的逻辑，比如提示用户上传可能失败了
+      }*/
+      console.log('uploadedCount', that.uploadCount)
+      console.log('formData', that.formData)
+
+      let submitAction = function (formData) {
+        uni.showModal({
+          title: '',
+          content: '确定保存吗？',
+          success: (res) => {
+            if (res.confirm) {
+              that.disabled = true
+              if (that.formData.id) {
+                that.$u.api.updateCashflow(that.formData).then(res => {
+                  uni.showToast({
+                    icon: 'none',
+                    title: res.msg,
+                    duration: 1500
+                  })
+                  if (res.code == 0) {
+                    setTimeout(() => {
+                      uni.navigateBack()
                     }, 1000)
                   }
+                  that.disabled = false
+                }).catch(() => {
+                  that.disabled = false
+                })
+              } else {
+                that.$u.api.createCashFlow(that.formData).then(res => {
+                  if (res.code == 0) {
+                    //开启了连续添加模式
+                    if (that.diy_action && that.diy_action.bill_action_continue.value) {
+                      uni.showToast({
+                        icon: 'none',
+                        title: '添加成功，您可以继续添加新记录',
+                        duration: 2000,
+                        fail: function(err) {
+                          console.log('msg_err', err)
+                        }
+                      })
+                      that.formData = {
+                        id: 0,
+                        budge_id: 0,
+                        //cashbook_id: 0,
+                        type: this.formData.type,
+                        amount: '',
+                        category_id: 0,
+                        budget_title: '',
+                        date: this.formData.date,
+                        remark: '',
+                        amount_type: '',
+                        image: null
+                      }
+                    } else {
+                      uni.showToast({
+                        icon:  'none',
+                        title: res.msg,
+                        duration: 1500,
+                        fail: function(err) {
+                          console.log('msg_err', err)
+                        }
+                      })
+                      setTimeout(function () {
+                        uni.switchTab({
+                          url: '/pages/index/index'
+                        })
+                      }, 1000)
+                    }
 
-                } else {
-                  this.$u.toast(res.msg);
-                }
-                uni.hideLoading()
-                this.disabled = false
-              }).catch(() => {
-                uni.hideLoading()
-                this.disabled = false
-              })
+                  } else {
+                    uni.showToast({
+                      icon: 'none',
+                      title: res.msg,
+                      duration: 2000
+                    })
+                  }
+                  this.disabled = false
+                }).catch(() => {
+                  that.disabled = false
+                })
+              }
+            } else if (res.cancel) {
+              //that.$u.toast('已取消');
             }
-          } else if (res.cancel) {
-            //this.$u.toast('已取消');
           }
-        }
-      })
+        })
+      }
+      await submitAction(that.formData)
+
     },
 
 
