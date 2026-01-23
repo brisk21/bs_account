@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <view v-if="!hasLogin" class="empty need_login">
         <u-empty text="未登录" mode="permission">
           <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">请先登录</button>
@@ -19,7 +19,7 @@
       <view class="data-list">
         <view class="data-item" v-for="(item, index) in list" :key="index" @click="toDetail(item)">
           <view class="data-item-title">
-            <u-icon :name="item.icon" :size="36"></u-icon>
+            <u-icon :name="item.icon" :size="36" :color="themePrimary"></u-icon>
             <text class="name">{{ item.name }}</text>
           </view>
           <view class="data-item-content remark">
@@ -51,7 +51,10 @@
 <script>
 import extend from "@/common/extend";
 
+import themeMixin from '@/common/theme-mixin.js'
+
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       list: [],
@@ -64,6 +67,9 @@ export default {
   },
   onLoad() {
     this.getList()
+  },
+  onShow() {
+    // 主题混入会自动调用applyThemeColors
   },
   methods: {
     getList() {
@@ -194,6 +200,12 @@ export default {
       }
 
       .action-list {
+        // 覆盖uview-ui的primary按钮颜色
+        ::v-deep .u-button--primary {
+          background-color: var(--theme-primary, #42b479) !important;
+          border-color: var(--theme-primary, #42b479) !important;
+        }
+        
         button {
           margin-left: 10rpx;
         }

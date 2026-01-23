@@ -62,7 +62,7 @@
             <view class="u-flex-1  box-left box-remark">
               {{ item.amount_type || '--' }}
             </view>
-            <view class="u-flex-1  box-right amount-green" v-if="item.type===20">
+            <view class="u-flex-1  box-right amount-green" v-if="item.type===20" :style="{ color: themePrimary }">
               -{{ item.currency_symbol || '￥' }}{{ item.amount }}
             </view>
             <view class="u-flex-1  box-right amount-red" v-else>
@@ -84,7 +84,7 @@
               <view class="title">
                 {{ item.type == 20 ? '支出' : '收入' }} {{ item.currency_symbol || '￥' }}
                 <text>{{ item.type == 20 ? '-' : '+' }}</text>
-                <text :class="item.type==10?'bs-red':'bs-green'">{{ item.amount }}</text>
+                <text :class="item.type==10?'bs-red':'bs-green'" :style="item.type==10 ? '' : { color: themePrimary }">{{ item.amount }}</text>
               </view>
               <view class="bs-item">
                 币种： {{ item.currency_name || '人民币' }}
@@ -408,6 +408,8 @@ export default {
   },
   onShow() {
     console.log('onShow')
+    // 应用主题颜色到bg对象
+    this.bg.backgroundColor = this.themePrimary
   },
   onLoad(options) {
     if (options.budget_id) {
@@ -886,6 +888,10 @@ export default {
     }
 
     .amount-green {
+      color: var(--theme-primary, #42b479);
+    }
+
+    .bs-green {
       color: var(--theme-primary, #42b479);
     }
 

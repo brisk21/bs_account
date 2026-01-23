@@ -1,6 +1,5 @@
 <template>
-  <view class="container bs_form">
-
+  <view class="container bs_form" :style="themeStyles">
 
     <u-form label-width="150">
       <u-form-item label="名称" >
@@ -26,8 +25,9 @@
 <script>
 
 import api from "@/common/p_idea";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       form: {

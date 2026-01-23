@@ -1,12 +1,12 @@
 <template>
-  <view class="container" :style="themeStyles">
+  <view class="container" :style="{ ...themeStyles, backgroundColor: themeBackground }">
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
-        <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">立即登录</button>
+        <button size="mini" slot="bottom" class="go-to-login" :style="{ backgroundColor: themePrimary }" @click="goToLoginPage()">立即登录</button>
       </u-empty>
     </view>
     <template v-else>
-      <view class="type_selector">
+      <view class="type_selector" :style="{ backgroundColor: themePrimary }">
         <u-subsection class="selector" :list="statusList" @change="typeChange" active-color="#fff"
                       :current="form.status"
                       mode="subsection">

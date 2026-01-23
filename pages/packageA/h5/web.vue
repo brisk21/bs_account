@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <web-view v-if="webViewSrc"
       :src="webViewSrc"
       :fullscreen="fullscreen"
@@ -8,7 +8,9 @@
 </template>
 
 <script>
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       webViewSrc: '',

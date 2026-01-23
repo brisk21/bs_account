@@ -1,5 +1,5 @@
 <template>
-  <view v-if="!hasLogin" class="no-login" :style="themeStyles">
+  <view v-if="!hasLogin" class="no-login" :style="themeStyles" :class="themeStyleId + '-container'">
     <u-empty text="未登录" mode="permission">
       <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">立即登录</button>
     </u-empty>
@@ -29,7 +29,7 @@
                   @search="toSearch" @custom="toSearch"></u-search>
       </view>
     </view>
-    <view class="list">
+    <view class="list" :class="themeStyleId + '-container'" :style="themeStyles">
 
       <view class="list-box" v-if="list.length > 0">
         <view class="data-item" v-for="(item,index) in list" :key="index">
@@ -37,6 +37,7 @@
           <view class="data-item-title">
             <text> {{ item.title }}</text>
             <text v-if="item.more_text" class="text-right view-chart"
+                  :style="{ color: themePrimary }"
                   @click="gotoPath('/pages/packageA/statistics/charts', true, form)">
               {{ item.more_text }}
             </text>
@@ -164,6 +165,8 @@ export default {
   },
   onShow() {
     this.getList(true)
+    // 应用主题颜色
+    this.bg.backgroundColor = this.themePrimary
   },
   onPageScroll(e) {
     this.scrollTop = e.scrollTop;
@@ -350,26 +353,40 @@ export default {
         justify-content: space-between;
 
         .view-chart {
-          color: var(--theme-primary, #42b479);
+          color: #42b479;
 
         }
       }
 
       .u-tr {
-        .bs-red {
-          color: red !important;
+
+              .bs-red {
+
+                color: red !important;
+
+              }
+
+      
+
+              .bs-green {
+
+                color: var(--theme-primary, #42b479) !important;
+
+              }
+
+      
+
+              .bs-gray {
+
+                color: #999 !important;
+
+              }
+
+            }
+
+          }
+
         }
 
-        .bs-green {
-          color: var(--theme-primary, #42b479) !important;
-        }
-
-        .bs-gray {
-          color: #999 !important;
-        }
       }
-
-    }
-  }
-}
 </style>

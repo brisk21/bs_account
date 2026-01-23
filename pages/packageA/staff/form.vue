@@ -1,5 +1,5 @@
 <template>
-  <view class="container bs_form">
+  <view class="container bs_form" :style="themeStyles">
 
     <u-form label-width="160">
 
@@ -60,8 +60,9 @@
 <script>
 
 import {get_detail, update, create} from "@/common/p_staff";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       keyword: '',

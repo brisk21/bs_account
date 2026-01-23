@@ -5,7 +5,7 @@
 
     <view class="user-section">
 
-      <view class="bg"></view>
+      <view class="bg" :style="{ backgroundColor: themePrimary }"></view>
       <view class="user-info-box">
         <view class="portrait-box" @click="gotoPath('/pages/setting/safe/avatar',true)">
           <image class="portrait" :src="userInfo.avatar || '/static/missing-face.png'">
@@ -32,15 +32,15 @@
     </view>
     <view class="tj-sction">
       <view class="tj-item" @click="gotoPath('/pages/index/list',true)">
-        <text class="num">{{ userInfo.sign_in_day || 0 }}</text>
+        <text class="num" :style="{ color: themePrimary }">{{ userInfo.sign_in_day || 0 }}</text>
         <text>使用天数</text>
       </view>
       <view class="tj-item" @click="gotoPath('/pages/index/list',true)">
-        <text class="num">{{ userInfo.all_bill_day || 0 }}</text>
+        <text class="num" :style="{ color: themePrimary }">{{ userInfo.all_bill_day || 0 }}</text>
         <text>总记账天数</text>
       </view>
       <view class="tj-item" @click="gotoPath('/pages/index/list',true)">
-        <text class="num">{{ userInfo.all_bill_count || 0 }}</text>
+        <text class="num" :style="{ color: themePrimary }">{{ userInfo.all_bill_count || 0 }}</text>
         <text>总记账笔数</text>
       </view>
     </view>
@@ -51,7 +51,7 @@
                     @close="show_tips=false"
       ></u-alert-tips>
     </view>
-    <view class="menu-container">
+    <view class="menu-container" :style="{ backgroundColor: themeBackground }">
       <view class="menu-list">
         <u-cell-group>
           <u-cell-item @click="gotoPath('/pages/notification/index')" title="系统消息" icon="bell">

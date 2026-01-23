@@ -1,5 +1,5 @@
 <template>
-  <view class="container category_form">
+  <view class="container category_form" :style="themeStyles">
     <u-form-item label="名称">
       <u-input placeholder="请输入名称" border :maxlength="50" type="text" clearable class="category_form_input"
                v-model="form.name"/>
@@ -23,7 +23,9 @@
 
 <script>
 import api from "@/common/amount_platform";
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       form:{

@@ -1,8 +1,8 @@
 <template>
 
-  <view class="container" :style="themeStyles">
+  <view class="container" :style="{ ...themeStyles, backgroundColor: themeBackground }">
 
-    <view class="top">
+    <view class="top" :style="{ backgroundColor: themePrimary }">
       <view class="line">
         <view class="item">
           <view class="header-text"> {{ year }} 年</view>
@@ -44,7 +44,7 @@
     </view>
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
-        <button size="mini" slot="bottom" class="go-to-login" @click="toLogin()">立即登录</button>
+        <button size="mini" slot="bottom" class="go-to-login" :style="{ backgroundColor: themePrimary }" @click="toLogin()">立即登录</button>
       </u-empty>
     </view>
     <template v-else>
@@ -87,7 +87,7 @@
                 <view class="box-remark">
                   {{ item1.remark || '无' }}
                 </view>
-                <view class="u-flex-1 box-right amount-green" v-if="item1.type==20">
+                <view class="u-flex-1 box-right amount-green" v-if="item1.type==20" :style="{ color: themePrimary }">
                   -{{ item1.currency_symbol || '￥' }}{{ item1.amount }}
                 </view>
                 <view class="u-flex-1 box-right amount-red" v-else>

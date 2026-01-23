@@ -1,6 +1,5 @@
 <template>
-  <view class="container">
-
+  <view class="container" :style="themeStyles">
 
     <view>
       <u-form label-width="100" label-position="top">
@@ -14,11 +13,11 @@
 
             <view class="list-box-children" v-for="(item, index) in list" :key="index" @click="toDetail(item.id)">
               <view class="u-flex-1  box-left box-left">
-                <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon>
+                <u-icon :name="item.category.icon" :color="themePrimary" size="32"></u-icon>
                 {{ item.category.name }}
               </view>
 
-              <view class="u-flex-1  box-right amount-green" v-if="item.type===20">
+              <view class="u-flex-1  box-right amount-green" v-if="item.type===20" :style="{ color: themePrimary }">
                 -￥{{ item.amount }}
               </view>
               <view class="u-flex-1  box-right amount-red" v-else>
@@ -116,8 +115,9 @@
 import {get_detail, check} from "@/common/p_reimbursement"
 import constConfig from "@/const";
 import uploadFile from "@/components/UploadFile.vue";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   components: {
     uploadFile
   },
@@ -379,7 +379,7 @@ export default {
     }
 
     .amount-green {
-      color: #42b479;
+      color: var(--theme-primary, #42b479);
     }
 
     .amount-red {

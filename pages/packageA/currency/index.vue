@@ -1,5 +1,5 @@
 <template>
-  <view class="currency-list">
+  <view class="currency-list" :style="themeStyles">
     <u-cell-group>
        <u-cell-item  :arrow="false" title="开启可删除币种" :title-style="{color: '#a3a390'}">
           <u-switch slot="right-icon" v-model="action"  ></u-switch>
@@ -21,7 +21,9 @@
 <script>
 import fab from "@/my-components/fab/index.vue";
 import api from "@/common/currency";
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   components: {
     fab
   },
@@ -42,6 +44,8 @@ export default {
   },
   onShow() {
     this.get_list()
+    // 应用主题颜色到fab按钮
+    this.bg.backgroundColor = this.themePrimary
   },
   methods: {
 
@@ -99,7 +103,7 @@ export default {
 
     .add_btn {
       width: 80%;
-      background-color: $uni-theme-color;
+      background-color: var(--theme-primary, #42b479);
       color: $uni-text-color-inverse;
     }
 

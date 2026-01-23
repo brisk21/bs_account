@@ -1,11 +1,11 @@
 <template>
-  <view v-if="!hasLogin" class="no-login" :style="themeStyles">
+  <view v-if="!hasLogin" class="no-login" :style="{ ...themeStyles, backgroundColor: themeBackground }">
     <u-empty text="未登录" mode="permission">
       <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">立即登录</button>
     </u-empty>
   </view>
-  <view v-else class="container" :style="themeStyles">
-    <view class="header">
+  <view v-else class="container" :style="{ ...themeStyles, backgroundColor: themeBackground }">
+    <view class="header" :style="{ backgroundColor: themePrimary }">
       <u-subsection :list="typeList" @change="typeChange" :animation="false" active-color="#ffffff"
                     :current="formData.type" mode="subsection" style="width: 200rpx;" height="60" font-size="25">
       </u-subsection>
@@ -200,7 +200,7 @@ export default {
 
   .go-to-login {
     border-radius: 10rpx;
-    background: var(--theme-primary, #42b479);
+    background-color: var(--theme-primary, #42b479);
     color: #fff;
   }
 }

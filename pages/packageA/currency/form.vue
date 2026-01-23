@@ -1,5 +1,5 @@
 <template>
-  <view class="container currency_form">
+  <view class="container currency_form" :style="themeStyles">
     <u-form-item label="币种名称">
       <u-input placeholder="请输入币种名称，如：美元" border :maxlength="20" type="text" clearable class="currency_form_input"
                v-model="form.name"/>
@@ -29,8 +29,9 @@
 
 <script>
 import api from "@/common/currency";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       form: {

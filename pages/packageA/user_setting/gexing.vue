@@ -1,5 +1,5 @@
 <template>
-  <view class="container bs_form">
+  <view class="container bs_form" :style="themeStyles">
 
     <u-form label-width="300">
       <template v-if="list.length>0">
@@ -19,8 +19,9 @@
 <script>
 
 import api from "@/common/setting";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       list: []

@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
         <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">请先登录</button>
@@ -31,8 +31,9 @@
 <script>
 import p_idea from "@/common/p_idea";
 import fab from "@/my-components/fab/index.vue";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   components: {
     fab
   },

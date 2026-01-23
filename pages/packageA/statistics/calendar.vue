@@ -1,5 +1,5 @@
 <template>
-  <view class="calendar-container">
+  <view class="calendar-container" :style="themeStyles">
     <picker mode="selector" :range="options" :value="currentOptionIndex" @change="bindMonthChange">
       <button size="mini">{{ currentOption }}</button>
     </picker>
@@ -39,8 +39,9 @@
 
 <script>
 import {get_list, ready} from "@/pages/packageA/statistics/p_calendar";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       income: { /* 示例数据  '2025-01-05': 300, '2025-01-14': 60000 */},

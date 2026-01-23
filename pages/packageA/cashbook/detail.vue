@@ -1,6 +1,5 @@
 <template>
-  <view class="container bs_form">
-
+  <view class="container bs_form" :style="themeStyles">
 
     <u-form label-width="160">
       <u-form-item label="加入账本">
@@ -47,8 +46,9 @@
 <script>
 
 import {get_detail, update, create, fetch, join} from "@/common/p_cashbook";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       keyword: '',

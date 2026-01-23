@@ -1,12 +1,12 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
         <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">立即登录</button>
       </u-empty>
     </view>
     <template v-else>
-      <view class="type_selector">
+      <view class="type_selector" :style="{ backgroundColor: themePrimary }">
         <u-subsection class="selector" :list="statusList" @change="typeChange" active-color="#fff"
                       :current="form.status"
                       mode="subsection">
@@ -88,8 +88,9 @@
 
 import {get_list, remove} from "@/common/p_staff";
 import fab from "@/my-components/fab/index.vue";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   components: {
     fab
   },
@@ -248,7 +249,7 @@ export default {
 .container {
   .type_selector {
     width: 100%;
-    background-color: $uni-theme-color;
+    background-color: var(--theme-primary, #42b479);
     display: flex;
     justify-content: center;
     padding-bottom: 30rpx;

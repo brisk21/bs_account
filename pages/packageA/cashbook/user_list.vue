@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <view class="data-list" v-if="list.length>0">
       <view v-for="(item, index) in list" :key="index">
         <view class="item  u-border-top-bottom">
@@ -23,8 +23,9 @@
 
 <script>
 import {user_list, unbind_user} from "@/common/p_cashbook";
-
+import themeMixin from '@/common/theme-mixin.js'
 export default {
+  mixins: [themeMixin],
   components: {},
   data() {
     return {

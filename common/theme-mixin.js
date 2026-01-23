@@ -13,7 +13,8 @@ import { getThemeConfig } from './theme.js'
 export default {
 	data() {
 		return {
-			themeStyles: {}
+			themeStyles: {},
+			themeStyleId: 'theme-style-' + Date.now() + Math.random().toString(36).substr(2, 9)
 		}
 	},
 	computed: {
@@ -58,6 +59,8 @@ export default {
 	onUnload() {
 		// 移除主题变化监听
 		uni.$off('themeChange', this.handleThemeChange)
+		// 移除动态样式
+		this.removeDynamicStyles()
 	},
 	methods: {
 		// 应用主题颜色到页面
@@ -70,8 +73,33 @@ export default {
 				'--theme-background': theme.background,
 				'--theme-card-background': theme.cardBackground
 			}
+			// 注入动态样式（用于小程序和APP）
+			this.injectDynamicStyles(theme)
 			// 强制更新视图
 			this.$forceUpdate()
+		},
+		// 注入动态样式
+		injectDynamicStyles(theme) {
+			// #ifdef H5
+			this.removeDynamicStyles()
+			const style = document.createElement('style')
+			style.id = this.themeStyleId
+			style.textContent = `
+				.${this.themeStyleId}-container .bs-green { color: ${theme.primary} !important; }
+				.${this.themeStyleId}-container .amount-green { color: ${theme.primary} !important; }
+				.${this.themeStyleId}-container .u-button--primary { background-color: ${theme.primary} !important; border-color: ${theme.primary} !important; }
+			`
+			document.head.appendChild(style)
+			// #endif
+		},
+		// 移除动态样式
+		removeDynamicStyles() {
+			// #ifdef H5
+			const style = document.getElementById(this.themeStyleId)
+			if (style) {
+				style.remove()
+			}
+			// #endif
 		},
 		// 更新导航栏颜色
 		updateNavigationBarColor() {
