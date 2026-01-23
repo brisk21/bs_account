@@ -323,86 +323,49 @@ export default {
 }
 
 .container {
-  background-color: #f5f6f8;
-  min-height: 100vh;
-  padding-bottom: 80rpx;
-
-  .search {
-    background-color: #ffffff;
-    padding-bottom: 20rpx;
-    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
-
-    .search-box {
-      padding: 20rpx 24rpx 0;
-    }
-  }
+  background-color: #ffffff;
+  margin-bottom: 80rpx;
 
   .tips {
-    margin-top: 30rpx;
-    padding: 0 24rpx;
+    margin-top: 15px;
     text-align: center;
-    font-size: 26rpx;
-    color: #999999;
-    line-height: 1.6;
+    color: rgb(111, 108, 108)
+
   }
 
   .list {
-    margin-top: 20rpx;
-    padding: 0 24rpx;
+    margin-top: 10px;
+    padding: 10px 20px;
 
-    .list-box {
-      .data-item {
-        background-color: #ffffff;
-        border-radius: 16rpx;
-        padding: 24rpx;
-        margin-bottom: 24rpx;
-        box-shadow: 0 2rpx 16rpx rgba(0, 0, 0, 0.06);
+    .data-item {
+      .data-item-title {
+        margin-top: 10px;
+        font-size: 30rpx;
+        color: #666666;
+        margin-bottom: 5rpx;
+        display: flex;
+        justify-content: space-between;
 
-        .data-item-title {
-          font-size: 32rpx;
-          font-weight: 600;
-          color: #333333;
-          margin-bottom: 20rpx;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+        .view-chart {
+          color: #0658ee;
 
-          .view-chart {
-            font-size: 28rpx;
-            font-weight: 400;
-            color: #2979ff;
-            display: flex;
-            align-items: center;
-
-            &::after {
-              content: '›';
-              margin-left: 4rpx;
-              font-size: 36rpx;
-              font-weight: 300;
-            }
-          }
-        }
-
-        .u-tr {
-          .bs-red {
-            color: #f56c6c !important;
-            font-weight: 500;
-          }
-
-          .bs-green {
-            color: #67c23a !important;
-            font-weight: 500;
-          }
-
-          .bs-gray {
-            color: #909399 !important;
-          }
         }
       }
-    }
 
-    .no-data {
-      margin-top: 100rpx;
+      .u-tr {
+        .bs-red {
+          color: red !important;
+        }
+
+        .bs-green {
+          color: #089c08 !important;
+        }
+
+        .bs-gray {
+          color: #999 !important;
+        }
+      }
+
     }
   }
 }
