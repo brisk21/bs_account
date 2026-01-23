@@ -216,6 +216,18 @@ export default {
 
   .portrait-box {
     position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 36rpx;
+      height: 36rpx;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    }
   }
 
   .portrait {
