@@ -1,10 +1,10 @@
 <template>
-  <view v-if="!hasLogin" class="no-login">
+  <view v-if="!hasLogin" class="no-login" :style="themeStyles">
     <u-empty text="未登录" mode="permission">
       <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">立即登录</button>
     </u-empty>
   </view>
-  <view v-else class="container">
+  <view v-else class="container" :style="themeStyles">
     <view class="search">
       <u-dropdown>
         <u-dropdown-item v-model="form.type" title="类型" :options="type" @change="set_type"></u-dropdown-item>
@@ -72,7 +72,10 @@
 <script>
 import api from "@/common/statistics";
 
+import themeMixin from '@/common/theme-mixin.js'
+
 export default {
+  mixins: [themeMixin],
   components: {},
   data() {
     return {
@@ -317,7 +320,7 @@ export default {
 
   .go-to-login {
     border-radius: 10rpx;
-    background: $uni-theme-color;
+    background: var(--theme-primary, #42b479);
     color: #fff;
   }
 }
@@ -347,7 +350,7 @@ export default {
         justify-content: space-between;
 
         .view-chart {
-          color: #0658ee;
+          color: var(--theme-primary, #42b479);
 
         }
       }
@@ -358,7 +361,7 @@ export default {
         }
 
         .bs-green {
-          color: #089c08 !important;
+          color: var(--theme-primary, #42b479) !important;
         }
 
         .bs-gray {

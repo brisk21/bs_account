@@ -1,5 +1,5 @@
 <template>
-  <view class="category-list">
+  <view class="category-list" :style="themeStyles">
 
     <view class="type_selector">
       <u-subsection class="selector" :list="list" @change="typeChange" active-color="#fff" :current="type"
@@ -36,7 +36,10 @@
 
 <script>
 import fab from "@/my-components/fab/index.vue";
+import themeMixin from '@/common/theme-mixin.js'
+
 export default {
+  mixins: [themeMixin],
   components: {
     fab
   },
@@ -60,6 +63,8 @@ export default {
   },
   onShow() {
     this.getCategory()
+    // 应用主题颜色
+    this.bg.backgroundColor = this.themePrimary
   },
   methods: {
     typeChange(index) {
@@ -122,7 +127,7 @@ export default {
 <style lang="scss">
 .type_selector {
   width: 100%;
-  background-color: $uni-theme-color;
+  background-color: var(--theme-primary, #42b479);
   display: flex;
   justify-content: center;
   padding-bottom: 30rpx;
@@ -140,7 +145,7 @@ export default {
 
     .add_btn {
       width: 80%;
-      background-color: $uni-theme-color;
+      background-color: var(--theme-primary, #42b479);
       color: $uni-text-color-inverse;
     }
 

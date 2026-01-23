@@ -242,7 +242,7 @@ export default {
 
   .num {
     font-size: 40rpx;
-    color: dodgerblue;
+    color: var(--theme-primary, #42b479);
     margin-bottom: 8upx;
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <view v-if="!hasLogin" class="empty need_login">
       <u-empty text="未登录" mode="permission">
         <button size="mini" slot="bottom" class="go-to-login" @click="toLogin()">立即登录</button>
@@ -56,7 +56,7 @@
           <view class="list-box-children" v-for="(item, index) in list" :key="index"
                 @click="toDetail(item.id)">
             <view class="u-flex  box-left box-left">
-              <u-icon :name="item.category.icon" color="#42b479" size="32"></u-icon>
+              <u-icon :name="item.category.icon" :color="themePrimary" size="32"></u-icon>
               {{ item.category.name }}
             </view>
             <view class="u-flex-1  box-left box-remark">
@@ -254,7 +254,10 @@
 <script>
 import type_popup from "@/my-components/popup/type_popup.vue";
 
+import themeMixin from '@/common/theme-mixin.js'
+
 export default {
+  mixins: [themeMixin],
   components: {
     type_popup,
   },
@@ -883,7 +886,7 @@ export default {
     }
 
     .amount-green {
-      color: #42b479;
+      color: var(--theme-primary, #42b479);
     }
 
     .amount-red {
@@ -921,7 +924,7 @@ export default {
 
 .go-to-login {
   border-radius: 10rpx;
-  background: $uni-theme-color;
+  background: var(--theme-primary, #42b479);
   color: #fff;
 }
 

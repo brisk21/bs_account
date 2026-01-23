@@ -1,10 +1,10 @@
 <template>
-  <view v-if="!hasLogin" class="no-login">
+  <view v-if="!hasLogin" class="no-login" :style="themeStyles">
     <u-empty text="未登录" mode="permission">
       <button size="mini" slot="bottom" class="go-to-login" @click="goToLoginPage()">立即登录</button>
     </u-empty>
   </view>
-  <view v-else class="container">
+  <view v-else class="container" :style="themeStyles">
     <view class="header">
       <u-subsection :list="typeList" @change="typeChange" :animation="false" active-color="#ffffff"
                     :current="formData.type" mode="subsection" style="width: 200rpx;" height="60" font-size="25">
@@ -27,7 +27,7 @@
           </text>
         </text>
         <u-subsection class="query-type" :list="queryTypeList" @change="queryTypeListChange" :animation="false"
-                      :active-color="scss.uniThemeColor" :current="formData.queryType" height="60" font-size="25">
+                      :active-color="themePrimary" :current="formData.queryType" height="60" font-size="25">
         </u-subsection>
       </view>
 
@@ -66,7 +66,10 @@
 import scss from '@/uni.scss'
 import dayjs from '@/dayjs.min.js'
 import api from "@/common/statistics";
+import themeMixin from '@/common/theme-mixin.js'
+
 export default {
+  mixins: [themeMixin],
   components: {},
   data() {
     return {
@@ -197,7 +200,7 @@ export default {
 
   .go-to-login {
     border-radius: 10rpx;
-    background: $uni-theme-color;
+    background: var(--theme-primary, #42b479);
     color: #fff;
   }
 }
@@ -229,7 +232,7 @@ export default {
     display: flex;
     justify-content: space-between;
 
-    background-color: $uni-theme-color;
+    background-color: var(--theme-primary, #42b479);
     padding: 20px 20px 20px 20px;
 
     .setting {
