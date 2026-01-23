@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <view v-if="list.length <= 0" class="empty">
       <u-empty text="暂无数据" mode="message"></u-empty>
     </view>
@@ -30,8 +30,10 @@
 
 <script>
 import api from "@/common/help";
+import themeMixin from '@/common/theme-mixin.js'
 
 export default {
+  mixins: [themeMixin],
   data() {
     return {
       content: '',

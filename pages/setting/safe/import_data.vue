@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
 
     <u-form-item label="来源类型" label-width="200">
       <u-radio-group v-model="form.source_type" class="radio-group" @change="source_type_change">
@@ -120,8 +120,10 @@
 <script>
 import constConfig from "@/const";
 import ytUpload from "@/uni_modules/yt-upload/components/yt-upload/yt-upload.vue";
+import themeMixin from '@/common/theme-mixin.js'
 
 export default {
+  mixins: [themeMixin],
   components: {
     ytUpload
   },

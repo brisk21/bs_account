@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <u-tabs :list="list" :is-scroll="false" :current="current" @change="change"></u-tabs>
     <u-form v-show="current===0" :model="form" label-width="100rpx" label-position="top"
             :label-style="{fontWeight:'bold',color:'black'}">
@@ -61,8 +61,10 @@
 <script>
 import constConfig from '@/const.js'
 import uploadFile from "@/components/UploadFile.vue";
+import themeMixin from '@/common/theme-mixin.js'
 
 export default {
+  mixins: [themeMixin],
   components: {
     uploadFile
   },

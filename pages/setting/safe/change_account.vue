@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" :style="themeStyles">
 		<view class="change_account_box">
       <view class="account-list" v-if="account_list.length>0">
         <u-swipe-action :show="item.show" :index="index" v-for="(item, index) in account_list" :key="item.user_code"
@@ -34,7 +34,10 @@
 
 <script>
 	import uniSwipeAction from "@/uni_modules/uni-swipe-action/components/uni-swipe-action/uni-swipe-action.vue";
+	import themeMixin from '@/common/theme-mixin.js'
+
 	export default {
+		mixins: [themeMixin],
 		components: {
 			uniSwipeAction
 

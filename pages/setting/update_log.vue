@@ -1,5 +1,5 @@
 <template>
-  <view class="container">
+  <view class="container" :style="themeStyles">
     <u-time-line v-if="list.length > 0">
       <u-time-line-item nodeTop="2" v-for="(item, index) in list" :key="index">
         <template  v-slot:node>
@@ -23,8 +23,10 @@
 </template>
 
 <script>
+import themeMixin from '@/common/theme-mixin.js'
 
 export default {
+  mixins: [themeMixin],
   components: {
 
   },

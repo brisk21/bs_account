@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" :style="themeStyles">
 		<view class="menu-container">
 			<view class="menu-list">
 				<u-cell-group>
@@ -26,10 +26,21 @@
 <script>
 
 	import constConfig from '@/const.js'
+
 	import {
+
 		getCode
+
 	} from '@/common/login.js'
+
+	import themeMixin from '@/common/theme-mixin.js'
+
+
+
 	export default {
+
+		mixins: [themeMixin],
+
 		components: {
 
 		},

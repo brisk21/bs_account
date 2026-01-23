@@ -1,5 +1,5 @@
 <template>
-  <view class="container category_form">
+  <view class="container category_form" :style="themeStyles">
     <u-form label-width="150">
     <u-form-item label="日账单：" label-position="left" >
       <u-switch slot="right" v-model="form.day_set" @change="submit"></u-switch>
@@ -19,7 +19,14 @@
 </template>
 
 <script>
+
+import themeMixin from '@/common/theme-mixin.js'
+
+
+
 export default {
+
+  mixins: [themeMixin],
   data() {
     return {
       form: {

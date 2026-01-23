@@ -1,5 +1,5 @@
 <template>
-  <view class="container category_form">
+  <view class="container category_form" :style="themeStyles">
     <u-form-item label="昵称">
       <u-input placeholder="请输入昵称" border :maxlength="10" type="text" clearable class="category_form_input"
                v-model="form.nick_name"/>
@@ -27,8 +27,10 @@
 <script>
 import constConfig from '@/const.js'
 import uploadFile from "@/components/UploadFile.vue";
+import themeMixin from '@/common/theme-mixin.js'
 
 export default {
+  mixins: [themeMixin],
   components: {
     uploadFile
   },

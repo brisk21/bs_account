@@ -1,5 +1,5 @@
 <template>
-  <view class="container bs_form">
+  <view class="container bs_form" :style="themeStyles">
     <u-form-item label="账号">
       <u-input placeholder="请输入登录账号" disabled border :maxlength="50" type="text" clearable class="bs_form_input"
                v-model="form.account"/>
@@ -30,7 +30,14 @@
 </template>
 
 <script>
+
+import themeMixin from '@/common/theme-mixin.js'
+
+
+
 export default {
+
+  mixins: [themeMixin],
   data() {
     return {
       user: null,

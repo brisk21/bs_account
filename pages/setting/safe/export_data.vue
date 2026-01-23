@@ -1,5 +1,5 @@
 <template>
-  <view class="container bs_form">
+  <view class="container bs_form" :style="themeStyles">
     <u-form-item label="接收邮箱" label-width="150">
       <u-input placeholder="请输入邮箱" border :maxlength="60" type="email" clearable class="category_form_input"
                v-model="form.email"/>
@@ -24,7 +24,14 @@
 </template>
 
 <script>
+
+import themeMixin from '@/common/theme-mixin.js'
+
+
+
 export default {
+
+  mixins: [themeMixin],
   data() {
     return {
       form: {
